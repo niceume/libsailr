@@ -1,0 +1,8 @@
+bmi = weight / (height * height);
+
+if (bmi > 25)
+{
+  overweight = 1;
+} else {
+  overweight = 0;
+}

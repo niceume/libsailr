@@ -1,0 +1,10 @@
+egfr = 186 * (cre/88.4) ^ (-1.154) * (age) - 0.203 
+
+
+if (sex == 0)
+{
+  egfr <- 0.742 * egfr
+} else {
+  egfr = egfr
+}
+

@@ -1,0 +1,3 @@
+if(overweight == 1){
+  judgement = uppercase("overweight")
+}

@@ -1,0 +1,10 @@
+z = x + y!
+z2 = z + 10
+x = z2 - z
+y = z2 / z
+
+if( "Hello" == "Hello"){
+    y = 7777
+} else {
+    y =  321
+}

@@ -1,0 +1,110 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "node.h"
+#include "parser_state.h"
+#include "tree_dump.h"
+#include "tree_free.h"
+#include "ptr_table.h"
+#include "gen_code.h"
+#include "gen_code_util.h"
+#include "vm_stack.h"
+#include "vm.h"
+
+#include "y.tab.h"
+
+extern FILE *yyin;
+extern void yyrestart(FILE*);
+
+void fatal(char*);
+#ifdef YYDEBUG
+  int yydebug=1;
+#endif
+
+int main(int argc, char** argv){
+	char* file_name = argv[1];
+	FILE* fp = fopen(file_name, "r");
+	if(!fp)
+		fatal("File cannot be accessed.\n");
+	else 
+        printf("file opened.\n");
+
+	ptr_table* table = ptr_table_init() ; 
+	// var x
+	ptr_table_create_int(&table, "x" , 10);
+	ptr_table_create_int(&table, "y" , 10);
+	ptr_table_create_int(&table, "z" , 10);
+	ptr_table_create_int(&table, "z2" , 10);
+	ptr_table_create_double(&table, "bmi", 0);
+	ptr_table_create_double(&table, "weight", 77);
+
+	string_object* str = string_new("Hello World");
+	ptr_table_create_anonym_string(&table, &str );
+
+	double* address_for_height = (double *)malloc(sizeof(double));
+	*address_for_height = 1.72;
+	ptr_table_create_double_from_ptr( &table, "height", &address_for_height );
+
+	ptr_table_create_int(&table, "overweight", 0);
+
+
+	/* Show ptr table at this point. */
+	printf("\nShow pointer table first! \n");
+	ptr_table_show_all(&table);
+
+	/* Create parser state */
+	parser_state* ps = new_parser_state(file_name, table);
+    yyrestart(fp);
+	int result = yyparse(ps) ;
+	/* The value returned by yyparse is 0 if parsing was successful */
+
+	if( result == 0 ){
+		fclose(fp);
+		printf("Parse succeeded!! \n");
+	} else { 
+		fclose(fp);
+		fatal("Parse error. \n");
+	}
+
+	ptr_table_show_all(&table);
+
+	/* Show parser tree  */
+	printf("\nShow parser tree! \n");
+	tree_dump(ps->tree, 0);
+
+	/* Convert tree into VM code */
+	printf("\nConvert parser tree into VM instruction list ! \n");
+
+	vm_inst_list* inst_list = gen_code( ps->tree , table); // VM Code is generated.
+	printf("VM Code is generated! \n");
+
+	vm_inst* inst = inst_list;
+	do{
+		vm_inst_display(inst);		
+		inst = inst->next;
+	}while(inst != NULL);
+
+
+	/* Convert VM into Array format */
+	printf("\nConvert VM instruction list into ordered layout! \n");
+	vm_inst* vmcode = vm_inst_list_to_code( inst_list );
+	int vmcode_size = vm_inst_list_size( inst_list);
+
+	/* Run virtual machine!! */
+	vm_stack* vmstack = vm_stack_init();
+	vm_exec_code(vmcode, vmcode_size , table , vmstack);
+
+	/* Show Ptr Table */
+	printf("\nShow pointer table! \n");
+	ptr_table_show_all(&table);
+
+    /* Free memory */
+	printf("\nFree parser tree! \n");
+	tree_free(ps->tree, 0);
+
+	exit(0);
+}
+
+void fatal(char* str){
+  fprintf(stderr, "%s!!!.\n", str);
+  exit(1);
+}

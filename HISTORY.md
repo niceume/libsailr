@@ -19,11 +19,26 @@ cd vm; ./compile_vm.sh; cd ..
 ./myparser sample_code/code1.slr
 ```
 
-* Current plan. 
-	+ Now I have struct_string structure to handle strings.
-	+ But this project will be integrated with C++ projects.
-	+ So C++ strings should be enabled to be manipulated.
-		+ Now I am trying to implement it.
-	+ Or support both situation by switching functions via macros.
+## Ver 0.2 [Nov. 23 2018]
 
+* The library now deals with C++ strings.
+    + cpp_string.cpp implements that part.
+    + struct_string.cpp is now not update. (But remains there)
+    + If this library might be used from C program, mechanism to switch between struct_string and cpp_string shoul be implementd
+* The library is now used from C++.
+    + C++ main program can calculate using this library. See main.cpp
+* Makefile (GNU Make) can compile 
+    + Meaning that 
+
+```
+./compile_cpp.sh
+```
+
+* The project name is now changed from RCppCalc to LibsailrDev.
+* To use libsailr part, use only under LibsailrDev/sailr/ directory.
+
+```
+cd <LibsailrDev_Project_Directory>/sailr/
+make build
+```
 

@@ -1,11 +1,13 @@
 # Ignore object files generated.
 
 *.o
+*.so
+*.a
 
 # Ignore generated files by flex and bison
 
-/src/y.output
-/src/y.tab.c
-/src/y.tab.h
-/src/lex.yy.c
+/sailr/y.output
+/sailr/y.tab.c
+/sailr/y.tab.h
+/sailr/lex.yy.c
 

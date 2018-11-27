@@ -68,6 +68,23 @@ ptr_table_update_int(ptr_table** table, char* key, int ival)
 	return 1;
 }
 
+string_object*
+ptr_table_get_pp_string(ptr_table** table, char* key)
+{
+  ptr_record* result = ptr_table_find(table, key);
+  void* ptr_address = result->address;
+  return ptr_address ;
+}
+
+const char*
+ptr_table_get_char(ptr_table** table, char* key)
+{
+  ptr_record* result = ptr_table_find(table, key);
+  void* ptr_address = result->address;
+  printf("The pointer referred is : %p", ptr_address);
+  return string_read ((string_object*) ptr_address);
+}
+
 ptr_record*
 ptr_table_create_double(ptr_table** table, char* key, double dval)
 {
@@ -78,14 +95,16 @@ ptr_table_create_double(ptr_table** table, char* key, double dval)
 	return result;
 }
 
-ptr_record* ptr_table_create_double_from_ptr(ptr_table** table, char* key, double** dptr)
+ptr_record*
+ptr_table_create_double_from_ptr(ptr_table** table, char* key, double** dptr)
 {
 	ptr_record* result = NULL;
 	result = ptr_table_add(table, key, (void**) dptr, PTR_DBL, GC_NO);
 	return result;
 }
 
-int ptr_table_update_double(ptr_table** table, char* key, double dval)
+int
+ptr_table_update_double(ptr_table** table, char* key, double dval)
 {
 	ptr_record* result = ptr_table_find(table, key);
 	memcpy((double*) result->address , &dval, sizeof(double));

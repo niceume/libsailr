@@ -166,6 +166,7 @@ else	{BEGIN ELSESTATE; printf("ELSE STATE!\n"); LEX_RETURN( KEY_ELSE );}
 
 \"([^\\\"]|\\.)*\"	{
 	lval->str = string_new_with_len((yytext + 1), yyleng - 2);
+	printf("LEXER: LIT_STR %s \n", yytext);
 	LEX_RETURN( LIT_STR );
 };
 

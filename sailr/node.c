@@ -76,6 +76,7 @@ TreeNode* pushback_node_stmt( TreeNode* node_stmts , TreeNode* node_stmt2 )
 {
   node_stmts->e2.last_sibling->e3.sibling = node_stmt2;
   node_stmts->e2.last_sibling = node_stmt2;
+  return node_stmts;
 }
 
 TreeNode*

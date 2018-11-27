@@ -60,8 +60,26 @@ vm_stack_store_val(vm_stack* vmstack)
 
 		case PP_STR:
 		if(lvalue->type == PP_STR){
+			printf("ASSING STRING VALUE");
 			string_free(*(lvalue->pp_str));
-			*(lvalue->pp_str) = *(rvalue->pp_str);
+			printf("LVALUE: pointer to pointer to string.\n");
+			printf("LVALUE: String Value %s \n",string_read( *( lvalue->pp_str)));
+			printf("LVALUE: pointer to string %p \n", *( lvalue->pp_str) );
+			printf("LVALUE: pointer to pointer to string %p \n" , ( lvalue->pp_str));
+
+			printf("RVALUE: pointer to pointer to string.\n");
+			printf("RVALUE: String Value %s \n",string_read( *( rvalue->pp_str)));
+			printf("RVALUE: pointer to string %p \n", *( rvalue->pp_str) );
+			printf("RVALUE: pointer to pointer to string %p \n" , ( rvalue->pp_str));
+			(*(lvalue->pp_str)) = *(rvalue->pp_str);
+
+			printf("RVALUE is assigned to LVALUE");
+			printf("LVALUE: pointer to pointer to string.\n");
+			printf("LVALUE: String Value %s \n",string_read( *( lvalue->pp_str)));
+			printf("LVALUE: pointer to string %p \n", *( lvalue->pp_str) );
+			printf("LVALUE: pointer to pointer to string %p \n" , ( lvalue->pp_str));
+
+
 		}else{
 			printf("unintended lvalue type.\n");
 		}

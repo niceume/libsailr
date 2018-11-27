@@ -57,6 +57,10 @@ ptr_record* ptr_table_create_string(ptr_table** table, char* key, string_object*
 ptr_record* ptr_table_create_string_from_ptr(ptr_table** table, char* key, string_object** strptr);
 int ptr_table_update_stirng(ptr_table**, char* key, string_object** strptr);
 
+string_object* ptr_table_get_pp_string(ptr_table** table, char* key);
+const char* ptr_table_get_char(ptr_table** table, char* key);
+
+
 int ptr_table_del(ptr_table** table, char* key);
 int ptr_table_free(ptr_table**);
 void ptr_table_show_all(ptr_table**);

@@ -23,12 +23,12 @@ cd vm; ./compile_vm.sh; cd ..
 
 * The library now deals with C++ strings.
     + cpp_string.cpp implements that part.
-    + struct_string.cpp is now not update. (But remains there)
+    + struct_string.cpp is now not updated. (But remains there)
     + If this library might be used from C program, mechanism to switch between struct_string and cpp_string shoul be implementd
 * The library is now used from C++.
     + C++ main program can calculate using this library. See main.cpp
 * Makefile (GNU Make) can compile 
-    + Meaning that 
+    + Meaning that this can be easily integrated with Rcpp project.
 
 ```
 ./compile_cpp.sh
@@ -41,4 +41,13 @@ cd vm; ./compile_vm.sh; cd ..
 cd <LibsailrDev_Project_Directory>/sailr/
 make build
 ```
+
+
+## Ver 0.21 [Nov. 28 2018]
+
+* Bug fixes
+    + string manipulations are improved. 
+* From Rcpp this library is successfully loaded and utilized.
+
+
 

@@ -142,7 +142,8 @@ vm_stack_display_item(vm_stack* vmstack, int idx)
 		printf("%04d \t%s \t%p \t%lf\n", idx, ItemTypeDisplay[stack[idx].type], *(stack[idx].pp_dval), **(stack[idx].pp_dval));
 		break;
 	case PP_STR:
-		printf("%04d \t%s \t%p \t%s\n", idx, ItemTypeDisplay[stack[idx].type], *(stack[idx].pp_str), string_read(*(stack[idx].pp_str)));
+		printf("SHOWING STRING of %p. \n", stack[idx].pp_str);
+//		printf("%04d \t%s \t%p \t%s\n", idx, ItemTypeDisplay[stack[idx].type], *(stack[idx].pp_str), string_read(*(stack[idx].pp_str)));
 		break;
 	case BOOLEAN:
 		printf("%04d \t%s \t%d \n", idx, ItemTypeDisplay[stack[idx].type], stack[idx].boolean );

@@ -61,7 +61,7 @@
 
 /* Numeric Operators*/
 /* UMINUS is special. No such token exits. */
-%left<nd> OP_PLUS OP_SUB
+%left<nd> OP_PLUS OP_SUB 
 %left<nd> OP_MULT OP_DIV OP_MOD
 %right<nd> UMINUS  /* In rule, | SUBOP expr %prec UMINUS */
 %right<nd> OP_POWER
@@ -81,9 +81,9 @@ stmts		: stmt					{ $$ = new_node_stmt($1); }
 					$$ = pushback_node_stmt($1, new_node_stmt($3));
 					}
 
-stmt		: assign_stmt			{ $$ = $1; }
-			| if_stmt				{ $$ = $1; }
-			| expr					{ $$ = $1; }
+stmt		: assign_stmt			{ printf("ASSIGN STMT!!!") ;$$ = $1; }
+			| if_stmt				{ printf("IF STMT!!!") ;$$ = $1; }
+			| expr					{ printf("JUST STMT!!!") ;$$ = $1; }
 
 expr		: fcall				{ $$ = $1; }
 			| expr AND expr		{ $$ = new_node_op("AND", $1, $3); }

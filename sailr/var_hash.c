@@ -65,6 +65,10 @@ var_hash_names(var_hash** hash)
 {
 	int hash_size = var_hash_size(hash);
 	printf("hash size: %d\n", hash_size);
+	if(hash_size == 0){
+		printf("No variables.\n");
+		return NULL;
+	}
 	char** hash_names = (char**) malloc(hash_size * sizeof(char*));
 
 	int idx = 0; 
@@ -83,7 +87,8 @@ var_hash_names(var_hash** hash)
 	return hash_names;
 }
 
-void var_hash_print_names(var_hash** hash)
+void
+var_hash_print_names(var_hash** hash)
 {
 	printf("Now printing....\n");
 	char** names = var_hash_names(hash);

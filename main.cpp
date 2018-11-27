@@ -93,16 +93,20 @@ main(int argc, char** argv)
 	*address_for_ow = 10;
 	sailr_ptr_table_create_int_from_ptr(&table, (char*)"overweight" , &address_for_ow);
 
-//	sailr_ptr_table_create_double_from_ptr(&table, "bmi", 0);
-//	sailr_ptr_table_create_double_from_ptr(&table, "weight", 77);
-//	string_object* str = string_new("Hello World");
-//	sailr_ptr_table_create_anonym_string(&table, &str );
-//	double* address_for_height = (double *)malloc(sizeof(double));
-//	*address_for_height = 1.72;
-//	sailr_ptr_table_create_double_from_ptr( &table, "height", &address_for_height );
-//	sailr_ptr_table_create_int(&table, "overweight", 0);
+	string_type_object* greeting = sailr_new_string("Hello World");
+	sailr_ptr_table_create_string_from_ptr( &table, (char*) "greeting" , &greeting);
 
+	string_type_object* univ = sailr_new_string("U");
+	sailr_ptr_table_create_string_from_ptr( &table, (char*) "univ" , &univ);
 
+	string_type_object* dot = sailr_new_string("D");
+	sailr_ptr_table_create_string_from_ptr( &table, (char*) "dot" , &dot);
+
+	string_type_object* name = sailr_new_string("N");
+	sailr_ptr_table_create_string_from_ptr( &table, (char*) "name" , &name);
+
+	string_type_object* result = sailr_new_string("R");
+	sailr_ptr_table_create_string_from_ptr( &table, (char*) "result" , &result);
 
 	std::cout << "Show pointer table! At this point, annonym STRING should be already added.\n"  << std::endl ;
     printf("table's pointer is %p \n", table);

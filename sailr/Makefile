@@ -1,9 +1,10 @@
 YACC = bison -y -d
 LEX = flex
 CC = gcc
-CXX = 
+CXX = g++
 AR = ar rvs
 CFLAGS += -fPIC -O3 -Ivm -Istring
+CXXFLAGS += -fPIC -O3 -Ivm -Istring
 RM = rm -f
 
 TARGET = libsailr.a
@@ -21,15 +22,15 @@ DEPS:=$(OBJS:.o=.d)
 
 .PHONY: build
 
-build : parse.o lex.o  $(TARGET)
+build : parse.o lex.o  $(TARGET) 
 
-$(TARGET) : $(OBJS) 
+$(TARGET) : $(OBJS)  $(OBJS_STR)
 	$(AR) $(TARGET) $(OBJS) $(OBJS_STR)
 
 # yacc creates y.tab.c. -d => y.tab.h. -v => y.output.
 
 parse.o : y.tab.c
-	$(CC) -o parse.o -c y.tab.c $(CFLAGS) -MMD -MP # -DYYDEBUG=1
+	$(CC) -o parse.o -c y.tab.c $(CFLAGS) -MMD -MP -DYYDEBUG=1 
 
 y.tab.c : parse.y
 	yacc -d -v parse.y
@@ -45,19 +46,21 @@ lex.o : lex.l  # lex.yy.c is includgin y.tab.h
 vm/%.o : vm/%.c 
 	$(CC) -c -o $@ $^  $(CFLAGS) -I. -MMD -MP
 
+string/cpp_string.o : string/cpp_string.cpp
+	$(CXX) -c -o $@ $^ $(CXXFLAGS) -MMD -MP
+
 string/%.o : string/%.c 
 	$(CC) -c -o $@ $^  $(CFLAGS) -I. -MMD -MP
 
-string/cpp_string.o : string/cpp_string.cpp
-	$(CXX) -c -o $@ $^ $(CXXFLAGS) -MMD -MP
+
 
 clean :
 	$(RM) *.o
 	$(RM) vm/*.o
-	$(RM) string/string*.o
+	$(RM) string/*.o
 	$(RM) *.d
 	$(RM) vm/*.d
-	$(RM) string/string*.d
+	$(RM) string/*.d
 	$(RM) *.so
 	$(RM) *.a
 	$(RM) y.tab.c y.tab.h y.output

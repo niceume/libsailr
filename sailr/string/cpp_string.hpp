@@ -10,6 +10,7 @@ extern "C" {
 	cpp_object* cpp_string_new_with_len (const char* , int);
 	const char* cpp_string_read (cpp_object*);
 	cpp_object* cpp_string_concat (cpp_object*, cpp_object*);
+	cpp_object** cpp_string_ptr_concat (cpp_object*, cpp_object*);
 	cpp_object* cpp_string_repeat (cpp_object*, int);
 	cpp_object* cpp_string_subset (cpp_object*, size_t, size_t );
 	// int cpp_string_copy_ptr ( cpp_object** , cpp_object** );

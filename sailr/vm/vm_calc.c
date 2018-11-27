@@ -1,7 +1,9 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include "vm_calc.h"
+#include "common_string.h"
 
 
 // Helper functions --------------
@@ -169,6 +171,10 @@ vm_calc_addx(vm_stack* vmstack)
 	stack_item_pp2value( top_item );
 	stack_item_pp2value( sec_item );
 
+	string_object* str1;
+	string_object* str2;
+	string_object** new_pp_str;
+
 	int result_ival;
 	double result_dval;
 	// Add calcuation
@@ -186,8 +192,20 @@ vm_calc_addx(vm_stack* vmstack)
 			result_dval = (double)sec_item->ival + top_item->dval ;
 		}else if((top_item->type == DVAL) && (sec_item->type == DVAL)){
 			result_dval = sec_item->dval + top_item->dval ;
+		}else if((top_item->type == PP_STR ) && (sec_item->type == PP_STR )){
+			printf("Pointer to pointer: %p \n", sec_item->pp_str);
+			str1 = *(sec_item->pp_str);
+			str2 = *(top_item->pp_str);
+			new_pp_str =  string_ptr_concat( str1, str2 );
+			sec_item->pp_str = new_pp_str;
+
+			vmstack->sp = vmstack->sp - 1; 
+			printf("Pointer : %p \n", new_pp_str);
+			printf("Pointer to pointer: %p \n", sec_item->pp_str);
+			printf("Pointer : %p \n", *(sec_item->pp_str));
+			return 1;
 		}else{
-			printf("ADDX should be applied to num and num on stack.\n");
+			printf("ADDX should be applied to 'num and num' or 'str and str' on stack.\n");
 			return 0;
 		}
 		vmstack->sp = vmstack->sp - 1; 

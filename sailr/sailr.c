@@ -6,6 +6,7 @@
 #include "vm_code.h"
 #include "gen_code.h"
 #include "gen_code_util.h"
+#include "common_string.h"
 #include "vm_stack.h"
 #include "y.tab.h"
 
@@ -111,6 +112,23 @@ sailr_ptr_table_create_anonym_string(ptr_table_object** table, const char* str)
 
 }
 
+string_type_object*
+sailr_ptr_table_get_pp_string(ptr_table_object** table, char* key){
+  return (string_type_object*) ptr_table_get_pp_string((ptr_table**)table, key);
+}
+
+const char*
+sailr_ptr_table_get_char(ptr_table_object** table, char* key){
+  return  ptr_table_get_char((ptr_table**)table, key);
+}
+
+
+string_type_object*
+sailr_new_string(const char* str)
+{
+	string_object* new_str = string_new(str);
+	return (string_type_object*) new_str;
+}
 
 int
 sailr_ptr_table_update_int(ptr_table_object** table, char* key, int ival)

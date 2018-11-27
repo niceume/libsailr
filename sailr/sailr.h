@@ -26,6 +26,11 @@ ptr_record_object* sailr_ptr_table_create_double_from_ptr(ptr_table_object** tab
 ptr_record_object* sailr_ptr_table_create_string_from_ptr(ptr_table_object** table, char* key, string_type_object** pp);
 ptr_record_object* sailr_ptr_table_create_anonym_string(ptr_table_object** table, const char* str);
 
+string_type_object* sailr_ptr_table_get_pp_string(ptr_table_object** table, char* key);
+const char* sailr_ptr_table_get_char(ptr_table_object** table, char* key);
+
+string_type_object* sailr_new_string(const char* str);
+
 
 int sailr_ptr_table_update_int(ptr_table_object** table, char* key, int ival);
 int sailr_ptr_table_update_double(ptr_table_object** table, char* key, double dval);

@@ -3,6 +3,8 @@
 #include "node.h"
 #include "parser_state.h"
 #include "common_string.h"
+
+int yydebug = 1;
 %}
 
 /* Define how each pseudo-variable returns values */
@@ -136,7 +138,7 @@ then_stmts	: stmt TERMIN					{ $$ = $1; }
 			| '{' prgm '}'		{ $$ = $2; }
 
 opt_else	: { $$ = NULL; }
-			| KEY_ELSE stmt TERMIN			{ $$ = $2; }
+			| KEY_ELSE stmt			{ $$ = $2; }
 			| KEY_ELSE '{' prgm '}'	{ $$ = $3; }
 
 assign_stmt	: lvar ASSIGN expr	{ $$ = new_node_let($1, $3); }

@@ -30,11 +30,12 @@ $(TARGET) : $(OBJS)  $(OBJS_STR)
 # yacc creates y.tab.c. -d => y.tab.h. -v => y.output.
 
 parse.o : y.tab.c
-	$(CC) -o parse.o -c y.tab.c $(CFLAGS) -MMD -MP -DYYDEBUG=1 
+	$(CC) -o parse.o -c y.tab.c $(CFLAGS) -MMD -MP 
 
 y.tab.c : parse.y
-	yacc -d -v parse.y
+	yacc -d -v --verbose --debug parse.y
  # yacc creates y.tab.c. -d option Creates y.tab.h. -v option creates y.output.
+ # --debug 
 
 lex.o : lex.l  # lex.yy.c is includgin y.tab.h
 	$(LEX) -olex.yy.c lex.l

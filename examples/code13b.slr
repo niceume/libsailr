@@ -1,0 +1,9 @@
+if(race == "White"){
+  race_id = 1
+}else if(race == "Black"){
+  race_id = 2
+}else if(race == "Asian-Pac-Islander"){
+ race_id = 3 
+} else {
+  race_id = 4 
+}

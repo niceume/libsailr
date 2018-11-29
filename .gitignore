@@ -4,6 +4,10 @@
 *.so
 *.a
 
+# Ignore dependency files generated.
+
+*.d
+
 # Ignore generated files by flex and bison
 
 /sailr/y.output

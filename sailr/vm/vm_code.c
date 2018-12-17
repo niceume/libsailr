@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "vm_code.h"
 
@@ -12,7 +13,7 @@ vm_inst_display( vm_inst* inst )
 		printf("CMD:%s\t ARG:.ival=%d\n", cmd_str, inst->ival);
 		break;
 	case VM_PUSH_DVAL:
-		printf("CMD:%s\t ARG:.dval=%d\n", cmd_str, inst->dval);
+		printf("CMD:%s\t ARG:.dval=%f\n", cmd_str, inst->dval);
 		break;
 	case VM_PUSH_PP_IVAL:
 	case VM_PUSH_PP_DVAL:

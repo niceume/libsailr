@@ -158,6 +158,7 @@ vm_inst* gen_code(TreeNode* nd, ptr_table* table){
 
   switch (nd->type){
   case NODE_PRGM:
+    printf("NODE_PRGM\n");
     tmp_code1 = gen_code(nd->e1.nd, table);
     vm_inst* termin_code = new_vm_inst_command(VM_END);
     nd_code = vm_inst_list_cat( tmp_code1 , termin_code );
@@ -165,6 +166,7 @@ vm_inst* gen_code(TreeNode* nd, ptr_table* table){
 	break;
 
   case NODE_STMT:
+    printf("NODE_STMT\n");
     tmp_code1 = gen_code(nd->e1.nd, table);
     if(nd->e3.sibling != NULL){
 		tmp_code3 = gen_code(nd->e3.sibling, table);
@@ -176,26 +178,31 @@ vm_inst* gen_code(TreeNode* nd, ptr_table* table){
     break;
 
   case NODE_INT:  // terminal node
+    printf("NODE_INT\n");
 	nd_code = gen_code_int(nd);
     return nd_code;
     break;
 
   case NODE_DBL:  // terminal node
+    printf("NODE_DBL\n");
     nd_code = gen_code_double(nd);
     return nd_code;
     break;
 
   case NODE_STR:  // terminal node
+    printf("NODE_STR\n");
     nd_code = gen_code_str(nd);
     return nd_code;
     break;
 
   case NODE_IDENT:  // terminal node
+    printf("NODE_IDENT\n");
     nd_code = gen_code_ident(nd, table);
     return nd_code;
     break;
 
   case NODE_OP:
+    printf("NODE_OP\n");
     cmd = convert_op(nd->e1.op);
     tmp_code2 = gen_code(nd->e2.nd, table);
     tmp_code3 = gen_code(nd->e3.nd, table);
@@ -204,6 +211,7 @@ vm_inst* gen_code(TreeNode* nd, ptr_table* table){
     break;
 
   case NODE_UNIOP:
+    printf("NODE_UNIOP\n");
     cmd = convert_op(nd->e1.op);
     tmp_code2 = gen_code(nd->e2.nd, table);
     nd_code = gen_code_unitary_op( cmd , tmp_code2 );
@@ -211,6 +219,7 @@ vm_inst* gen_code(TreeNode* nd, ptr_table* table){
 	break;
 
   case NODE_LET:
+    printf("NODE_LET\n");
     tmp_code1 = gen_code(nd->e1.nd, table);
     tmp_code2 = gen_code(nd->e2.nd, table);
     nd_code = gen_code_let( tmp_code1, tmp_code2 );
@@ -228,6 +237,7 @@ vm_inst* gen_code(TreeNode* nd, ptr_table* table){
 
 
   case NODE_IF:
+    printf("NODE_IF\n");
     tmp_code1 = gen_code(nd->e1.nd, table);
     nd_code = tmp_code1;
 

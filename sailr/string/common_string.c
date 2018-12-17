@@ -18,7 +18,7 @@ const c_char*
 string_read( string_object* str)
 {
   const char* c_str = cpp_string_read( str );
-  printf("C STRING: %s", c_str);
+//  printf("C STRING: %s", c_str);
 	return c_str;
 }
 

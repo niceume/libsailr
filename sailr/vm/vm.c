@@ -13,6 +13,8 @@
 #include "vm_calc.h"
 #include "vm_assign.h"
 
+int vm_run_inst (vm_inst* , ptr_table* , vm_stack* );
+
 int
 vm_exec_code( vm_inst* code , int num_insts , ptr_table* table , vm_stack* vmstack)
 {

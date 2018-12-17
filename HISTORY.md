@@ -49,5 +49,18 @@ make build
     + string manipulations are improved. 
 * From Rcpp this library is successfully loaded and utilized.
 
+## Ver 0.22 [Dec. 17 2018]
+
+* Bug fixes
+    + Nested if else did not work well. Now it's fixed.
+    + working fine.
+
+## Plan
+
+* Newly created variables are supported.
+    1. It should be added dynamically.
+
+
+
 
 

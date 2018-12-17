@@ -47,7 +47,7 @@ vm_stack_store_val(vm_stack* vmstack)
 		}else if(lvalue->type == PP_DVAL){
 			memcpy( *(lvalue->pp_dval), &(rvalue->dval), sizeof(double));
 		}else if(lvalue->type == PP_STR){
-			sprintf( tmp_str , "%d" , rvalue->dval);
+			sprintf( tmp_str , "%f" , rvalue->dval);
 			tmp_s_str = string_new(tmp_str);
 			string_free(*(lvalue->pp_str));
 			*(lvalue->pp_str) = tmp_s_str;

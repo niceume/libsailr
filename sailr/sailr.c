@@ -2,12 +2,15 @@
 #include "ptr_table.h"
 #include "var_hash.h"
 #include "parser_state.h"
+#include "common_string.h"
 #include "node.h"
-#include "vm_code.h"
+#include "tree_dump.h"
+#include "tree_free.h"
 #include "gen_code.h"
 #include "gen_code_util.h"
-#include "common_string.h"
+#include "vm_code.h"
 #include "vm_stack.h"
+#include "vm.h"
 #include "y.tab.h"
 
 ptr_table_object*

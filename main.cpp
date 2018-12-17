@@ -108,6 +108,21 @@ main(int argc, char** argv)
 	string_type_object* result = sailr_new_string("R");
 	sailr_ptr_table_create_string_from_ptr( &table, (char*) "result" , &result);
 
+	string_type_object* race = sailr_new_string("Asian-Pac-Islander");
+	sailr_ptr_table_create_string_from_ptr( &table, (char*) "race" , &race);
+
+	int* address_for_oa = (int *)malloc(sizeof(int));
+	*address_for_oa = 0;
+	sailr_ptr_table_create_int_from_ptr(&table, (char*)"old_asian" , &address_for_oa);
+
+	int* address_for_race_id = (int *)malloc(sizeof(int));
+	*address_for_race_id  = 0;
+	sailr_ptr_table_create_int_from_ptr(&table, (char*)"race_id" , &address_for_race_id);
+
+	int* address_for_age = (int *)malloc(sizeof(int));
+	*address_for_age  = 0;
+	sailr_ptr_table_create_int_from_ptr(&table, (char*)"age" , &address_for_age);
+
 	std::cout << "Show pointer table! At this point, annonym STRING should be already added.\n"  << std::endl ;
     printf("table's pointer is %p \n", table);
 	sailr_ptr_table_show_all(&table);
@@ -115,8 +130,6 @@ main(int argc, char** argv)
 	std::cout << "Show parser tree! \n"  << std::endl ;
 
 	sailr_tree_dump( ps );
-
-
 
 
 	std::cout << "Show pointer table again! \n"  << std::endl ;

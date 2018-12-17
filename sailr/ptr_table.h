@@ -60,8 +60,9 @@ int ptr_table_update_stirng(ptr_table**, char* key, string_object** strptr);
 string_object* ptr_table_get_pp_string(ptr_table** table, char* key);
 const char* ptr_table_get_char(ptr_table** table, char* key);
 
-
+int ptr_table_update_string(ptr_table** , char* , string_object** );
 int ptr_table_del(ptr_table** table, char* key);
+int ptr_record_free(ptr_record* );
 int ptr_table_free(ptr_table**);
 void ptr_table_show_all(ptr_table**);
 PtrType ptr_table_type_of(ptr_table** table, char* key);

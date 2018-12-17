@@ -159,9 +159,15 @@ ptr_table_create_string_from_ptr(ptr_table** table, char* key, string_object** s
 int
 ptr_table_update_string(ptr_table** table, char* key, string_object** strptr)
 {
+    ptr_record* to_be_updated = ptr_table_find(table, key);
+    if(to_be_updated->type != PTR_STR)
+        printf("ERROR: Record with non-string is trying to be updated with string.");
 
+    if(to_be_updated->gc == GC_YES)
+        free(to_be_updated->address);
+    
+    to_be_updated->address = *strptr;
 }
-
 
 int
 ptr_table_del(ptr_table** table, char* key)

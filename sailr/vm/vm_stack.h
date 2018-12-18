@@ -15,7 +15,7 @@ enum _ItemType {
 		PP_IVAL,
 		PP_DVAL,
 		PP_STR,
-		NULLPTR
+		NULL_ITEM
 };
 typedef enum _ItemType ItemType;
 
@@ -28,6 +28,7 @@ struct _stack_item {
 		int** pp_ival;
 		double** pp_dval;
 		string_object** pp_str; 
+        ptr_record* p_record;
 		void* ptr;
 	};
 };
@@ -55,6 +56,7 @@ int vm_stack_push_dval( vm_stack* , double );
 int vm_stack_push_pp_ival( vm_stack* , ptr_table**, char* );
 int vm_stack_push_pp_dval( vm_stack* , ptr_table**, char* );
 int vm_stack_push_pp_str( vm_stack* , ptr_table**, char* );
+int vm_stack_push_null( vm_stack* , ptr_table**, char* );
 
 stack_item* vm_stack_pop( vm_stack* );
 

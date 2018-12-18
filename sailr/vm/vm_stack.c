@@ -10,7 +10,7 @@ char* ItemTypeDisplay[] = {
 	"PP_IVAL",
 	"PP_DVAL",
 	"PP_STR",
-	"NULLPTR"
+	"NULL_ITEM"
 };
 
 // private
@@ -21,7 +21,7 @@ vm_stack_init()
 	stack->sp = 0;
 
 	stack_item* item = (stack_item*)malloc(sizeof(stack_item));
-	item->type = NULLPTR;
+	item->type = NULL_ITEM;
 	item->ptr = NULL;
 
 	memcpy( &(stack->stack[stack->sp]), item, sizeof(stack_item));
@@ -105,6 +105,18 @@ vm_stack_push_pp_str( vm_stack* stack , ptr_table** table, char* ptr_key)
 	vm_stack_display_item(stack, stack->sp);
 }
 
+int
+vm_stack_push_null( vm_stack* stack , ptr_table** table, char* ptr_key)
+{
+	ptr_record* record = ptr_table_find(table, ptr_key);
+	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
+	memcpy(new_stack_item,
+		&(stack_item const){ NULL_ITEM, {.p_record = record} },
+		sizeof(stack_item));
+	vm_stack_push_item(stack, new_stack_item);
+	vm_stack_display_item(stack, stack->sp);
+}
+
 stack_item*
 vm_stack_pop( vm_stack* vmstack )
 {
@@ -148,8 +160,8 @@ vm_stack_display_item(vm_stack* vmstack, int idx)
 	case BOOLEAN:
 		printf("%04d \t%s \t%d \n", idx, ItemTypeDisplay[stack[idx].type], stack[idx].boolean );
 		break;
-	case NULLPTR:
-		printf("%04d \t%s %p\n", idx, ItemTypeDisplay[stack[idx].type], stack[idx].ptr );
+	case NULL_ITEM:
+		printf("%04d \t%s %p\n", idx, ItemTypeDisplay[stack[idx].type], ((ptr_record*) stack[idx].p_record)->address );
 		break;
 	}
 }

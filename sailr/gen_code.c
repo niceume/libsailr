@@ -60,6 +60,8 @@ gen_code_ident(TreeNode* nd, ptr_table* table)  // Terminal OK
 		code = new_vm_inst_push_pp_dval(id_name);
 	} else if (record->type == PTR_STR){
 		code = new_vm_inst_push_pp_str(id_name);
+	} else if (record->type == PTR_NULL){
+		code = new_vm_inst_push_null(id_name);
 	} else {
 		printf("Inappropriate type is specified for varialbe. \n");
 	}

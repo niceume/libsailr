@@ -3,6 +3,7 @@
 #include "common_string.h"
 #include "vm_stack.h"
 #include "vm_assign.h"
+#include "../ptr_table.h"
 
 int
 vm_stack_store_val(vm_stack* vmstack)
@@ -10,6 +11,39 @@ vm_stack_store_val(vm_stack* vmstack)
 
 	stack_item* lvalue = vm_stack_second(vmstack);
 	stack_item* rvalue = vm_stack_top(vmstack);
+
+    if( lvalue->type == NULL_ITEM ){
+    ptr_record* left_record = (ptr_record*)lvalue->p_record;
+	switch (rvalue->type){
+		case IVAL:
+        // change type from PTR_NULL to PTR_INT on ptr_table.
+        left_record->type = PTR_INT;
+        // allocate memory for integer. ptr_record points to the address.
+        left_record->address = malloc(sizeof(int));
+        left_record->gc = GC_YES;
+        // assign value to the newly allocated memory.
+        memcpy( left_record->address, &(rvalue->ival), sizeof(int));
+		break;
+		case DVAL:
+        // change type from PTR_NULL to PTR_INT on ptr_table.
+        left_record->type = PTR_DBL;
+        // allocate memory for integer. ptr_record points to the address.
+        left_record->address = malloc(sizeof(double));
+        left_record->gc = GC_YES;
+        // assign value to the newly allocated memory.
+        memcpy( left_record->address, &(rvalue->ival), sizeof(double));
+		break;
+		case PP_STR:
+        // change type from PTR_NULL to PTR_STR on ptr_table.
+        left_record->type = PTR_STR;
+        left_record->gc = GC_YES;
+        // assign address of right string to the ptr_record.
+        left_record->address = *(rvalue->pp_str);
+		break;
+    }
+	vmstack->sp = ((vmstack->sp) - 2);
+    return 1;
+    }
 
 	if( (lvalue->type != PP_IVAL ) && (lvalue->type != PP_DVAL ) && (lvalue->type != PP_STR ))
 		printf("lvalue should be pointer to pointer.\n");

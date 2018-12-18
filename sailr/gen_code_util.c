@@ -57,6 +57,14 @@ new_vm_inst_push_pp_str( char* ptr_key )
 }
 
 vm_inst*
+new_vm_inst_push_null( char* ptr_key )
+{
+	vm_inst* temp_inst = new_vm_inst_command( VM_PUSH_NULL );
+	temp_inst->ptr_key = ptr_key;
+	return temp_inst;
+}
+
+vm_inst*
 new_vm_inst_label( char* label )
 {
 	vm_inst* temp_inst = new_vm_inst_command( VM_LABEL );

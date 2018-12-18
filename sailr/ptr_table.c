@@ -18,7 +18,7 @@ ptr_table_init (){
 	return table;
 }
 
-// type specified should be PTR_INT, PTR_DBL or PTR_STR
+// type specified should be PTR_INT, PTR_DBL, PTR_STR or PTR_NULL
 ptr_record*
 ptr_table_add (ptr_table** table, char* key, void** address, PtrType type, GCReq gc )
 {
@@ -29,7 +29,11 @@ ptr_table_add (ptr_table** table, char* key, void** address, PtrType type, GCReq
 		ptr_record* new_ptr_record;
 		new_ptr_record = (ptr_record *)malloc(sizeof(ptr_record));
 		strncpy( new_ptr_record->key , key, MAX_KEY_LEN ) ;
-		new_ptr_record->address = *address;
+        if(type != PTR_NULL){
+    		new_ptr_record->address = *address;
+        }else{
+            new_ptr_record->address = NULL;
+        }
 		new_ptr_record->type = type;
 		new_ptr_record->gc = gc ; 
 		// printf("%s\t %p\t \n", new_ptr_record->key, new_ptr_record->address);
@@ -37,7 +41,12 @@ ptr_table_add (ptr_table** table, char* key, void** address, PtrType type, GCReq
 		// printf("%s\t %p\t \n", table->key, table->address);
 		result = new_ptr_record;
 	} else {
-		ptr_table_update( result, *address, type, gc );
+        if(type != PTR_NULL){
+    		ptr_table_update( result, *address, type, gc );
+        }else{
+    		ptr_table_update( result, NULL, type, gc );
+        }
+
 	}
 	return result;
 }
@@ -167,6 +176,16 @@ ptr_table_update_string(ptr_table** table, char* key, string_object** strptr)
         free(to_be_updated->address);
     
     to_be_updated->address = *strptr;
+}
+
+ptr_record*
+ptr_table_create_null(ptr_table** table, char* key)
+{
+	ptr_record* result = NULL;
+    void** ppv = NULL;
+	result = ptr_table_add(table, key, ppv, PTR_NULL, GC_NO);
+    printf("void pointer \n");
+	return result;
 }
 
 int

@@ -123,6 +123,13 @@ main(int argc, char** argv)
 	*address_for_age  = 0;
 	sailr_ptr_table_create_int_from_ptr(&table, (char*)"age" , &address_for_age);
 
+	int* address_for_hrsweek = (int *)malloc(sizeof(int));
+	*address_for_hrsweek  = 20;
+	sailr_ptr_table_create_int_from_ptr(&table, (char*)"hrsweek" , &address_for_hrsweek);
+
+	sailr_ptr_table_create_null(&table, (char*)"workaholic_asian" );
+	sailr_ptr_table_create_null(&table, (char*)"workaholic_asian_name" );
+
 	std::cout << "Show pointer table! At this point, annonym STRING should be already added.\n"  << std::endl ;
     printf("table's pointer is %p \n", table);
 	sailr_ptr_table_show_all(&table);

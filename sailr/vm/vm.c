@@ -76,6 +76,9 @@ vm_run_inst (vm_inst* inst, ptr_table* table, vm_stack* vmstack )
 	case VM_PUSH_PP_STR:
 		vm_stack_push_pp_str(vmstack, &table, inst->ptr_key);
 		break;
+    case VM_PUSH_NULL:
+    	vm_stack_push_null(vmstack, &table, inst->ptr_key);
+	    break;
 	case VM_POP:
 		vm_stack_pop(vmstack);
 		break;

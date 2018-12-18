@@ -108,12 +108,19 @@ sailr_ptr_table_create_string_from_ptr(ptr_table_object** table, char* key, stri
 }
 
 ptr_record_object*
+sailr_ptr_table_create_null(ptr_table_object** table, char* key)
+{
+	return (ptr_record_object*) ptr_table_create_null((ptr_table**)table, key);
+}
+
+ptr_record_object*
 sailr_ptr_table_create_anonym_string(ptr_table_object** table, const char* str)
 {
 	string_object* new_str = string_new(str);
 	return (ptr_record_object*) ptr_table_create_anonym_string((ptr_table**)table, &new_str);
 
 }
+
 
 string_type_object*
 sailr_ptr_table_get_pp_string(ptr_table_object** table, char* key){

@@ -68,10 +68,15 @@ vm_run_inst (vm_inst* inst, ptr_table* table, vm_stack* vmstack )
 		vm_stack_push_dval(vmstack, inst->dval);
 		break;
 	case VM_PUSH_PP_IVAL:
+        printf("This instruction is not used. Use VM_PUSH_PP_NUM.");
 		vm_stack_push_pp_ival(vmstack, &table, inst->ptr_key);
 		break;
 	case VM_PUSH_PP_DVAL:
+        printf("This instruction is not used. Use VM_PUSH_PP_NUM.");
 		vm_stack_push_pp_dval(vmstack, &table, inst->ptr_key);
+		break;
+	case VM_PUSH_PP_NUM:
+		vm_stack_push_pp_num(vmstack, &table, inst->ptr_key);
 		break;
 	case VM_PUSH_PP_STR:
 		vm_stack_push_pp_str(vmstack, &table, inst->ptr_key);

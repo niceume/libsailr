@@ -66,10 +66,15 @@ make build
 
 * Bug fix: double was not dealt properly, and it's fixed.
 
-## Ver 0.25 [Dec.22 2018]
+## Ver 0.25 [Dec.21 2018]
 
 * Change directory structure.
     + Easier to be used from other projects.
+
+## Ver 0.26 [Dec. 21 2018]
+
+* For undefined varialbe, its type is assigned to the type of first value.
+* Number (int and double) are dealt in the same way at VM instruction level.
 
 ## Plan
 

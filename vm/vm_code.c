@@ -20,6 +20,12 @@ vm_inst_display( vm_inst* inst )
 	case VM_PUSH_PP_STR:
 		printf("CMD:%s\t ARG:.ptr_key=%s\n", cmd_str, inst->ptr_key);
 		break;
+    case VM_PUSH_PP_NUM:
+		printf("CMD:%s\t ARG:.ptr_key=%s\n", cmd_str, inst->ptr_key);
+		break;
+    case VM_PUSH_NULL:
+		printf("CMD:%s\t ARG:.ptr_key=%s\n", cmd_str, inst->ptr_key);
+		break;
 	case VM_LABEL:
 		printf("CMD:%s\t ARG:.label=%s\n", cmd_str, inst->label);
 		break;

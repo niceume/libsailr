@@ -55,6 +55,7 @@ int vm_stack_push_ival( vm_stack* , int );
 int vm_stack_push_dval( vm_stack* , double );
 int vm_stack_push_pp_ival( vm_stack* , ptr_table**, char* );
 int vm_stack_push_pp_dval( vm_stack* , ptr_table**, char* );
+int vm_stack_push_pp_num( vm_stack* , ptr_table**, char* );
 int vm_stack_push_pp_str( vm_stack* , ptr_table**, char* );
 int vm_stack_push_null( vm_stack* , ptr_table**, char* );
 

@@ -35,7 +35,8 @@ new_vm_inst_push_dval( double dval )
 vm_inst*
 new_vm_inst_push_pp_ival( char* ptr_key )
 {
-	vm_inst* temp_inst = new_vm_inst_command( VM_PUSH_PP_IVAL );
+//	vm_inst* temp_inst = new_vm_inst_command( VM_PUSH_PP_IVAL );
+    vm_inst* temp_inst = new_vm_inst_command( VM_PUSH_PP_NUM );
 	temp_inst->ptr_key = ptr_key;
 	return temp_inst;
 }
@@ -43,7 +44,8 @@ new_vm_inst_push_pp_ival( char* ptr_key )
 vm_inst*
 new_vm_inst_push_pp_dval( char* ptr_key )
 {
-	vm_inst* temp_inst = new_vm_inst_command( VM_PUSH_PP_DVAL );
+//	vm_inst* temp_inst = new_vm_inst_command( VM_PUSH_PP_DVAL );
+    vm_inst* temp_inst = new_vm_inst_command( VM_PUSH_PP_NUM );
 	temp_inst->ptr_key = ptr_key;
 	return temp_inst;
 }
@@ -161,6 +163,8 @@ vm_inst_list_display_all( vm_inst_list* list )
 	char* curr_cmd;
 	vm_inst* curr_inst;
 	curr_inst = list;
+    printf("At this point, VM instructions just holds 'key name' for ptr_table record.\n");
+    printf("For values, VM instructions holds values themselves.\n");
 	do{
 		vm_inst_display( curr_inst );
 		curr_inst = curr_inst->next;

@@ -76,10 +76,12 @@ void
 sailr_vm_inst_list_show( vm_inst_object* insts )
 {
 	vm_inst* inst = (vm_inst*) insts;
-	do{
-		vm_inst_display(inst);		
-		inst = inst->next;
-	}while(inst != NULL);
+    vm_inst_list_display_all( inst );
+    
+//	do{
+//		vm_inst_display(inst);		
+//		inst = inst->next;
+//	}while(inst != NULL);
 }
 
 void

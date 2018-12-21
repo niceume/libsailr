@@ -93,6 +93,20 @@ vm_stack_push_pp_dval( vm_stack* stack , ptr_table** table, char* ptr_key)
 }
 
 int
+vm_stack_push_pp_num( vm_stack* stack , ptr_table** table, char* ptr_key)
+{
+	ptr_record* record = ptr_table_find(table, ptr_key);
+    if(record->type == PTR_INT){
+        vm_stack_push_pp_ival(stack, table, ptr_key);
+    } else if (record->type == PTR_DBL){
+        vm_stack_push_pp_dval(stack, table, ptr_key);
+    } else {
+        printf("ERROR: For records corresponding to instructions of PUSH_PP_NUM, ");
+        printf("types should be PTR_INT or PTR_DBL.\n");
+    }
+}
+
+int
 vm_stack_push_pp_str( vm_stack* stack , ptr_table** table, char* ptr_key)
 {
 	ptr_record* record = ptr_table_find(table, ptr_key);

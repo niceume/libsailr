@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "vm_calc.h"
 #include "common_string.h"
+#include "../ptr_table.h"
 
 
 // Helper functions --------------
@@ -136,6 +137,7 @@ item_is_bool (stack_item* item)
 int
 stack_item_pp2value(stack_item* item)
 {
+    ptr_record* null_record ;
 	switch(item->type){
 		case PP_IVAL:
 			item->type = IVAL;
@@ -153,6 +155,28 @@ stack_item_pp2value(stack_item* item)
 		case DVAL:
 			printf("This item is already a value.\n");
 			break;
+        case NULL_ITEM:
+            null_record = (ptr_record*) item->p_record;
+            if(null_record->type == PTR_NULL){
+                printf("ERROR: The variable, %s, should not be null. ", null_record->key );
+                printf("Variable of null value cannot be used for calculation. \n");
+            }else{
+                if(null_record->type == PTR_INT){
+			        item->type = IVAL;
+			        int tmp_int = *((int*)(null_record->address)) ;
+			        item->ival = tmp_int;
+                }else if(null_record->type == PTR_DBL){
+			        item->type = DVAL;
+			        double tmp_double = *((double*)(null_record->address)) ;
+			        item->dval = tmp_double;
+                }else if(null_record->type == PTR_STR){
+			        item->type = PP_STR;
+			        string_object* tmp_str = ((string_object*)(null_record->address)) ;
+			        item->pp_str = &tmp_str;
+                }else{
+                    printf("ERROR: NULL_ITEM points to a ptr_record with unintended type: %s", null_record->key );
+                }
+            }
 		default:
 			printf("THis item is not PP_IVAL, PP_DVAL, IVAL or DVAL. \n");
 			return 0;

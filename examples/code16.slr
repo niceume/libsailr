@@ -9,7 +9,7 @@ if(race == "White"){
 }else if(race == "Asian-Pac-Islander"){
   race_id = 3
   if( hrsweek >= 40 ){
-    workaholic_asian =  workaholic_asian + 1
+    workaholic_asian =  workaholic_asian + 1.5
     workaholic_asian_name = "Taro works much"
   }
 }else{

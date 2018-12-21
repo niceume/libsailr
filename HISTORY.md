@@ -43,19 +43,19 @@ make build
 ```
 
 
-## Ver 0.2a (Prev called 0.21) [Nov. 28 2018]
+## Ver 0.21 [Nov. 28 2018]
 
 * Bug fixes
     + string manipulations are improved. 
 * From Rcpp this library is successfully loaded and utilized.
 
-## Ver 0.2b (Prev called 0.22) [Dec. 17 2018]
+## Ver 0.22 [Dec. 17 2018]
 
 * Bug fixes
     + Nested if else did not work well. Now it's fixed.
     + working fine.
 
-## Ver 0.2c [Dec. 18 2018]
+## Ver 0.23 [Dec. 18 2018]
 
 * Newly created variables are supported.
     1. Variable should be prepared as PTR_NULL on ptr_table.

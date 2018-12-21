@@ -28,7 +28,7 @@ vm_inst*
 new_vm_inst_push_dval( double dval )
 {
 	vm_inst* temp_inst = new_vm_inst_command( VM_PUSH_DVAL );
-	temp_inst->ival = dval;
+	temp_inst->dval = dval;
 	return temp_inst;
 }
 

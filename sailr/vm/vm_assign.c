@@ -16,22 +16,60 @@ vm_stack_store_val(vm_stack* vmstack)
     ptr_record* left_record = (ptr_record*)lvalue->p_record;
 	switch (rvalue->type){
 		case IVAL:
-        // change type from PTR_NULL to PTR_INT on ptr_table.
-        left_record->type = PTR_INT;
-        // allocate memory for integer. ptr_record points to the address.
-        left_record->address = malloc(sizeof(int));
-        left_record->gc = GC_YES;
-        // assign value to the newly allocated memory.
-        memcpy( left_record->address, &(rvalue->ival), sizeof(int));
+        if(left_record->type == PTR_NULL){
+            // change type from PTR_NULL to PTR_INT on ptr_table.
+            left_record->type = PTR_INT;
+            // allocate memory for integer. ptr_record points to the address.
+            left_record->address = malloc(sizeof(int));
+            left_record->gc = GC_YES;
+            // assign value to the newly allocated memory.
+            memcpy( left_record->address, &(rvalue->ival), sizeof(int));
+        } else if (left_record->type == PTR_INT){
+            // left_record->type continues to be PTR_INT.
+            free(left_record->address);
+            left_record->address = malloc(sizeof(int));
+            left_record->gc = GC_YES;
+            // assign value to the newly allocated memory.
+            memcpy( left_record->address, &(rvalue->ival), sizeof(int));
+        } else if (left_record->type == PTR_DBL){
+            // left_record->type continues to be PTR_DBL.
+            free(left_record->address);
+            left_record->address = malloc(sizeof(double));
+            left_record->gc = GC_YES;
+            // assign value to the newly allocated memory.
+            double temp_dbl_from_rvalue = (double)(rvalue->ival);
+            memcpy( left_record->address, &(temp_dbl_from_rvalue), sizeof(double));            
+        } else { // e.g. left_record->type == PTR_STR
+            printf("ERROR: this type cannot be assigned to this type.");
+        }
 		break;
 		case DVAL:
-        // change type from PTR_NULL to PTR_INT on ptr_table.
-        left_record->type = PTR_DBL;
-        // allocate memory for integer. ptr_record points to the address.
-        left_record->address = malloc(sizeof(double));
-        left_record->gc = GC_YES;
-        // assign value to the newly allocated memory.
-        memcpy( left_record->address, &(rvalue->ival), sizeof(double));
+        if(left_record->type == PTR_NULL){
+            // change type from PTR_NULL to PTR_DBL on ptr_table.
+            left_record->type = PTR_DBL;
+            // allocate memory for integer. ptr_record points to the address.
+            left_record->address = malloc(sizeof(double));
+            left_record->gc = GC_YES;
+            // assign value to the newly allocated memory.
+            memcpy( left_record->address, &(rvalue->dval), sizeof(double));
+        }else if (left_record->type == PTR_INT){
+            // change type from PTR_INT to PTR_DBL on ptr_table.
+            left_record->type = PTR_DBL;
+            free(left_record->address);
+            left_record->address = malloc(sizeof(double));
+            left_record->gc = GC_YES;
+            // assign value to the newly allocated memory.
+            memcpy( left_record->address, &(rvalue->dval), sizeof(double));
+        } else if (left_record->type == PTR_DBL){
+            // left record->type continues to be PTR_DBL.
+            free(left_record->address);
+            left_record->address = malloc(sizeof(double));
+            left_record->gc = GC_YES;
+            // assign value to the newly allocated memory.
+            memcpy( left_record->address, &(rvalue->dval), sizeof(double));
+        } else { // e.g. left_record->type == PTR_STR
+            printf("ERROR: this type cannot be assigned to this type.");
+        }
 		break;
 		case PP_STR:
         // change type from PTR_NULL to PTR_STR on ptr_table.

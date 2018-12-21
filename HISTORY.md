@@ -62,6 +62,15 @@ make build
     2. The variable type should be changed dynamically.
 
 
+## Ver 0.24 [Dec.21 2018]
+
+* Bug fix: double was not dealt properly, and it's fixed.
+
+## Ver 0.25 [Dec.22 2018]
+
+* Change directory structure.
+    + Easier to be used from other projects.
+
 ## Plan
 
 * Refactoring

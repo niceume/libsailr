@@ -10,8 +10,8 @@
 
 # Ignore generated files by flex and bison
 
-/sailr/y.output
-/sailr/y.tab.c
-/sailr/y.tab.h
-/sailr/lex.yy.c
+/y.output
+/y.tab.c
+/y.tab.h
+/lex.yy.c
 

@@ -65,10 +65,9 @@ int yydebug = 1;
 /* UMINUS is special. No such token exits. */
 %left<nd> OP_PLUS OP_SUB 
 %left<nd> OP_MULT OP_DIV OP_MOD
-%right<nd> UMINUS  /* In rule, | SUBOP expr %prec UMINUS */
 %right<nd> OP_POWER
 %left<nd> FACTOR
-
+%right<nd> UMINUS  /* https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.3.0/com.ibm.zos.v2r3.bpxa600/bpxa698.htm */
 
 %%
 
@@ -105,6 +104,7 @@ arg		: arg OP_PLUS arg		{ $$ = new_node_op("PLUS", $1, $3); }
 			| arg OP_LT arg		{ $$ = new_node_op("LT", $1, $3); }
 			| arg OP_GE arg		{ $$ = new_node_op("GE", $1, $3); }
 			| arg OP_LE arg		{ $$ = new_node_op("LE", $1, $3); }
+			| OP_SUB arg %prec UMINUS	{ $$ = new_node_uniop("UMINUS", $2); }
 			| primary				{ $$ = $1; }
 
 primary	: IDENT	

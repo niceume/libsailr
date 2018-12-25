@@ -28,9 +28,9 @@ struct _stack_item {
 		int** pp_ival;
 		double** pp_dval;
 		string_object** pp_str; 
-        ptr_record* p_record;
 		void* ptr;
 	};
+    ptr_record* p_record;
 };
 typedef struct _stack_item stack_item ;
 

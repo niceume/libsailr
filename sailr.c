@@ -91,15 +91,15 @@ sailr_vm_exec_code( vm_inst_object* code , int num_insts , ptr_table_object* tab
 }
 
 ptr_record_object*
-sailr_ptr_table_create_int_from_ptr(ptr_table_object** table, char* key, int** pp)
+sailr_ptr_table_create_int_from_ptr(ptr_table_object** table, char* key, int** i_pp, double** d_pp)
 {
-	return (ptr_record_object*) ptr_table_create_int_from_ptr((ptr_table**)table, key, pp);
+	return (ptr_record_object*) ptr_table_create_int_from_ptr((ptr_table**)table, key, i_pp, d_pp);
 }
 
 ptr_record_object*
-sailr_ptr_table_create_double_from_ptr(ptr_table_object** table, char* key, double** pp)
+sailr_ptr_table_create_double_from_ptr(ptr_table_object** table, char* key, double** d_pp, int** i_pp)
 {
-	return (ptr_record_object*) ptr_table_create_double_from_ptr((ptr_table**)table, key, pp);
+	return (ptr_record_object*) ptr_table_create_double_from_ptr((ptr_table**)table, key, d_pp, i_pp);
 }
 
 ptr_record_object*

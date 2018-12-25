@@ -86,6 +86,8 @@ convert_op(char* op_name)
 		return VM_POWX;
 	} else if ( strcmp( op_name, "FACTOR") == 0 ) {
 		return VM_FAC;
+	} else if ( strcmp( op_name, "UMINUS") == 0 ) {
+		return VM_UMINUS;
 	} else if ( strcmp( op_name, "AND") == 0 ) {
 		return VM_AND;
 	} else if ( strcmp( op_name, "OR") == 0 ) {

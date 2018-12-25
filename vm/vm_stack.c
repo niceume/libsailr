@@ -47,7 +47,7 @@ vm_stack_push_ival( vm_stack* stack , int num)
 {
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	memcpy(new_stack_item,
-		&(stack_item const){ IVAL, {.ival = num} },
+		&(stack_item const){ IVAL, {.ival = num} , NULL },
 		sizeof(stack_item));
 	printf("new_stack_item: ival %d \n", new_stack_item->ival );
 	vm_stack_push_item(stack, new_stack_item);
@@ -59,7 +59,7 @@ vm_stack_push_dval( vm_stack* stack , double num)
 {
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	memcpy(new_stack_item,
-		&(stack_item const){ DVAL, {.dval = num} },
+		&(stack_item const){ DVAL, {.dval = num} , NULL },
 		sizeof(stack_item));
 	vm_stack_push_item(stack, new_stack_item);
 	return 1;
@@ -74,7 +74,7 @@ vm_stack_push_pp_ival( vm_stack* stack , ptr_table** table, char* ptr_key)
 
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	memcpy(new_stack_item,
-		&(stack_item const){ PP_IVAL, {.pp_ival = pp_ival} },
+		&(stack_item const){ PP_IVAL, {.pp_ival = pp_ival}, record },
 		sizeof(stack_item));
 	printf("new_stack_item: pointer to pointer to %d \n", **(new_stack_item->pp_ival) );
 	vm_stack_push_item(stack, new_stack_item);
@@ -87,7 +87,7 @@ vm_stack_push_pp_dval( vm_stack* stack , ptr_table** table, char* ptr_key)
 	double** pp_dval = (double**) &(record->address);
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	memcpy(new_stack_item,
-		&(stack_item const){ PP_DVAL, {.pp_dval = pp_dval} },
+		&(stack_item const){ PP_DVAL, {.pp_dval = pp_dval}, record },
 		sizeof(stack_item));
 	vm_stack_push_item(stack, new_stack_item);
 }
@@ -113,7 +113,7 @@ vm_stack_push_pp_str( vm_stack* stack , ptr_table** table, char* ptr_key)
 	string_object** pp_str = (string_object**) &(record->address);
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	memcpy(new_stack_item,
-		&(stack_item const){ PP_STR, {.pp_str = pp_str} },
+		&(stack_item const){ PP_STR, {.pp_str = pp_str}, record },
 		sizeof(stack_item));
 	vm_stack_push_item(stack, new_stack_item);
 	vm_stack_display_item(stack, stack->sp);
@@ -125,7 +125,7 @@ vm_stack_push_null( vm_stack* stack , ptr_table** table, char* ptr_key)
 	ptr_record* record = ptr_table_find(table, ptr_key);
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	memcpy(new_stack_item,
-		&(stack_item const){ NULL_ITEM, {.p_record = record} },
+		&(stack_item const){ NULL_ITEM, {.ptr = NULL}, record },
 		sizeof(stack_item));
 	vm_stack_push_item(stack, new_stack_item);
 	vm_stack_display_item(stack, stack->sp);

@@ -76,10 +76,19 @@ make build
 * For undefined varialbe, its type is assigned to the type of first value.
 * Number (int and double) are dealt in the same way at VM instruction level.
 
+## Ver 0.30 [Dec. 25 2018]
+
+* Numbers are converted between double and int.
+	* Add extra address field to ptr_table/ptr_record.
+	* This enables number-type record to keep memory for int and double.
+* This happens when assingning and LHS type is different from RHS type.
+
+* Add unitary minus operator support.
+
 ## Plan
 
 * Refactoring
-
+* Function support
 
 
 

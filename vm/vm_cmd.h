@@ -36,6 +36,7 @@
 	X(VM_MODX, "VM_MODX") \
 	X(VM_POWX, "VM_POWX") \
 	X(VM_FAC, "VM_FAC") \
+	X(VM_UMINUS, "VM_UMINUS") \
 \
 /* Logical Calculation */ \
 	X(VM_AND, "VM_AND") \

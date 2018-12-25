@@ -11,9 +11,12 @@ ptr_table_init (){
 	ptr_record* new_ptr_record;
 	new_ptr_record = (ptr_record *)malloc(sizeof(ptr_record));
 	strncpy( new_ptr_record->key , "_HEAD_OF_UTHASH_", MAX_KEY_LEN) ; 
-	new_ptr_record->address = (void**) NULL;
+	new_ptr_record->address = (void*) NULL;
 	new_ptr_record->type = PTR_NULL;
-	new_ptr_record->gc = GC_YES;
+	new_ptr_record->gc = GC_NO;
+	new_ptr_record->ex_addr = (void*) NULL;
+	new_ptr_record->ex_type = PTR_NULL;
+	new_ptr_record->ex_gc = GC_NO;
 	ptr_table_insert(&table, new_ptr_record );
 	return table;
 }
@@ -62,10 +65,11 @@ ptr_table_create_int(ptr_table** table, char* key, int ival)
 }
 
 ptr_record*
-ptr_table_create_int_from_ptr(ptr_table** table, char* key, int** iptr)
+ptr_table_create_int_from_ptr(ptr_table** table, char* key, int** iptr, double** dptr)
 {
 	ptr_record* result = NULL;
 	result = ptr_table_add(table, key, (void**) iptr, PTR_INT, GC_NO);
+	ptr_record_update_extra_address(result, (void**) dptr, PTR_DBL, GC_NO);
 	return result;
 }
 
@@ -105,10 +109,11 @@ ptr_table_create_double(ptr_table** table, char* key, double dval)
 }
 
 ptr_record*
-ptr_table_create_double_from_ptr(ptr_table** table, char* key, double** dptr)
+ptr_table_create_double_from_ptr(ptr_table** table, char* key, double** dptr, int** iptr)
 {
 	ptr_record* result = NULL;
 	result = ptr_table_add(table, key, (void**) dptr, PTR_DBL, GC_NO);
+	ptr_record_update_extra_address(result, (void**) iptr, PTR_INT, GC_NO);
 	return result;
 }
 
@@ -119,6 +124,37 @@ ptr_table_update_double(ptr_table** table, char* key, double dval)
 	memcpy((double*) result->address , &dval, sizeof(double));
 	return 1;
 }
+
+int
+ptr_record_update_extra_address(ptr_record* pr, void** ptr_ex_addr, PtrType ex_type, GCReq ex_gc )
+{
+	pr->ex_addr = *ptr_ex_addr;
+	pr->ex_type = ex_type;
+	pr->ex_gc = ex_gc;
+	return 1;
+}
+
+int
+ptr_record_swap_addresses(ptr_record* pr)
+{
+	void* temp_address;
+	PtrType temp_type;
+	GCReq temp_gc;
+
+	temp_address = pr->address;
+	temp_type = pr->type;
+	temp_gc = pr->gc;
+
+	pr->address = pr->ex_addr;
+	pr->type = pr->ex_type;
+	pr->gc = pr->ex_gc;
+
+	pr->ex_addr = temp_address;
+	pr->ex_type = temp_type;
+	pr->ex_gc = temp_gc;
+	return 1;
+}
+
 
 char*
 create_new_str_key(){
@@ -250,20 +286,25 @@ ptr_table_show_all(ptr_table** table)
     ptr_record *pr;
     for( pr = *table ; pr != NULL; pr=(ptr_record *)pr->hh.next) {
 		if(pr->type == PTR_INT){
-        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%d \n", 
-			pr->key, pr->address, pr->type, pr->gc, *((int*)(pr->address)) );
+        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%d\t (ADR:%p\t TYPE:%d\t GC:%d\t VAL:%lf) \n", 
+			pr->key, pr->address, pr->type, pr->gc, *((int*)(pr->address)),
+			pr->ex_addr, pr->ex_type, pr->ex_gc, *((double*)(pr->ex_addr)) );
 		}else if(pr->type == PTR_DBL){
-        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%lf \n", 
-			pr->key, pr->address, pr->type, pr->gc, *((double*)(pr->address)) );
+        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%lf\t (ADR:%p\t TYPE:%d\t GC:%d\t VAL:%d)\n", 
+			pr->key, pr->address, pr->type, pr->gc, *((double*)(pr->address)),
+			pr->ex_addr, pr->ex_type, pr->ex_gc, *((int*)(pr->ex_addr)));
 		}else if(pr->type == PTR_STR){
-        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%s \n", 
-			pr->key, pr->address, pr->type, pr->gc, string_read((string_object*)(pr->address)) );
+        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%s\t (ADR:%p)\n", 
+			pr->key, pr->address, pr->type, pr->gc, string_read((string_object*)(pr->address)),
+			pr->ex_addr );
 		}else if(pr->type == PTR_NULL){
-        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d \n", 
-			pr->key, pr->address, pr->type, pr->gc);
+        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t (ADR:%p) \n", 
+			pr->key, pr->address, pr->type, pr->gc,
+			pr->ex_addr);
 		}else{
-        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d \n", 
-			pr->key, pr->address, pr->type, pr->gc);
+        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t (ADR:%p) \n", 
+			pr->key, pr->address, pr->type, pr->gc,
+			pr->ex_addr);
 		}
     }
 }

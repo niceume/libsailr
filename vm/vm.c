@@ -121,6 +121,9 @@ vm_run_inst (vm_inst* inst, ptr_table* table, vm_stack* vmstack )
 	case VM_FAC:
 		vm_calc_factorial(vmstack);
 		break;
+	case VM_UMINUS:
+		vm_calc_uminus(vmstack);
+		break;
 	case VM_AND:
 		vm_calc_and(vmstack);
 		break;

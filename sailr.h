@@ -21,8 +21,8 @@ void                  sailr_vm_inst_list_show( vm_inst_object* );
 vm_stack_object*      sailr_vm_stack_init();
 void                  sailr_vm_exec_code(vm_inst_object*, int, ptr_table_object*, vm_stack_object*);
 
-ptr_record_object* sailr_ptr_table_create_int_from_ptr(ptr_table_object** table, char* key, int** pp);
-ptr_record_object* sailr_ptr_table_create_double_from_ptr(ptr_table_object** table, char* key, double** pp);
+ptr_record_object* sailr_ptr_table_create_int_from_ptr(ptr_table_object** table, char* key, int** i_pp, double** d_pp);
+ptr_record_object* sailr_ptr_table_create_double_from_ptr(ptr_table_object** table, char* key, double** d_pp, int** i_pp);
 ptr_record_object* sailr_ptr_table_create_string_from_ptr(ptr_table_object** table, char* key, string_type_object** pp);
 ptr_record_object* sailr_ptr_table_create_anonym_string(ptr_table_object** table, const char* str);
 ptr_record_object* sailr_ptr_table_create_null(ptr_table_object** table, char* key);

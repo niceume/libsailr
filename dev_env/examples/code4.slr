@@ -1,7 +1,11 @@
 /* cre age sex */
 
+age = 35;
+cre = 0.91;
+sex = 1;
+
 // MDRD
-egfr = 186 * (cre/88.4) - 1.154 * (age) - 0.203 
+egfr = 175 * cre ^ -1.154 * age ^ -0.203
 
 // Adjustment
 if (sex == 0)

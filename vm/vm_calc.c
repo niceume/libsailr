@@ -362,7 +362,7 @@ vm_calc_factorial(vm_stack* vmstack)
 
 	int result_ival;
 
-	// Add calcuation
+	// Factorial calcuation
 	// For ivals
 	if(top_item->type == IVAL){
 			result_ival = int_factorial( top_item->ival) ;
@@ -377,6 +377,36 @@ vm_calc_factorial(vm_stack* vmstack)
 			top_item->ival = result_ival;		
 	} else {
 		printf("FACT should be applied to num and num on stack.\n");
+		return 0;
+	}
+	return 1;
+}
+
+// unitary minus (single operator)
+int vm_calc_uminus(vm_stack* vmstack)
+{
+	int sp = vmstack->sp;
+	stack_item* stack = vmstack->stack;
+	stack_item* top_item = vm_stack_top(vmstack);
+	stack_item_pp2value( top_item );
+
+	int result_ival;
+	double result_dval;
+
+	// For ivals
+	if(top_item->type == IVAL){
+			result_ival = (-1) * ( top_item->ival) ;
+			vmstack->sp = vmstack->sp - 0; 
+			top_item->type = IVAL;
+			top_item->ival = result_ival;		
+	} else if(top_item->type == DVAL) {
+		// For dval
+			result_dval = (-1) * ( top_item->dval );
+			vmstack->sp = vmstack->sp - 0; 
+			top_item->type = DVAL;
+			top_item->dval = result_dval;		
+	} else {
+		printf("uminus should be applied to num and num on stack.\n");
 		return 0;
 	}
 	return 1;

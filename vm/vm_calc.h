@@ -10,6 +10,7 @@ int vm_calc_powx(vm_stack*);
 int vm_calc_modx(vm_stack*);
 int vm_calc_divx(vm_stack*);
 int vm_calc_factorial(vm_stack*);
+int vm_calc_uminus(vm_stack*);
 
 int vm_calc_and(vm_stack*);
 int vm_calc_or(vm_stack*);

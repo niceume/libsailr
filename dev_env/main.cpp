@@ -62,36 +62,47 @@ main(int argc, char** argv)
 	// Assinging pointers onto table
 
 	int* address_for_x = (int *)malloc(sizeof(int));
+	double* address_for_d_x = (double *)malloc(sizeof(double));
 	*address_for_x = 10;
-	sailr_ptr_table_create_int_from_ptr(&table, (char*)"x" , &address_for_x);
+	sailr_ptr_table_create_int_from_ptr(&table, (char*)"x" , &address_for_x, &address_for_d_x);
 
 	int* address_for_y = (int *)malloc(sizeof(int));
+	double* address_for_d_y = (double *)malloc(sizeof(double));
 	*address_for_y = 10;
-	sailr_ptr_table_create_int_from_ptr(&table, (char*)"y" , &address_for_y);
+	sailr_ptr_table_create_int_from_ptr(&table, (char*)"y" , &address_for_y, &address_for_d_y);
 
 	int* address_for_z = (int *)malloc(sizeof(int));
+	double* address_for_d_z = (double *)malloc(sizeof(double));
 	*address_for_z = 10;
-	sailr_ptr_table_create_int_from_ptr(&table, (char*)"z" , &address_for_z);
+	sailr_ptr_table_create_int_from_ptr(&table, (char*)"z" , &address_for_z, &address_for_d_z);
 
 	int* address_for_z2 = (int *)malloc(sizeof(int));
+	double* address_for_d_z2 = (double *)malloc(sizeof(double));
 	*address_for_z2 = 10;
-	sailr_ptr_table_create_int_from_ptr(&table, (char*)"z2" , &address_for_z2);
+	sailr_ptr_table_create_int_from_ptr(&table, (char*)"z2" , &address_for_z2, &address_for_d_z2);
 
 	double* address_for_bmi = (double *)malloc(sizeof(double));
+	int* address_for_i_bmi = (int *)malloc(sizeof(int));
 	*address_for_bmi = 0;
-	sailr_ptr_table_create_double_from_ptr(&table, (char*)"bmi" , &address_for_bmi);
+	sailr_ptr_table_create_double_from_ptr(&table, (char*)"bmi" , &address_for_bmi, &address_for_i_bmi);
 
 	double* address_for_height = (double *)malloc(sizeof(double));
+	int* address_for_i_height = (int *)malloc(sizeof(int));
 	*address_for_height = 1.72;
-	sailr_ptr_table_create_double_from_ptr(&table, (char*)"height" , &address_for_height);
+	sailr_ptr_table_create_double_from_ptr(&table, (char*)"height" , &address_for_height, &address_for_i_height);
 
 	double* address_for_bodyweight = (double *)malloc(sizeof(double));
+	int* address_for_i_bw = (int *)malloc(sizeof(int));
 	*address_for_bodyweight = 57.5;
-	sailr_ptr_table_create_double_from_ptr(&table, (char*)"weight" , &address_for_bodyweight);
+	sailr_ptr_table_create_double_from_ptr(&table, (char*)"weight" , &address_for_bodyweight, &address_for_i_bw);
 
 	int* address_for_ow = (int *)malloc(sizeof(int));
+	double* address_for_d_ow = (double *)malloc(sizeof(double));
 	*address_for_ow = 10;
-	sailr_ptr_table_create_int_from_ptr(&table, (char*)"overweight" , &address_for_ow);
+	sailr_ptr_table_create_int_from_ptr(&table, (char*)"overweight" , &address_for_ow, &address_for_d_ow);
+
+	string_type_object* judgement = sailr_new_string("weight?");
+	sailr_ptr_table_create_string_from_ptr( &table, (char*) "judgement" , &judgement);
 
 	string_type_object* greeting = sailr_new_string("Hello World");
 	sailr_ptr_table_create_string_from_ptr( &table, (char*) "greeting" , &greeting);
@@ -112,20 +123,39 @@ main(int argc, char** argv)
 	sailr_ptr_table_create_string_from_ptr( &table, (char*) "race" , &race);
 
 	int* address_for_oa = (int *)malloc(sizeof(int));
+	double* address_for_d_oa = (double *)malloc(sizeof(double));
 	*address_for_oa = 0;
-	sailr_ptr_table_create_int_from_ptr(&table, (char*)"old_asian" , &address_for_oa);
+	sailr_ptr_table_create_int_from_ptr(&table, (char*)"old_asian" , &address_for_oa, &address_for_d_oa);
 
 	int* address_for_race_id = (int *)malloc(sizeof(int));
+	double* address_for_d_race_id = (double *)malloc(sizeof(double));
 	*address_for_race_id  = 0;
-	sailr_ptr_table_create_int_from_ptr(&table, (char*)"race_id" , &address_for_race_id);
+	sailr_ptr_table_create_int_from_ptr(&table, (char*)"race_id" , &address_for_race_id, &address_for_d_race_id);
 
 	int* address_for_age = (int *)malloc(sizeof(int));
+	double* address_for_d_age = (double *)malloc(sizeof(double));
 	*address_for_age  = 0;
-	sailr_ptr_table_create_int_from_ptr(&table, (char*)"age" , &address_for_age);
+	sailr_ptr_table_create_int_from_ptr(&table, (char*)"age" , &address_for_age, &address_for_d_age);
+
+	double* address_for_cre = (double *)malloc(sizeof(double));
+	int* address_for_i_cre = (int *)malloc(sizeof(int));
+	*address_for_cre  = 0;
+	sailr_ptr_table_create_double_from_ptr(&table, (char*)"cre" , &address_for_cre, &address_for_i_cre);
+
+	int* address_for_sex = (int *)malloc(sizeof(int));
+	double* address_for_d_sex = (double *)malloc(sizeof(double));
+	*address_for_sex  = 0;
+	sailr_ptr_table_create_int_from_ptr(&table, (char*)"sex" , &address_for_sex, &address_for_d_sex);
+
+	double* address_for_egfr = (double *)malloc(sizeof(double));
+	int* address_for_i_egfr = (int *)malloc(sizeof(int));
+	*address_for_egfr  = 0;
+	sailr_ptr_table_create_double_from_ptr(&table, (char*)"egfr" , &address_for_egfr, &address_for_i_egfr);
 
 	int* address_for_hrsweek = (int *)malloc(sizeof(int));
+	double* address_for_d_hrsweek = (double*) malloc(sizeof(double));
 	*address_for_hrsweek  = 20;
-	sailr_ptr_table_create_int_from_ptr(&table, (char*)"hrsweek" , &address_for_hrsweek);
+	sailr_ptr_table_create_int_from_ptr(&table, (char*)"hrsweek" , &address_for_hrsweek, &address_for_d_hrsweek);
 
 	sailr_ptr_table_create_null(&table, (char*)"workaholic_asian" );
 	sailr_ptr_table_create_null(&table, (char*)"workaholic_asian_name" );

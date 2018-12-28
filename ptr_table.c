@@ -90,7 +90,7 @@ ptr_table_get_pp_string(ptr_table** table, char* key)
 }
 
 const char*
-ptr_table_get_char(ptr_table** table, char* key)
+ptr_table_read_string(ptr_table** table, char* key)
 {
   ptr_record* result = ptr_table_find(table, key);
   void* ptr_address = result->address;
@@ -248,9 +248,24 @@ ptr_record_free(ptr_record* pr)
 }
 
 PtrType
-ptr_table_type_of(ptr_table** table, char* key){
+ptr_table_get_type(ptr_table** table, char* key)
+{
 	ptr_record* temp = ptr_table_find(table, key);
 	return temp->type;
+}
+
+PtrType
+ptr_record_get_type(ptr_record* record)
+{
+	return record->type;
+}
+
+void**
+ptr_table_get_pptr(ptr_table** table, char* key)
+{
+	ptr_record* temp = ptr_table_find(table, key);
+	void** temp_pptr = (void**) &(temp->address);
+	return temp_pptr;
 }
 
 

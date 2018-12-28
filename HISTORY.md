@@ -85,11 +85,16 @@ make build
 
 * Add unitary minus operator support.
 
+## Ver 0.31 [Dec. 28 2018]
+
+* Minor fixes
+	* Function ptr_table_get_pptr() 
+	* Some bug fixes.
+
 ## Plan
 
 * Refactoring
 * Function support
-
-
+* Missing value support
 
 

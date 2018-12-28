@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "sailr.h"
 #include "ptr_table.h"
 #include "var_hash.h"
@@ -130,8 +132,8 @@ sailr_ptr_table_get_pp_string(ptr_table_object** table, char* key){
 }
 
 const char*
-sailr_ptr_table_get_char(ptr_table_object** table, char* key){
-  return  ptr_table_get_char((ptr_table**)table, key);
+sailr_ptr_table_read_string(ptr_table_object** table, char* key){
+  return  ptr_table_read_string((ptr_table**)table, key);
 }
 
 
@@ -164,6 +166,36 @@ void
 sailr_ptr_table_show_all(ptr_table_object** table)
 {
 	ptr_table_show_all((ptr_table**) table);
+}
+
+char
+sailr_ptr_table_get_type(ptr_table_object** table, char* key)
+{
+	ptr_record* record = ptr_table_find((ptr_table**) table, key);
+	switch(record->type){
+		case PTR_INT:
+			return 'i';
+		break;
+		case PTR_DBL:
+			return 'd';
+		break;
+		case PTR_STR:
+			return 's';
+		break;
+		case PTR_NULL:
+			return 'n';
+		break;
+		default:
+			printf("This branch should not be executed.");
+			return 'x';
+		break;
+	}
+}
+
+void**
+sailr_ptr_table_get_pptr(ptr_table_object** table, char* key)
+{
+	return ptr_table_get_pptr((ptr_table**) table, key);
 }
 
 // Functions fro var_hash, varnames

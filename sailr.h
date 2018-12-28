@@ -28,16 +28,18 @@ ptr_record_object* sailr_ptr_table_create_anonym_string(ptr_table_object** table
 ptr_record_object* sailr_ptr_table_create_null(ptr_table_object** table, char* key);
 
 string_type_object* sailr_ptr_table_get_pp_string(ptr_table_object** table, char* key);
-const char* sailr_ptr_table_get_char(ptr_table_object** table, char* key);
+const char* sailr_ptr_table_read_string(ptr_table_object** table, char* key);
 
 string_type_object* sailr_new_string(const char* str);
-
 
 int sailr_ptr_table_update_int(ptr_table_object** table, char* key, int ival);
 int sailr_ptr_table_update_double(ptr_table_object** table, char* key, double dval);
 int sailr_ptr_table_update_string(ptr_table_object** table, char* key, string_type_object** str);
 
-void                  sailr_ptr_table_show_all(ptr_table_object** table);
+void sailr_ptr_table_show_all(ptr_table_object** table);
+
+char sailr_ptr_table_get_type(ptr_table_object** table, char* key);
+void** sailr_ptr_table_get_pptr(ptr_table_object** table, char* key);
 
 char** sailr_varnames(parser_state_object* );
 char** sailr_rhs_varnames(parser_state_object* );

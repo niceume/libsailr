@@ -25,13 +25,14 @@ string_read( string_object* str)
 string_object*
 string_concat( string_object* str1, string_object* str2 )
 {
-	return  cpp_string_concat( str1, str2 );
+//	printf( "%s + %s \n", string_read(str1), string_read(str2) );
+	return (string_object*) cpp_string_concat((cpp_object*) str1, (cpp_object*) str2 );
 }
 
 string_object**
 string_ptr_concat( string_object* str1, string_object* str2 )
 {
-	string_object** str_obj = (string_object**)(intptr_t) cpp_string_ptr_concat( str1, str2 );
+	string_object** str_obj = (string_object**) cpp_string_ptr_concat( str1, str2 );
 	return str_obj;
 }
 

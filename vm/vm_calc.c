@@ -165,20 +165,24 @@ stack_item_pp2value(stack_item* item)
 			        item->type = IVAL;
 			        int tmp_int = *((int*)(null_record->address)) ;
 			        item->ival = tmp_int;
+					printf("NULL_ITEM is converted to IVAL.\n");
                 }else if(null_record->type == PTR_DBL){
 			        item->type = DVAL;
 			        double tmp_double = *((double*)(null_record->address)) ;
 			        item->dval = tmp_double;
+					printf("NULL_ITEM is converted to DVAL.\n");
                 }else if(null_record->type == PTR_STR){
 			        item->type = PP_STR;
-			        string_object* tmp_str = ((string_object*)(null_record->address)) ;
-			        item->pp_str = &tmp_str;
+			        string_object** tmp_pp_str = &(null_record->address) ;
+			        item->pp_str = tmp_pp_str;
+					printf("NULL_ITEM is converted to PP_STR.\n");
                 }else{
                     printf("ERROR: NULL_ITEM points to a ptr_record with unintended type: %s", null_record->key );
                 }
             }
+			break;
 		default:
-			printf("THis item is not PP_IVAL, PP_DVAL, IVAL or DVAL. \n");
+			printf("THis item is not PP_IVAL, PP_DVAL, IVAL, DVAL or NULL_ITEM. Need not to be converted. \n");
 			return 0;
 	}
 	return 1;
@@ -197,6 +201,7 @@ vm_calc_addx(vm_stack* vmstack)
 
 	string_object* str1;
 	string_object* str2;
+	string_object* new_p_str;
 	string_object** new_pp_str;
 
 	int result_ival;
@@ -217,10 +222,13 @@ vm_calc_addx(vm_stack* vmstack)
 		}else if((top_item->type == DVAL) && (sec_item->type == DVAL)){
 			result_dval = sec_item->dval + top_item->dval ;
 		}else if((top_item->type == PP_STR ) && (sec_item->type == PP_STR )){
-			printf("Pointer to pointer: %p \n", sec_item->pp_str);
-			str1 = *(sec_item->pp_str);
-			str2 = *(top_item->pp_str);
-			new_pp_str =  string_ptr_concat( str1, str2 );
+			printf("Left on ADDX operator is %s (%p)\n", string_read((string_object*)(* (sec_item->pp_str))) , *(sec_item->pp_str)  );
+			printf("Right on ADDX operator is %s (%p)\n", string_read((string_object*)(* (top_item->pp_str))) , *(top_item->pp_str) );
+			str1 = (* (sec_item->pp_str));
+			str2 = (* (top_item->pp_str));
+//			printf("%s + %s \n" , string_read((string_object*)str1), string_read((string_object*)str2));
+			new_pp_str = (string_object**) string_ptr_concat( str1, str2 );
+			printf("newly created \n");
 			sec_item->pp_str = new_pp_str;
 
 			vmstack->sp = vmstack->sp - 1; 
@@ -463,6 +471,8 @@ vm_calc_eq(vm_stack* vmstack)
 	stack_item* stack = vmstack->stack;
 	stack_item* top_item = vm_stack_top(vmstack);
 	stack_item* sec_item = vm_stack_second(vmstack);
+	stack_item_pp2value( top_item ); 
+	stack_item_pp2value( sec_item ); 
 	bool result_bool;
 
 	if( item_is_num(sec_item) && item_is_num(top_item)){
@@ -497,6 +507,8 @@ vm_calc_eq(vm_stack* vmstack)
 	stack_item* stack = vmstack->stack; \
 	stack_item* top_item = vm_stack_top(vmstack); \
 	stack_item* sec_item = vm_stack_second(vmstack); \
+	stack_item_pp2value( top_item ); \
+	stack_item_pp2value( sec_item ); \
 	bool result_bool; \
  \
 	if( item_is_num(sec_item) && item_is_num(top_item)){ \

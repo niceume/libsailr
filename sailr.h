@@ -39,6 +39,7 @@ int sailr_ptr_table_update_string(ptr_table_object** table, char* key, string_ty
 void sailr_ptr_table_show_all(ptr_table_object** table);
 
 char sailr_ptr_table_get_type(ptr_table_object** table, char* key);
+int sailr_ptr_record_is_ptr_null(ptr_table_object** table, char* key);
 void** sailr_ptr_table_get_pptr(ptr_table_object** table, char* key);
 
 char** sailr_varnames(parser_state_object* );

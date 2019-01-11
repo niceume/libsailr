@@ -169,13 +169,13 @@ vm_stack_display_item(vm_stack* vmstack, int idx)
 		break;
 	case PP_STR:
 //		printf("SHOWING STRING of %p. \n", stack[idx].pp_str);
-		printf("%04d \t%s \t%p \t%s\n", idx, ItemTypeDisplay[stack[idx].type], *(stack[idx].pp_str), string_read(*(stack[idx].pp_str)));
+		printf("%04d \t%s \t%p (ptr to str) \t%s\n", idx, ItemTypeDisplay[stack[idx].type], *(stack[idx].pp_str), string_read(*(stack[idx].pp_str)));
 		break;
 	case BOOLEAN:
 		printf("%04d \t%s \t%d \n", idx, ItemTypeDisplay[stack[idx].type], stack[idx].boolean );
 		break;
 	case NULL_ITEM:
-		printf("%04d \t%s %p\n", idx, ItemTypeDisplay[stack[idx].type], ((ptr_record*) stack[idx].p_record)->address );
+		printf("%04d \t%s %p (address on ptr_table) \n", idx, ItemTypeDisplay[stack[idx].type], ((ptr_record*) stack[idx].p_record)->address );
 		break;
 	}
 }

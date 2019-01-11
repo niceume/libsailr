@@ -1,3 +1,5 @@
+race = "Black"
+
 if(race == "White"){
   race_id = 1
 }else if(race == "Black"){

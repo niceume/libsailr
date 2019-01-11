@@ -254,10 +254,21 @@ ptr_table_get_type(ptr_table** table, char* key)
 	return temp->type;
 }
 
-PtrType
-ptr_record_get_type(ptr_record* record)
+// PtrType
+// ptr_record_get_type(ptr_record* record)
+// {
+// 	return record->type;
+// }
+
+int
+ptr_record_is_ptr_null(ptr_table** table, char* key)
 {
-	return record->type;
+	PtrType ptrtype = ptr_table_get_type(table, key);
+	if(ptrtype == PTR_NULL){
+		return 1;
+	} else {
+		return 0;
+	}
 }
 
 void**

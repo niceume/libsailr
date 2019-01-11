@@ -72,8 +72,9 @@ int ptr_table_del(ptr_table** table, char* key);
 int ptr_record_free(ptr_record* );
 int ptr_table_free(ptr_table**);
 void ptr_table_show_all(ptr_table**);
+
 PtrType ptr_table_get_type(ptr_table** table, char* key);
-PtrType ptr_record_get_type(ptr_record* );
+int ptr_record_is_ptr_null(ptr_table** table, char* key);
 void** ptr_table_get_pptr(ptr_table** table, char* key);
 
 

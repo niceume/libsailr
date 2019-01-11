@@ -8,6 +8,11 @@
 
 *.d
 
+# Ignore dev files
+
+a.out
+core
+
 # Ignore generated files by flex and bison
 
 /y.output

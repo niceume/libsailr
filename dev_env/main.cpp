@@ -86,6 +86,8 @@ main(int argc, char** argv)
 	*address_for_bmi = 0;
 	sailr_ptr_table_create_double_from_ptr(&table, (char*)"bmi" , &address_for_bmi, &address_for_i_bmi);
 
+	sailr_ptr_table_create_null(&table, (char*)"bmix" );
+
 	double* address_for_height = (double *)malloc(sizeof(double));
 	int* address_for_i_height = (int *)malloc(sizeof(int));
 	*address_for_height = 1.72;
@@ -159,6 +161,10 @@ main(int argc, char** argv)
 
 	sailr_ptr_table_create_null(&table, (char*)"workaholic_asian" );
 	sailr_ptr_table_create_null(&table, (char*)"workaholic_asian_name" );
+	sailr_ptr_table_create_null(&table, (char*)"first" );
+	sailr_ptr_table_create_null(&table, (char*)"second" );
+	sailr_ptr_table_create_null(&table, (char*)"fullname" );
+	sailr_ptr_table_create_null(&table, (char*)"great_dr" );
 
 	std::cout << "Show pointer table! At this point, annonym STRING should be already added.\n"  << std::endl ;
     printf("table's pointer is %p \n", table);

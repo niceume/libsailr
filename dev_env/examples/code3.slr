@@ -1,6 +1,6 @@
 age = 35;
 cre = 0.91;
-sex = 1;
+sex = 0;
 
 egfr = 175 * cre ^ -1.154 * age ^ -0.203
 

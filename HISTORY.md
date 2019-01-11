@@ -91,10 +91,15 @@ make build
 	* Function ptr_table_get_pptr() 
 	* Some bug fixes.
 
+## Ver 0.32
+
+* Minor fixes for R package.
+
 ## Plan
 
 * Refactoring
-* Function support
+	+ Avoid (char*) casting
 * Missing value support
+* Function support
 
 

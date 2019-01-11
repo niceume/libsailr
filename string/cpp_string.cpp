@@ -21,20 +21,28 @@ cpp_string_new_with_len(const char* str, int len)
 const char*
 cpp_string_read (cpp_object* obj )
 {
-	if (obj != NULL)
-		return ( static_cast<std::string*>(obj))->c_str();
-	else 
+	std::string* str;
+	if (obj != NULL){
+		str = static_cast<std::string*>(obj);
+		return str->c_str();
+	}else{ 
 		std::cout << "String is NULL ??\n" << std::endl;
 		return "";
+	}
 }
 
 cpp_object*
 cpp_string_concat (cpp_object* obj1 , cpp_object* obj2 )
 {
+	std::cout << "start concat" << std::endl;
 	std::string* str1 = static_cast<std::string*>(obj1);
 	std::string* str2 = static_cast<std::string*>(obj2);
+	std::cout << "start concat2" << std::endl;
+	std::cout << (*str1) << (*str2) << std::endl;
 	std::stringstream ss;
-	ss << *str1 << *str2;
+	ss << (*str1) << (*str2);
+	std::cout << "start concat3" << std::endl;
+	std::cout << ss.str() << std::endl;
 	std::string* new_str = new std::string( ss.str() );
 	return (void*) new_str;
 }
@@ -43,7 +51,9 @@ cpp_object**
 cpp_string_ptr_concat (cpp_object* obj1 , cpp_object* obj2 )
 {
 	std::string* str1 = static_cast<std::string*>(obj1);
+	std::cout << (*str1) << std::endl;
 	std::string* str2 = static_cast<std::string*>(obj2);
+	std::cout << (*str2) << std::endl;
 	std::stringstream ss;
 	ss << *str1 << *str2;
 	std::string* new_p_str = new std::string( ss.str() );

@@ -48,7 +48,7 @@ vm/%.o : vm/%.c
 	$(CC) -c -o $@ $^  $(CFLAGS) -I. -MMD -MP
 
 string/cpp_string.o : string/cpp_string.cpp
-	$(CXX) -c -o $@ $^ $(CXXFLAGS) -MMD -MP
+	$(CXX) -c -o $@ $^ $(CXXFLAGS) -MMD -MP 
 
 string/%.o : string/%.c 
 	$(CC) -c -o $@ $^  $(CFLAGS) -I. -MMD -MP
@@ -63,8 +63,19 @@ clean :
 	$(RM) vm/*.d
 	$(RM) string/*.d
 	$(RM) *.so
+	$(RM) vm/*.so
+	$(RM) string/*.so
 	$(RM) *.a
+	$(RM) vm/*.a
+	$(RM) string/*.a
+	$(RM) a.out
+	$(RM) vm/a.out
+	$(RM) string/a.out
+	$(RM) core
+	$(RM) vm/core
+	$(RM) string/core
 	$(RM) y.tab.c y.tab.h y.output
 	$(RM) lex.yy.c
-	$(RM) a.out
 	$(RM) $(TARGET)
+
+

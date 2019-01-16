@@ -1,3 +1,24 @@
-if(overweight == 1){
-  judgement = uppercase("overweight")
+/* cre age sex */
+
+age = 35;
+cre = 0.91;
+sex = 3;
+
+// MDRD
+egfr = 175 * cre ^ -1.154 * age ^ -0.203
+
+// Adjustment
+if (sex == 0)
+{
+  egfr <- 0.742 * egfr
+} else if (sex == 1 ){
+  egfr = egfr
+} else {
+  egfr = .
 }
+
+/*
+if(race > 1){
+  egfr <- 1.210 * egfr
+}
+*/

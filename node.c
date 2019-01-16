@@ -16,6 +16,7 @@ while (0);
 #include <errno.h>
 #include <limits.h>
 #include <float.h>
+#include <math.h>
 
 int
 char_to_int(char* num)
@@ -96,6 +97,16 @@ new_node_double( char* num )
   TreeNode* nd = (TreeNode*)malloc(sizeof(TreeNode));
   nd->type = NODE_DBL;
   nd->e1.dval = char_to_double( num );
+  return nd;
+}
+
+TreeNode*
+new_node_nan_double ( )
+{
+  NEW_NODE_HEADER
+  TreeNode* nd = (TreeNode*)malloc(sizeof(TreeNode));
+  nd->type = NODE_DBL;
+  nd->e1.dval = sqrt(-1) ;  // creating nan
   return nd;
 }
 

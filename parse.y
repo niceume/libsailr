@@ -44,6 +44,7 @@ int yydebug = 1;
 
 /* All the tokens that are returned by yylex() should be listed. */
 %token<nd> LIT_NUM
+%token<nd> NA_NUM
 %token<str> LIT_STR
 %token<id> IDENT
 %token KEY_IF KEY_ELSE
@@ -115,7 +116,8 @@ primary	: IDENT
 			}
 			| LIT_NUM				{ $$ = $1; }
 			| LIT_STR				{ $$ = new_node_str( $1 , p->ptrtable ); }
-			| '(' expr ')'			{ $$ = $2;  }
+			| '(' expr ')'			{ $$ = $2; }
+			| NA_NUM				{ $$ = $1; }
 
 fcall		: fname '(' args ')'	{ $$ = new_node_fcall($1, $3); }
 

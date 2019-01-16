@@ -63,6 +63,7 @@ extern TreeNode* new_node_stmt( TreeNode* );
 extern TreeNode* pushback_node_stmt( TreeNode*, TreeNode* );
 extern TreeNode* new_node_int(char*);
 extern TreeNode* new_node_double(char*);
+extern TreeNode* new_node_nan_double();
 extern TreeNode* new_node_str( string_object*, ptr_table* );
 extern TreeNode* new_node_ident( char* );
 extern TreeNode* new_node_fcall( TreeNode* , TreeNode*  );

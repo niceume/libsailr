@@ -136,11 +136,17 @@ else	{BEGIN ELSESTATE; printf("ELSE STATE!\n"); LEX_RETURN( KEY_ELSE );}
 "{"	LEX_RETURN( '{' );
 "}"	LEX_RETURN( '}' );
 
-	/* For Macro */
+	/* For missing numbers */
+"."		{
+	lval->nd = new_node_nan_double( );
+	LEX_RETURN( NA_NUM );
+};
+
+	/* For Macro (Plan) */
 "%{"	LEX_RETURN( PLCUR );
 "%}"	LEX_RETURN( PRCUR );
 
-	/* For list identities */
+	/* For list identities (Plan) */
 ","	LEX_RETURN( COMMA );
 
 	/* Identifier such as variable names, and function names */

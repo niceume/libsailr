@@ -94,6 +94,12 @@ make build
 ## Ver 0.32
 
 * Minor fixes for R package.
+    * Code21, in which strings are manipulated, passed. 
+
+## Ver 0.33 [Jan. 16 2019]
+
+* Minor fixes
+    + Add missing values support. (Period is dealt as missing number.)
 
 ## Plan
 
@@ -101,5 +107,6 @@ make build
 	+ Avoid (char*) casting
 * Missing value support
 * Function support
+    + Lua can be used?
 
 

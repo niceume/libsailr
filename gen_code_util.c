@@ -59,6 +59,15 @@ new_vm_inst_push_pp_str( char* ptr_key )
 }
 
 vm_inst*
+new_vm_inst_push_pp_rexp( char* ptr_key )
+{
+	printf("Going to generate VM code for REXP\n");
+	vm_inst* temp_inst = new_vm_inst_command( VM_PUSH_PP_REXP );
+	temp_inst->ptr_key = ptr_key;
+	return temp_inst;
+}
+
+vm_inst*
 new_vm_inst_push_null( char* ptr_key )
 {
 	vm_inst* temp_inst = new_vm_inst_command( VM_PUSH_NULL );

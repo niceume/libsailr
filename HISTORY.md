@@ -101,12 +101,16 @@ make build
 * Minor fixes
     + Add missing values support. (Period is dealt as missing number.)
 
-## Plan
+## Ver 0.35 [Feb. 18 2019]
 
+* Regular expression support 
+* Function support
+
+## Plan 
+* Backreference mechanism for regular expresion 
 * Refactoring
 	+ Avoid (char*) casting
-* Missing value support
-* Function support
-    + Lua can be used?
+* print function
+* User extension ? Lua ?? 
 
 

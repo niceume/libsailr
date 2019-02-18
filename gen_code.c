@@ -48,6 +48,14 @@ gen_code_str(TreeNode* nd )  // Terminal OK
 	return code; 
 }
 
+vm_inst*
+gen_code_rexp(TreeNode* nd )  // Terminal OK
+{
+	char* key = nd->e1.rexp_key;
+	vm_inst* code = new_vm_inst_push_pp_rexp(key);
+	return code; 
+}
+
 vm_inst* 
 gen_code_ident(TreeNode* nd, ptr_table* table)  // Terminal OK
 {
@@ -106,6 +114,8 @@ convert_op(char* op_name)
 		return VM_LE;
 	} else if ( strcmp( op_name, "NEG") == 0 ) {
 		return VM_NEG;
+	} else if ( strcmp( op_name, "REXP_MATCH") == 0 ) {
+		return VM_REXP_MATCH;
 	} else {
 		printf("ERROR:node op has undefined oprator!!\n");
 	}
@@ -196,6 +206,12 @@ vm_inst* gen_code(TreeNode* nd, ptr_table* table){
   case NODE_STR:  // terminal node
     printf("NODE_STR\n");
     nd_code = gen_code_str(nd);
+    return nd_code;
+    break;
+
+  case NODE_REXP:  // terminal node
+    printf("NODE_REXP\n");
+    nd_code = gen_code_rexp(nd);
     return nd_code;
     break;
 

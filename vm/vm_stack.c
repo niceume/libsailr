@@ -1,17 +1,20 @@
 #include "vm_stack.h"
 #include "ptr_table.h"
 #include "common_string.h"
+#include "simple_re.h"
 #include <stdio.h>
 
-char* ItemTypeDisplay[] = {
-	"IVAL",
-	"DVAL",
-	"BOOLEAN",
-	"PP_IVAL",
-	"PP_DVAL",
-	"PP_STR",
-	"NULL_ITEM"
+#define Y(a, b) b,
+char *vm_stack_item_name[] = {
+  VM_STACK_ITEM_NAME_TABLE
 };
+#undef Y
+
+char*
+display_item_type(ItemType type)
+{
+	return vm_stack_item_name[ type ];
+}
 
 // private
 vm_stack*
@@ -120,6 +123,19 @@ vm_stack_push_pp_str( vm_stack* stack , ptr_table** table, char* ptr_key)
 }
 
 int
+vm_stack_push_pp_rexp( vm_stack* stack , ptr_table** table, char* ptr_key)
+{
+	ptr_record* record = ptr_table_find(table, ptr_key);
+	simple_re** pp_rexp = (simple_re**) &(record->address);
+	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
+	memcpy(new_stack_item,
+		&(stack_item const){ PP_REXP, {.pp_rexp = pp_rexp}, record },
+		sizeof(stack_item));
+	vm_stack_push_item(stack, new_stack_item);
+	vm_stack_display_item(stack, stack->sp);
+}
+
+int
 vm_stack_push_null( vm_stack* stack , ptr_table** table, char* ptr_key)
 {
 	ptr_record* record = ptr_table_find(table, ptr_key);
@@ -156,26 +172,28 @@ vm_stack_display_item(vm_stack* vmstack, int idx)
 	switch (stack[idx].type)
 	{
 	case IVAL:
-		printf("%04d \t%s %d\n", idx, ItemTypeDisplay[stack[idx].type], stack[idx].ival );
+		printf("%04d \t%s %d\n", idx, display_item_type(stack[idx].type), stack[idx].ival );
 		break;
 	case DVAL:
-		printf("%04d \t%s %lf\n", idx, ItemTypeDisplay[stack[idx].type], stack[idx].dval );
+		printf("%04d \t%s %lf\n", idx, display_item_type(stack[idx].type), stack[idx].dval );
 		break;
 	case PP_IVAL:
-		printf("%04d \t%s \t%p \t%d\n", idx, ItemTypeDisplay[stack[idx].type], *(stack[idx].pp_ival), **(stack[idx].pp_ival));
+		printf("%04d \t%s \t%p \t%d\n", idx, display_item_type(stack[idx].type), *(stack[idx].pp_ival), **(stack[idx].pp_ival));
 		break;
 	case PP_DVAL:
-		printf("%04d \t%s \t%p \t%lf\n", idx, ItemTypeDisplay[stack[idx].type], *(stack[idx].pp_dval), **(stack[idx].pp_dval));
+		printf("%04d \t%s \t%p \t%lf\n", idx, display_item_type(stack[idx].type), *(stack[idx].pp_dval), **(stack[idx].pp_dval));
 		break;
 	case PP_STR:
-//		printf("SHOWING STRING of %p. \n", stack[idx].pp_str);
-		printf("%04d \t%s \t%p (ptr to str) \t%s\n", idx, ItemTypeDisplay[stack[idx].type], *(stack[idx].pp_str), string_read(*(stack[idx].pp_str)));
+		printf("%04d \t%s \t%p (ptr to str) \t%s\n", idx, display_item_type(stack[idx].type), *(stack[idx].pp_str), string_read(*(stack[idx].pp_str)));
+		break;
+	case PP_REXP:
+		printf("%04d \t%s \t%p (ptr to rexp) \t%s\n", idx, display_item_type(stack[idx].type), *(stack[idx].pp_rexp), simple_re_read_pattern(*(stack[idx].pp_rexp)));
 		break;
 	case BOOLEAN:
-		printf("%04d \t%s \t%d \n", idx, ItemTypeDisplay[stack[idx].type], stack[idx].boolean );
+		printf("%04d \t%s \t%d \n", idx, display_item_type(stack[idx].type), stack[idx].boolean );
 		break;
 	case NULL_ITEM:
-		printf("%04d \t%s %p (address on ptr_table) \n", idx, ItemTypeDisplay[stack[idx].type], ((ptr_record*) stack[idx].p_record)->address );
+		printf("%04d \t%s %p (address on ptr_table) \n", idx, display_item_type(stack[idx].type), ((ptr_record*) stack[idx].p_record)->address );
 		break;
 	}
 }

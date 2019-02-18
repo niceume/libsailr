@@ -124,6 +124,19 @@ new_node_str( string_object* str , ptr_table* table )
 }
 
 TreeNode*
+new_node_rexp( string_object* pattern , ptr_table* table )
+{
+  NEW_NODE_HEADER
+  ptr_record* record = ptr_table_create_anonym_rexp(&table, string_read(pattern), "UTF-8" );
+  TreeNode* nd = (TreeNode*)malloc(sizeof(TreeNode));
+  nd->type = NODE_REXP;
+  nd->e1.rexp_key = record->key ;
+  printf("table's pointer is %p \n", table);
+  ptr_table_show_all(&table);
+  return nd;
+}
+
+TreeNode*
 new_node_ident( char* ident )
 {
   NEW_NODE_HEADER

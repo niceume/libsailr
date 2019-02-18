@@ -42,6 +42,9 @@ tree_dump( TreeNode* nd, int level )
   case NODE_STR:
     printf( "%s%s(%s)\n", rep_spaces(level), "NODE_STR", nd->e1.str_key );
     break;
+  case NODE_REXP:
+    printf( "%s%s(%s)\n", rep_spaces(level), "NODE_REXP", nd->e1.rexp_key );
+    break;
   case NODE_IDENT:
     printf( "%s%s(%s)\n", rep_spaces(level), "NODE_IDENT", nd->e1.id );
     break;

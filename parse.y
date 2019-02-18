@@ -46,6 +46,7 @@ int yydebug = 1;
 %token<nd> LIT_NUM
 %token<nd> NA_NUM
 %token<str> LIT_STR
+%token<str> LIT_REXP
 %token<id> IDENT
 %token KEY_IF KEY_ELSE
 %token ASSIGN
@@ -59,7 +60,7 @@ int yydebug = 1;
 /* Logical Operators*/
 %left<nd> OR
 %left<nd> AND
-%nonassoc<nd> OP_EQ OP_NEQ
+%nonassoc<nd> OP_EQ OP_NEQ REXP_MATCH
 %left<nd> OP_LT OP_LE OP_GT OP_GE
 
 /* Numeric Operators*/
@@ -106,6 +107,7 @@ arg		: arg OP_PLUS arg		{ $$ = new_node_op("PLUS", $1, $3); }
 			| arg OP_GE arg		{ $$ = new_node_op("GE", $1, $3); }
 			| arg OP_LE arg		{ $$ = new_node_op("LE", $1, $3); }
 			| OP_SUB arg %prec UMINUS	{ $$ = new_node_uniop("UMINUS", $2); }
+			| primary REXP_MATCH primary		{ $$ = new_node_op("REXP_MATCH", $1, $3); }
 			| primary				{ $$ = $1; }
 
 primary	: IDENT	
@@ -116,6 +118,7 @@ primary	: IDENT
 			}
 			| LIT_NUM				{ $$ = $1; }
 			| LIT_STR				{ $$ = new_node_str( $1 , p->ptrtable ); }
+			| LIT_REXP				{ $$ = new_node_rexp( $1 , p->ptrtable ); }
 			| '(' expr ')'			{ $$ = $2; }
 			| NA_NUM				{ $$ = $1; }
 

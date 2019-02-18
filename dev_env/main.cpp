@@ -166,6 +166,8 @@ main(int argc, char** argv)
 	sailr_ptr_table_create_null(&table, (char*)"fullname" );
 	sailr_ptr_table_create_null(&table, (char*)"great_dr" );
 
+	sailr_ptr_table_create_null(&table, (char*)"pattern" );
+
 	std::cout << "Show pointer table! At this point, annonym STRING should be already added.\n"  << std::endl ;
     printf("table's pointer is %p \n", table);
 	sailr_ptr_table_show_all(&table);

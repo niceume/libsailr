@@ -1,0 +1,12 @@
+first = "Dr."
+second = "Ken"
+
+fullname = first + "-" + second 
+
+pattern = re/^Dr\./
+
+if (fullname == "Dr.-Ken"){
+	great_dr = "Yes";
+} else {
+	great_dr = "No";
+}

@@ -15,7 +15,8 @@ typedef enum {
   NODE_STMT,   // e1: <nd>, e3: <sibling>
   NODE_INT,    // e1: <ival>
   NODE_DBL,  // e1: <dval>
-  NODE_STR,    // e1: <id> string
+  NODE_STR,    // e1: <str_key> string
+  NODE_REXP,   // e1: <rexp_key> pattern string
   NODE_IDENT,  // e1: <id> variable name
   NODE_FCALL,  // e1: <id> function name, e3: <sibling> argument
   NODE_FARG,   // e1: <nd> node, e3: <sibling> next argument
@@ -36,6 +37,7 @@ typedef struct TreeNode_ {
     char *id;
     char *op;
     char *str_key ;
+    char *rexp_key ;
     int ival ; 
     double dval;
   } e1;
@@ -65,6 +67,7 @@ extern TreeNode* new_node_int(char*);
 extern TreeNode* new_node_double(char*);
 extern TreeNode* new_node_nan_double();
 extern TreeNode* new_node_str( string_object*, ptr_table* );
+extern TreeNode* new_node_rexp( string_object*, ptr_table* );
 extern TreeNode* new_node_ident( char* );
 extern TreeNode* new_node_fcall( TreeNode* , TreeNode*  );
 extern TreeNode* new_node_farg( TreeNode* );

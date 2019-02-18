@@ -18,6 +18,7 @@ vm_inst_display( vm_inst* inst )
 	case VM_PUSH_PP_IVAL:
 	case VM_PUSH_PP_DVAL:
 	case VM_PUSH_PP_STR:
+	case VM_PUSH_PP_REXP:
 		printf("CMD:%s\t ARG:.ptr_key=%s\n", cmd_str, inst->ptr_key);
 		break;
     case VM_PUSH_PP_NUM:

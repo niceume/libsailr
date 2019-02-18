@@ -37,6 +37,11 @@ tree_free( TreeNode* nd, int level)
     printf( "%s%s(%s)\n", rep_spaces(level), "Free NODE_STR", nd->e1.str_key );
     free(nd);
     break;
+  case NODE_REXP:
+    printf("Free NODE_REXP\n");
+    printf( "%s%s(%s)\n", rep_spaces(level), "Free NODE_REXP", nd->e1.rexp_key );
+	free(nd);
+    break;
   case NODE_IDENT:
     printf("Free NODE_IDENT\n");
     printf("%s%s(%s)\n", rep_spaces(level),"Free NODE_IDENT", nd->e1.id);

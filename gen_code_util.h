@@ -11,6 +11,7 @@ vm_inst* new_vm_inst_push_dval( double );
 vm_inst* new_vm_inst_push_pp_ival( char* ptr_key );
 vm_inst* new_vm_inst_push_pp_dval( char* ptr_key );
 vm_inst* new_vm_inst_push_pp_str( char* ptr_key );
+vm_inst* new_vm_inst_push_pp_rexp( char* ptr_key );
 vm_inst* new_vm_inst_push_null( char* ptr_key );
 vm_inst* new_vm_inst_label( char* label );
 vm_inst* new_vm_inst_fjmp( char* label );

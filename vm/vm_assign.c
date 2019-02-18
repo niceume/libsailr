@@ -54,6 +54,11 @@ vm_stack_store_val(vm_stack* vmstack)
 				left_record->gc = GC_YES;
 				// ToDo: Do I need to free the string on rvalue ??
 				// ToDo: I think to answer this, we need to know the GC flag of the record corresponding to this stack item.
+			}else if( rvalue->type == PP_REXP){
+				// change type from PTR_NULL to PTR_STR on ptr_table.
+				left_record->type = PTR_REXP;
+				left_record->address = (void*) *(rvalue->pp_rexp) ;
+				left_record->gc = GC_YES;
 			}else{
 				// ToDo: ERROR
             }

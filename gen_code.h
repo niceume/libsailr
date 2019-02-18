@@ -12,6 +12,7 @@ vm_inst* gen_code_stmt_nosib(vm_inst*);
 vm_inst* gen_code_int(TreeNode*);  // Code gen for termainal node receives a pointer to node.
 vm_inst* gen_code_double(TreeNode*);  // Code gen for termainal node
 vm_inst* gen_code_str(TreeNode*);  // Code gen for termainal node
+vm_inst* gen_code_rexp(TreeNode*);  // Code gen for termainal node
 vm_inst* gen_code_ident(TreeNode*);  // Code gen for termainal node
 
 vm_inst* gen_code_op(VM_CMD, vm_inst*, vm_inst*);

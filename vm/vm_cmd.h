@@ -11,6 +11,7 @@
 	X(VM_PUSH_PP_DVAL, "VM_PUSH_PP_DVAL") \
 	X(VM_PUSH_PP_NUM, "VM_PUSH_PP_NUM") \
 	X(VM_PUSH_PP_STR, "VM_PUSH_PP_STR") \
+	X(VM_PUSH_PP_REXP, "VM_PUSH_PP_REXP") \
 	X(VM_PUSH_NULL, "VM_PUSH_NULL") \
 	X(VM_POP, "VM_POP") \
 	X(VM_END, "VM_END") \
@@ -37,6 +38,9 @@
 	X(VM_POWX, "VM_POWX") \
 	X(VM_FAC, "VM_FAC") \
 	X(VM_UMINUS, "VM_UMINUS") \
+\
+/* Regular Expression Matching */ \
+	X(VM_REXP_MATCH, "VM_REXP_MATCH") \
 \
 /* Logical Calculation */ \
 	X(VM_AND, "VM_AND") \

@@ -5,19 +5,32 @@
 
 #include "vm_code.h"
 #include "../ptr_table.h"
+#include "../simple_re/simple_re.h"
+
+// Stack type and name
+
+#define VM_STACK_ITEM_NAME_TABLE \
+	Y(IVAL, "IVAL") /* The stack is holding an int. */ \
+	Y(DVAL, "DVAL") /* The stack is holding a double. */ \
+	Y(BOOLEAN, "BOOLENAN") \
+	Y(PP_IVAL, "PP_IVAL") \
+	Y(PP_DVAL, "PP_DVAL") \
+	Y(PP_STR, "PP_STR") \
+	Y(PP_REXP, "PP_REXP") \
+	Y(NULL_ITEM, "NULL_ITEM")
+
+#define Y(a, b) a,
+enum _ItemType {
+  VM_STACK_ITEM_NAME_TABLE
+};
+#undef Y
+
+typedef enum _ItemType ItemType;
+
+char* display_item_type(ItemType type);
+
 
 // Stack structure for VM
-
-enum _ItemType {
-		IVAL,  // The stack is holding an int.
-		DVAL,  // The stack is holding a double.
-		BOOLEAN,
-		PP_IVAL,
-		PP_DVAL,
-		PP_STR,
-		NULL_ITEM
-};
-typedef enum _ItemType ItemType;
 
 struct _stack_item {
 	ItemType type ; 
@@ -28,6 +41,7 @@ struct _stack_item {
 		int** pp_ival;
 		double** pp_dval;
 		string_object** pp_str; 
+		simple_re** pp_rexp;
 		void* ptr;
 	};
     ptr_record* p_record;
@@ -57,6 +71,7 @@ int vm_stack_push_pp_ival( vm_stack* , ptr_table**, char* );
 int vm_stack_push_pp_dval( vm_stack* , ptr_table**, char* );
 int vm_stack_push_pp_num( vm_stack* , ptr_table**, char* );
 int vm_stack_push_pp_str( vm_stack* , ptr_table**, char* );
+int vm_stack_push_pp_rexp( vm_stack* , ptr_table**, char* );
 int vm_stack_push_null( vm_stack* , ptr_table**, char* );
 
 stack_item* vm_stack_pop( vm_stack* );

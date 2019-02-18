@@ -130,6 +130,9 @@ else	{BEGIN ELSESTATE; printf("ELSE STATE!\n"); LEX_RETURN( KEY_ELSE );}
 "<-"	LEX_RETURN( ASSIGN );
 "="	LEX_RETURN( ASSIGN );
 
+	/* For regular expression matching */
+"=~"	LEX_RETURN( REXP_MATCH );
+
 	/* For Parentheses and Blocks */
 "("	LEX_RETURN( '(' );
 ")"	LEX_RETURN( ')' );
@@ -168,6 +171,10 @@ else	{BEGIN ELSESTATE; printf("ELSE STATE!\n"); LEX_RETURN( KEY_ELSE );}
 
 	/* String literals */
 	/* (ref.)  https://stackoverflow.com/questions/2039795/regular-expression-for-a-string-literal-in-flex-lex   */
+	/* \"       Begining with double quote. */
+	/* [^\\\"]  ???  */
+	/* \\.      Escaped anything*/
+	/* \"       Ending with double quote. */
 
 
 \"([^\\\"]|\\.)*\"	{
@@ -179,6 +186,12 @@ else	{BEGIN ELSESTATE; printf("ELSE STATE!\n"); LEX_RETURN( KEY_ELSE );}
 \'([^\\\']|\\.)*\'	{
 	lval->str = string_new_with_len((yytext+1), yyleng - 2);
 	LEX_RETURN( LIT_STR );
+};
+
+	/* Regular expression literals */
+re"/"[^("/")]([^("/")\n]|"\/")*"/" {
+	lval->str = string_new_with_len((yytext+3), yyleng - 4);
+	LEX_RETURN( LIT_REXP ); 
 };
 
 	/*  Terminators */

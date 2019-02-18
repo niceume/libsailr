@@ -13,6 +13,7 @@ enum _PtrType{
 	PTR_INT,
 	PTR_DBL,
 	PTR_STR,
+	PTR_REXP,
 	PTR_NULL
 };
 typedef enum _PtrType PtrType ;
@@ -62,11 +63,12 @@ ptr_record* ptr_table_create_string(ptr_table** table, char* key, string_object*
 ptr_record* ptr_table_create_string_from_ptr(ptr_table** table, char* key, string_object** strptr);
 int ptr_table_update_stirng(ptr_table**, char* key, string_object** strptr);
 
-
 string_object* ptr_table_get_pp_string(ptr_table** table, char* key);
 const char* ptr_table_read_string(ptr_table** table, char* key);
-
 int ptr_table_update_string(ptr_table** , char* , string_object** );
+
+ptr_record* ptr_table_create_anonym_rexp(ptr_table** table, const char* pattern, const char* enc);
+
 ptr_record* ptr_table_create_null(ptr_table** table, char* key);
 int ptr_table_del(ptr_table** table, char* key);
 int ptr_record_free(ptr_record* );

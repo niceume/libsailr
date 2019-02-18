@@ -1,10 +1,10 @@
 YACC = bison -y -d
 LEX = flex
 CC = gcc
-CXX = g++
+CPPC := g++
 AR = ar rvs
-CFLAGS += -fPIC -O3 -Ivm -Istring
-CXXFLAGS += -fPIC -O3 -Ivm -Istring
+CFLAGS += -fPIC -O3 -Ivm -Istring -Isimple_re -I$(ONIG_INCLUDE_DIR)
+CPPCFLAGS += -fPIC -O3 -Ivm -Istring
 RM = rm -f
 
 TARGET = libsailr.a
@@ -15,7 +15,8 @@ endif
 SRCS=$(filter-out y.tab.c lex.yy.c, $(wildcard *.c)) $(wildcard vm/*.c) $(wildcard string/*.c)
 OBJS:=$(SRCS:.c=.o) parse.o lex.o
 OBJS_STR:= string/common_string.o string/cpp_string.o
-DEPS:=$(OBJS:.o=.d)
+OBJS_RE:= simple_re/simple_re.o
+DEPS:=$(OBJS:.o=.d) $(OBJS_STR:.o=.d) $(OBJS_RE:.o=.d)
 
 # List "objfile depends on source and header"
 -include $(DEPS)
@@ -24,8 +25,8 @@ DEPS:=$(OBJS:.o=.d)
 
 build : parse.o lex.o  $(TARGET) 
 
-$(TARGET) : $(OBJS)  $(OBJS_STR)
-	$(AR) $(TARGET) $(OBJS) $(OBJS_STR)
+$(TARGET) : $(OBJS)  $(OBJS_STR)  $(OBJS_RE)  
+	$(AR) $(TARGET) $(OBJS) $(OBJS_STR) $(OBJS_RE) 
 
 # yacc creates y.tab.c. -d => y.tab.h. -v => y.output.
 
@@ -48,32 +49,40 @@ vm/%.o : vm/%.c
 	$(CC) -c -o $@ $^  $(CFLAGS) -I. -MMD -MP
 
 string/cpp_string.o : string/cpp_string.cpp
-	$(CXX) -c -o $@ $^ $(CXXFLAGS) -MMD -MP 
+	$(CPPC) -c -o $@ $^ $(CPPCFLAGS) -MMD -MP 
 
 string/%.o : string/%.c 
 	$(CC) -c -o $@ $^  $(CFLAGS) -I. -MMD -MP
 
+simple_re/%.o : simple_re/%.c
+	$(CC) -c -o $@ $^  $(CFLAGS) -I. -MMD -MP
 
 
 clean :
 	$(RM) *.o
 	$(RM) vm/*.o
 	$(RM) string/*.o
+	$(RM) simple_re/*.o
 	$(RM) *.d
 	$(RM) vm/*.d
 	$(RM) string/*.d
+	$(RM) simple_re/*.d
 	$(RM) *.so
 	$(RM) vm/*.so
 	$(RM) string/*.so
+	$(RM) simple_re/*.so
 	$(RM) *.a
 	$(RM) vm/*.a
 	$(RM) string/*.a
+	$(RM) simple_re/*.a
 	$(RM) a.out
 	$(RM) vm/a.out
 	$(RM) string/a.out
+	$(RM) simple_re/a.out
 	$(RM) core
 	$(RM) vm/core
 	$(RM) string/core
+	$(RM) simple_re/core
 	$(RM) y.tab.c y.tab.h y.output
 	$(RM) lex.yy.c
 	$(RM) $(TARGET)

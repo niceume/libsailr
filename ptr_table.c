@@ -2,8 +2,10 @@
 #include <stdio.h>
 #include <string.h>
 #include "common_string.h"
+#include "simple_re.h"
 
 static int str_counter = 0;
+static int rexp_counter = 0;
 
 ptr_table*
 ptr_table_init (){
@@ -165,6 +167,15 @@ create_new_str_key(){
 	return new_str ; 
 }
 
+char*
+create_new_rexp_key(){
+	char* new_str = (char *)malloc(sizeof(char)*16);
+	rexp_counter = rexp_counter + 1 ;
+    char* prefix = (char*) "REXP%011d";
+	sprintf(new_str, prefix , rexp_counter);
+	return new_str ; 
+}
+
 /*
 ptr_record*
 ptr_table_create_anonym_struct_string(ptr_table** table, struct_string** str)
@@ -212,6 +223,18 @@ ptr_table_update_string(ptr_table** table, char* key, string_object** strptr)
         free(to_be_updated->address);
     
     to_be_updated->address = *strptr;
+}
+
+ptr_record*
+ptr_table_create_anonym_rexp(ptr_table** table, const char* pattern, const char* enc)
+{
+	char* new_key;
+	new_key = create_new_rexp_key();
+	simple_re* new_re;
+	new_re = simple_re_compile( pattern, enc );
+	ptr_record* new_ptr_record;
+	new_ptr_record = ptr_table_add(table, new_key, (void**) &new_re, PTR_REXP, GC_YES);
+	return new_ptr_record ;
 }
 
 ptr_record*
@@ -322,6 +345,10 @@ ptr_table_show_all(ptr_table** table)
 		}else if(pr->type == PTR_STR){
         	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%s\t (ADR:%p)\n", 
 			pr->key, pr->address, pr->type, pr->gc, string_read((string_object*)(pr->address)),
+			pr->ex_addr );
+		}else if(pr->type == PTR_REXP){
+        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%s\t (ADR:%p)\n", 
+			pr->key, pr->address, pr->type, pr->gc, simple_re_read_pattern((simple_re*)(pr->address)),
 			pr->ex_addr );
 		}else if(pr->type == PTR_NULL){
         	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t (ADR:%p) \n", 

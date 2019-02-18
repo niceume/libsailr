@@ -20,3 +20,8 @@ core
 /y.tab.h
 /lex.yy.c
 
+# Ignore onigmo files
+
+/dev_env/onigmo/*
+/regexp/onig/*
+

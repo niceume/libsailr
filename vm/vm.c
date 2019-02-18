@@ -12,6 +12,7 @@
 #include "vm_stack.h"
 #include "vm_calc.h"
 #include "vm_assign.h"
+#include "vm_rexp.h"
 
 int vm_run_inst (vm_inst* , ptr_table* , vm_stack* );
 
@@ -80,6 +81,9 @@ vm_run_inst (vm_inst* inst, ptr_table* table, vm_stack* vmstack )
 		break;
 	case VM_PUSH_PP_STR:
 		vm_stack_push_pp_str(vmstack, &table, inst->ptr_key);
+		break;
+	case VM_PUSH_PP_REXP:
+		vm_stack_push_pp_rexp(vmstack, &table, inst->ptr_key);
 		break;
     case VM_PUSH_NULL:
     	vm_stack_push_null(vmstack, &table, inst->ptr_key);
@@ -150,6 +154,9 @@ vm_run_inst (vm_inst* inst, ptr_table* table, vm_stack* vmstack )
 		break;
 	case VM_NEG:
 		vm_calc_neg(vmstack);
+		break;
+	case VM_REXP_MATCH:
+		vm_rexp_match(vmstack);
 		break;
 	case VM_LABEL:
 		// Do nothing.

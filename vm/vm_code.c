@@ -34,6 +34,9 @@ vm_inst_display( vm_inst* inst )
 	case VM_FJMP:
 		printf("CMD:%s\t ARG:.label=%s\n", cmd_str, inst->label);
 		break;
+	case VM_FCALL:
+		printf("CMD:%s\t ARG:.fname=%s  .num_arg=%d\n", cmd_str, inst->fname, inst->num_arg);
+		break;
 	default:
 		printf("CMD:%s\n", cmd_str);
 		break;

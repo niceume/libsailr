@@ -43,8 +43,10 @@ gen_code_double(TreeNode* nd)  // Terminal OK
 vm_inst*
 gen_code_str(TreeNode* nd )  // Terminal OK
 {
+//	printf("instruction for VM to push pp to STR: %s. \n", nd->e1.str_key);
 	char* key = nd->e1.str_key;
 	vm_inst* code = new_vm_inst_push_pp_str(key);
+//	printf("instruction for VM to push pp to STR: %s. \n", nd->e1.str_key);
 	return code; 
 }
 
@@ -147,7 +149,8 @@ gen_code_unitary_op(VM_CMD cmd, vm_inst* code1) // OK operator
 }
 
 vm_inst*
-gen_code_let(vm_inst* code1, vm_inst* code2){
+gen_code_let(vm_inst* code1, vm_inst* code2)
+{
 	vm_inst* code;
 	vm_inst* let_code;
 	let_code = new_vm_inst_command(VM_STO);
@@ -156,6 +159,28 @@ gen_code_let(vm_inst* code1, vm_inst* code2){
 	return code;
 }
 
+vm_inst*
+gen_code_fcall( char* fname, int num_arg, vm_inst* farg_code)
+{
+	vm_inst* code;
+    vm_inst* fcall_inst;
+
+    fcall_inst = new_vm_inst_command(VM_FCALL);
+    int fname_len = strlen(fname);
+    if( fname_len < MAX_FUNC_NAME_LEN){
+        strncpy( fcall_inst->fname, fname, fname_len + 1 );
+    } else { 
+        printf("ERROR: function name is too long. over %d.", MAX_FUNC_NAME_LEN);
+    }  
+    fcall_inst->num_arg = num_arg;
+
+    if(farg_code != NULL){
+      code = vm_inst_list_cat( farg_code, fcall_inst);
+    } else {
+      code = fcall_inst;
+    }
+    return code;
+}
 
 /* END Helper Functions ---------------- */
 
@@ -246,15 +271,37 @@ vm_inst* gen_code(TreeNode* nd, ptr_table* table){
 	return nd_code;
     break;
 
-
-/*
   case NODE_FCALL:
+    printf("NODE_FCALL\n");
+    char* fname = nd->e1.nd->e1.id;
+    int num_arg;
+    if( nd->e3.nd->type == NODE_FARG ){
+      printf("function, %s \n", fname);
+      tmp_code3 = gen_code(nd->e3.nd, table); /* Code for FARG */
+      num_arg = count_num_farg( nd );
+      printf("function, %s , with %d args \n", fname, num_arg);
+      nd_code = gen_code_fcall(fname, num_arg, tmp_code3 );
+    }else if( nd->e3.nd->type == NODE_NULL ){
+      nd_code = gen_code_fcall(fname, 0, NULL);
+    }else{
+      printf("ERROR: Unintended node under NODE_FCALL\n");
+    }
+    return nd_code;
     break;
 
   case NODE_FARG:
+    printf("NODE_FARG\n");
+    tmp_code1 = gen_code(nd->e1.nd, table);
+    if( nd->e3.sibling != NULL ){
+      printf("I have small sibling. \n");
+	  tmp_code3 = gen_code(nd->e3.sibling, table);
+      nd_code = vm_inst_list_cat( tmp_code1, tmp_code3);
+    }else{
+      printf("I don't have any more sibling. \n");
+      nd_code = tmp_code1;
+    }
+    return nd_code;
 	break;
-*/
-
 
   case NODE_IF:
     printf("NODE_IF\n");
@@ -296,6 +343,10 @@ vm_inst* gen_code(TreeNode* nd, ptr_table* table){
 	}
 
 	return nd_code;
+    break;
+
+  case NODE_NULL:
+    printf("This part should not be executed.\n");
     break;
 
   }

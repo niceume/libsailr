@@ -2,6 +2,7 @@
 #include "ptr_table.h"
 #include "common_string.h"
 #include "simple_re.h"
+#include "vm_call_func.h"
 #include <stdio.h>
 
 #define Y(a, b) b,
@@ -147,6 +148,12 @@ vm_stack_push_null( vm_stack* stack , ptr_table** table, char* ptr_key)
 	vm_stack_display_item(stack, stack->sp);
 }
 
+int
+vm_stack_fcall( vm_stack* vmstack, char* fname , int num_args)
+{
+	call_func(vmstack, fname, num_args);
+}
+
 stack_item*
 vm_stack_pop( vm_stack* vmstack )
 {
@@ -275,6 +282,18 @@ vm_stack_third( vm_stack* vmstack )
 	int idx = vmstack->sp - 2 ;
 	if (idx <= 0) {
 		printf("The item second below top is NULL. ");
+		return NULL;
+	} else {
+	  return &(vmstack->stack[idx]);
+	}
+}
+
+stack_item*
+vm_stack_nth( vm_stack* vmstack , int nth)
+{
+	int idx = vmstack->sp - (nth - 1 ) ;
+	if (idx <= 0) {
+		printf("The item nth (%d) below top is NULL. ", nth);
 		return NULL;
 	} else {
 	  return &(vmstack->stack[idx]);

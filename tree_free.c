@@ -52,7 +52,7 @@ tree_free( TreeNode* nd, int level)
     tree_free(nd->e1.nd, level);
     if( ! nd->e3.sibling )
       tree_free(nd->e3.sibling, level + 1);
-    printf("%s%s(%s)\n", rep_spaces(level), "Free NODE_FCALL",nd->e1.op);
+    printf("%s%s(%s)\n", rep_spaces(level), "Free NODE_FCALL",nd->e1.nd->e1.id);
     free(nd);
     break;
   case NODE_FARG:
@@ -98,6 +98,10 @@ tree_free( TreeNode* nd, int level)
     if( nd->e3.nd != NULL)
       tree_free(nd->e3.nd, level + 1);
     printf( "%s%s\n", rep_spaces(level), "Free NODE_IF" );
+    free(nd);
+    break;
+  case NODE_NULL:
+    printf( "%s%s\n", rep_spaces(level), "Free NODE_NULL" );
     free(nd);
     break;
   }

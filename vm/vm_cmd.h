@@ -61,6 +61,8 @@ enum _VM_CMD {
 #undef X
 typedef enum _VM_CMD VM_CMD;
 
+#define MAX_FUNC_NAME_LEN 511
+
 char* vm_cmd_to_string(VM_CMD cmd);
 
 #endif

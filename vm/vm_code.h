@@ -13,6 +13,8 @@ struct _vm_inst{
 		char* ptr_key;
 		char* label;
 	};
+	char fname[MAX_FUNC_NAME_LEN + 1];
+	int num_arg;
 	struct _vm_inst* prev; // Only used for linked list structure
 	struct _vm_inst* next; // Only used for linked list structure
 	struct _vm_inst* last; // Only used for linked list structure. The first element should have a pointer to the last element for performance purpose.

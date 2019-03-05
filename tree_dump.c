@@ -49,7 +49,7 @@ tree_dump( TreeNode* nd, int level )
     printf( "%s%s(%s)\n", rep_spaces(level), "NODE_IDENT", nd->e1.id );
     break;
   case NODE_FCALL:
-    printf( "%s%s(%s)\n", rep_spaces(level), "NODE_FCALL" , nd->e1.id );
+    printf( "%s%s(%s)\n", rep_spaces(level), "NODE_FCALL" , nd->e1.nd->e1.id );
     if( nd->e3.nd != NULL )
       tree_dump(nd->e3.nd, level + 1);
     break;
@@ -87,6 +87,9 @@ tree_dump( TreeNode* nd, int level )
       tree_dump(nd->e2.nd, level + 1);
     if( nd->e3.nd != NULL)
       tree_dump(nd->e3.nd, level + 1);
+    break;
+  case NODE_NULL:
+    printf( "%s%s\n", rep_spaces(level), "NODE_NULL" );
     break;
   }
 }

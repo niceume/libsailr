@@ -166,10 +166,18 @@ TreeNode* new_node_farg( TreeNode* arg)
   return nd;
 }
 
-TreeNode* pushback_node_farg( TreeNode* arg, TreeNode* next_arg)
+TreeNode* pushback_node_farg( TreeNode* first_arg, TreeNode* new_arg)
 {
-  arg->e3.sibling = next_arg;
-  return arg;
+  TreeNode* node_ptr = first_arg->e3.sibling;
+  if(node_ptr == NULL){
+    first_arg->e3.sibling = new_arg;
+  }else{
+    while( node_ptr->e3.sibling != NULL ){
+       node_ptr = node_ptr->e3.sibling;
+    }
+    node_ptr->e3.sibling = new_arg;
+  }
+  return first_arg;
 }
 
 TreeNode* new_node_op( char* op_type, TreeNode* t1, TreeNode* t2)
@@ -214,6 +222,40 @@ TreeNode* new_node_if(TreeNode* cond, TreeNode* then_node, TreeNode* else_node)
   return nd;
 }
 
+TreeNode* new_node_null()
+{
+  NEW_NODE_HEADER
+  TreeNode* nd = (TreeNode*)malloc(sizeof(TreeNode));
+  nd->type = NODE_NULL;
+  nd->e1.nd = NULL;
+  nd->e2.nd = NULL;
+  nd->e3.nd = NULL;
+  return nd;
+}
+
+
+int
+count_num_farg(TreeNode* fcall_node)
+{
+  int count;
+  if(fcall_node->e3.nd->type == NODE_NULL){
+    printf("NODE_NULL");
+    return 0;
+  }else if(fcall_node->e3.nd->type == NODE_FARG){
+    printf("NODE_FARG");
+    count = 0;
+  }else{
+    return -1;
+  }
+
+  TreeNode* farg_node;
+  farg_node = fcall_node->e3.nd;
+  while( farg_node != NULL ){
+    count = count + 1;
+    farg_node = farg_node->e3.sibling;
+  } 
+  return count;
+}
 
 
 

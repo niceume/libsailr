@@ -18,12 +18,13 @@ typedef enum {
   NODE_STR,    // e1: <str_key> string
   NODE_REXP,   // e1: <rexp_key> pattern string
   NODE_IDENT,  // e1: <id> variable name
-  NODE_FCALL,  // e1: <id> function name, e3: <sibling> argument
+  NODE_FCALL,  // e1: <id> function name, e3: <nd> argument
   NODE_FARG,   // e1: <nd> node, e3: <sibling> next argument
   NODE_OP,     // e1: <id> op e2:<nd>left of operator, e3:<nd> right of operator
   NODE_UNIOP,  // e1: <id> op e2:<nd> argument
   NODE_LET,    // e1: lvalue, e2 rvalue
-  NODE_IF      // e1: condtion expression, e2: then stmt, e3: else stme
+  NODE_IF,     // e1: condtion expression, e2: then stmt, e3: else stme
+  NODE_NULL
 } NodeType;
 
 
@@ -76,7 +77,9 @@ extern TreeNode* new_node_op( char* , TreeNode* , TreeNode* );
 extern TreeNode* new_node_uniop( char* , TreeNode*);
 extern TreeNode* new_node_let(TreeNode*, TreeNode*);
 extern TreeNode* new_node_if(TreeNode* , TreeNode* , TreeNode* );
+extern TreeNode* new_node_null();
 
+extern int count_num_farg(TreeNode* fcall_node);
 
 #endif /* NODE_H */
 

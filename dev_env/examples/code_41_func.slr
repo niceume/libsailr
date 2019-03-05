@@ -1,0 +1,9 @@
+bmi = weight / (height * height);
+
+if (bmi > 25)
+{
+  overweight = 1;
+  print("You ", "are " ,  "overweight!", " because BMI is over 25.\n")
+} else {
+  overweight = 0;
+}

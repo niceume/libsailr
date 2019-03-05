@@ -105,7 +105,7 @@ vm_run_inst (vm_inst* inst, ptr_table* table, vm_stack* vmstack )
 		vm_stack_store_val(vmstack);
 		break;
 	case VM_FCALL:
-		// vm_stack_fcall(vmstack);
+		vm_stack_fcall(vmstack, inst->fname, inst->num_arg );
 		break;
 	case VM_ADDX:
 		vm_calc_addx(vmstack);

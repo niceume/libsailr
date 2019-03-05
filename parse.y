@@ -126,8 +126,11 @@ fcall		: fname '(' args ')'	{ $$ = new_node_fcall($1, $3); }
 
 fname		: IDENT				{ $$ = new_node_ident($1); }
 
-args		: arg					{ $$ = new_node_farg($1); }
-			| args COMMA arg
+args		: /* empty */  		{ $$ = new_node_null(); }
+			| expr				{ 
+								$$ = new_node_farg($1); 
+								}
+			| args COMMA expr
 					{
 					$$ = pushback_node_farg($1, new_node_farg($3));
 					}

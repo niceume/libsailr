@@ -74,6 +74,8 @@ int vm_stack_push_pp_str( vm_stack* , ptr_table**, char* );
 int vm_stack_push_pp_rexp( vm_stack* , ptr_table**, char* );
 int vm_stack_push_null( vm_stack* , ptr_table**, char* );
 
+int vm_stack_fcall( vm_stack* , char* , int );
+
 stack_item* vm_stack_pop( vm_stack* );
 
 void vm_stack_display_item( vm_stack*, int );
@@ -88,6 +90,7 @@ int vm_stack_free( vm_stack* );
 stack_item* vm_stack_top( vm_stack*);
 stack_item* vm_stack_second( vm_stack* );
 stack_item* vm_stack_third( vm_stack* );
+stack_item* vm_stack_nth( vm_stack*, int );
 
 #endif
 

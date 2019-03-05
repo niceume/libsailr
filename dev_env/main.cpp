@@ -90,12 +90,12 @@ main(int argc, char** argv)
 
 	double* address_for_height = (double *)malloc(sizeof(double));
 	int* address_for_i_height = (int *)malloc(sizeof(int));
-	*address_for_height = 1.72;
+	*address_for_height = 1.67;
 	sailr_ptr_table_create_double_from_ptr(&table, (char*)"height" , &address_for_height, &address_for_i_height);
 
 	double* address_for_bodyweight = (double *)malloc(sizeof(double));
 	int* address_for_i_bw = (int *)malloc(sizeof(int));
-	*address_for_bodyweight = 57.5;
+	*address_for_bodyweight = 70.5;
 	sailr_ptr_table_create_double_from_ptr(&table, (char*)"weight" , &address_for_bodyweight, &address_for_i_bw);
 
 	int* address_for_ow = (int *)malloc(sizeof(int));

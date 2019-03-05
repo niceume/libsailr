@@ -106,11 +106,22 @@ make build
 * Regular expression support 
 * Function support
 
+## Ver 0.40 [Mar. 5 2019]
+
+* Functions are supported.
+    + Built-in functions (written in C) are avaible.
+    + Only print() function is implemented. 
+
 ## Plan 
-* Backreference mechanism for regular expresion 
+* Backreference mechanism for regular expresion
+* Ways to deal with general objects.
+    + At ptr_table level??
+    + Only at function call level??
+    + For example. let's think about how to deal with tm structure defined in time.h in C.
 * Refactoring
 	+ Avoid (char*) casting
-* print function
+* Functions
+    + chomp (remove white space from the head/tail)
 * User extension ? Lua ?? 
 
 

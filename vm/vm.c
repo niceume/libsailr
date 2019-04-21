@@ -86,7 +86,7 @@ vm_run_inst (vm_inst* inst, ptr_table* table, vm_stack* vmstack )
 		vm_stack_push_pp_rexp(vmstack, &table, inst->ptr_key);
 		break;
     case VM_PUSH_NULL:
-    	vm_stack_push_null(vmstack, &table, inst->ptr_key);
+    	vm_stack_push_corresp_item(vmstack, &table, inst->ptr_key);
 	    break;
 	case VM_POP:
 		vm_stack_pop(vmstack);
@@ -103,9 +103,10 @@ vm_run_inst (vm_inst* inst, ptr_table* table, vm_stack* vmstack )
 		break;
 	case VM_STO:
 		vm_stack_store_val(vmstack);
+		ptr_table_show_all(&table);
 		break;
 	case VM_FCALL:
-		vm_stack_fcall(vmstack, inst->fname, inst->num_arg );
+		vm_stack_fcall(vmstack, inst->fname, inst->num_arg, &table );
 		break;
 	case VM_ADDX:
 		vm_calc_addx(vmstack);

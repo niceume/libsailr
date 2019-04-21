@@ -4,7 +4,7 @@
 #include "parser_state.h"
 #include "common_string.h"
 
-int yydebug = 1;
+int yydebug = 0; /* 0 : no debug, 1: debug */
 %}
 
 /* Define how each pseudo-variable returns values */

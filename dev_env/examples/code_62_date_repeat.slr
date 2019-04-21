@@ -1,0 +1,10 @@
+// date = date_ymd( 2019, 4, 8 )
+date_str = date_format( date_ymd( 2019, 4, 8 ), "%Y-%m-%d" )
+
+// print(date_str)
+
+greeting = str_repeat( date_format( date_ymd( 2019, 4, 8 ), "%Y-%m-%d" ), 3)
+print(greeting)
+
+greeting = str_repeat( date_format( date_ymd( 2019, 4, 8 ), "%Y-%m-%d" ), 3)
+print(greeting)

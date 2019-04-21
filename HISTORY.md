@@ -108,20 +108,55 @@ make build
 
 ## Ver 0.40 [Mar. 5 2019]
 
-* Functions are supported.
+* Functions are supported. (Just a few functions)
     + Built-in functions (written in C) are avaible.
     + Only print() function is implemented. 
 
+
+## Ver 0.50 [Apr. 6 2019]
+
+* More functions are added
+    + print( str1, str2 ... )
+    + num_to_str( num ) 
+    + str_strip( str )
+    + str_lstrip( str ) 
+    + str_rstrip( str )
+    + str_concat( str1, str2 ... ) 
+    + str_repeat( str )
+    + str_subset( str, num, num )  // index starts from zero.
+    + str_to_num( str )
+    + rexp_matched( num )  // back reference
+    + date_ymd( year, month, day )
+    + date_ym_weekday_nth( year, month, weekday, nth )  // weekday should be "Sun", "Mon" ... 
+    + date_add_n_years( unix_date, years )
+    + date_add_n_months( unix_date, months )
+    + date_add_n_days( unix_date, days )
+    + date_format( unix_date, str_format )  // This format should follow C++'s std::chrono::format. "%m/%d/%y" or "%Y-%m-%d" is popular.
+* Back reference mechanism for regular expresion
+    + Use function to do this. => rexp_matched(1)
+
+## Ver 0.51 (Apr. 21 2019)
+
+* Refactoring1
+    + Stop Memory Leak
+    + Free pointer table at last
+
 ## Plan 
-* Backreference mechanism for regular expresion
-* Ways to deal with general objects.
-    + At ptr_table level??
-    + Only at function call level??
-    + For example. let's think about how to deal with tm structure defined in time.h in C.
-* Refactoring
+
+* Refactoring2
 	+ Avoid (char*) casting
-* Functions
-    + chomp (remove white space from the head/tail)
-* User extension ? Lua ?? 
+    + Functions in ptr_table.c. Pointer to pointer may be used wrongly; possibility for some local pointers are destroyed unintentionally.
+* Matched regular expressions also need to be cleared for every row.
+
+
+## Abondoned Ideas
+
+* Ways to deal with general objects.
+    + At ptr_table level?? Only at function call level?? => Implement only at function call level.
+    + For example. let's think about how to deal with tm structure defined in time.h in C.
+        + At ptr_table level, PTR_OBJ is used.
+        + At vm stack level, PP_OBJ is used.
+        + PP_OBJ pointts to a wrapper for some structure. 
+        + That wrapper (wrapper_obj) holds the type of real object.
 
 

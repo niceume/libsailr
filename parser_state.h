@@ -19,6 +19,7 @@ typedef struct {
 } parser_state;
 
 parser_state* new_parser_state(char* fname, ptr_table* table);
+int parser_state_free(parser_state* ps);
 
 #endif /* PARSER_STATE_H */
 

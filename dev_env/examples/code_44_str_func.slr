@@ -1,0 +1,14 @@
+bmi = weight / (height * height);
+
+if (bmi > 25)
+{
+  overweight = 1;
+  print("You ", "are " ,  "overweight!", " because BMI is over 25. BMI: " , num_to_str( bmi ) ,  "\n")
+  greeting = str_concat("You ", "are " ,  "overweight!", " because BMI is over 25. BMI: " , num_to_str( bmi ) ,  "\n")
+} else {
+  overweight = 0;
+  print("You ", "are " , "not " , "overweight!", " because BMI is smaller than or equal to 25.\n")
+  greeting = str_concat("You ", "are " ,  "overweight!", " because BMI is over 25. BMI: " , num_to_str( bmi ) ,  "\n")
+}
+
+

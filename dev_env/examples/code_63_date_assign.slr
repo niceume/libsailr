@@ -1,0 +1,6 @@
+date = date_ymd( 2019, 4, 8 )
+print(num_to_str(date))
+date_str = date_format( date , "%Y-%m-%d" )
+greeting = str_repeat( date_str,  3)
+print(greeting)
+

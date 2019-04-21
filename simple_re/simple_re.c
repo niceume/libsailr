@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
+simple_re* re_last_matched = NULL;
 
 simple_re*
 simple_re_new()
@@ -78,6 +79,9 @@ simple_re_match ( simple_re* re , const char* str)
 	return_value = onig_search(regexp, text, end_ptr, start_ptr, end_ptr, region , ONIG_OPTION_NONE);
 	printf("onig_search is executed: %d \n", (int)return_value);
 
+	// This is important for back reference.
+	re_last_matched = re;
+
 	if( return_value == ONIG_MISMATCH){
 		printf("Unmatched\n");
 		return -1;
@@ -146,6 +150,12 @@ simple_re_reset( simple_re* re )
 		re->matched = NULL;
 	}
 	return 1;
+}
+
+int
+simple_re_clear_last_matched()
+{
+	re_last_matched = NULL;
 }
 
 

@@ -167,6 +167,8 @@ main(int argc, char** argv)
 	sailr_ptr_table_create_null(&table, (char*)"great_dr" );
 
 	sailr_ptr_table_create_null(&table, (char*)"pattern" );
+	sailr_ptr_table_create_null(&table, (char*)"date" );
+	sailr_ptr_table_create_null(&table, (char*)"date_str" );
 
 	std::cout << "Show pointer table! At this point, annonym STRING should be already added.\n"  << std::endl ;
     printf("table's pointer is %p \n", table);
@@ -193,12 +195,25 @@ main(int argc, char** argv)
 	sailr_vm_exec_code(vmcode, vmcode_size , table , vmstack);
 
 	/* Show Ptr Table */
-	std::cout << "\nShow pointer table! \n" << std::endl;
+	std::cout << "Show pointer table! \n" << std::endl;
+	sailr_ptr_table_show_all(&table);
+
+	/* Test Code to delete pointer table records. */
+	std::cout << "Delete pointer records except ...  \n" << std::endl;
+	char* record_list[] = {"_HEAD_OF_UTHASH_", "greeting","bmi", "date", "date_str"};
+	sailr_ptr_table_del_records_except(&table, record_list, sizeof(record_list) / sizeof(record_list[0]));
+
+	std::cout << "Show pointer table! \n" << std::endl;
 	sailr_ptr_table_show_all(&table);
 
     /* Free memory */
-	std::cout << "\nFree parser tree! \n" << std::endl;
+	std::cout << "Free parser tree! \n" << std::endl;
 	sailr_tree_free(ps);
+	std::cout << "Free pointer table!" << std::endl;
+	sailr_ptr_table_del_all(&table);
+	std::cout << "Free parser state object!" << std::endl;
+//	sailr_parser_state_free(ps);
+	std::cout << "Memory areas are successfully freed." << std::endl;
 
 	return 1;
 }

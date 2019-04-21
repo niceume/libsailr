@@ -225,6 +225,13 @@ ptr_table_update_string(ptr_table** table, char* key, string_object** strptr)
     to_be_updated->address = *strptr;
 }
 
+int
+ptr_record_update_string(ptr_record* pr , string_object** pp_str, GCReq gc)
+{
+	pr->address = *pp_str;
+	pr->gc = gc;
+}
+
 ptr_record*
 ptr_table_create_anonym_rexp(ptr_table** table, const char* pattern, const char* enc)
 {
@@ -248,12 +255,12 @@ ptr_table_create_null(ptr_table** table, char* key)
 }
 
 int
-ptr_table_del(ptr_table** table, char* key)
+ptr_table_del_record(ptr_table** table, char* key)
 {
 	ptr_record* to_be_deleted = ptr_table_find(table, key);
 	if (to_be_deleted != NULL){
-		HASH_DEL( *table, to_be_deleted);
-		ptr_record_free(to_be_deleted);
+		HASH_DEL( *table, to_be_deleted);  /* Just removed from hash. (Structure exists) */
+		ptr_record_free(to_be_deleted);  /* Free structure and momory pointed by address */
 		return 1;
 	} else {
 		printf("Cannot find record to be deleted.\n");
@@ -262,12 +269,23 @@ ptr_table_del(ptr_table** table, char* key)
 }
 
 int
-ptr_record_free(ptr_record* pr)
+ptr_record_free_mem(ptr_record* pr)
 {
 	if(pr->gc == GC_YES)
 		free(pr->address);
+}
 
+int
+ptr_record_free_struct(ptr_record* pr)
+{
 	free(pr);
+}
+
+int
+ptr_record_free(ptr_record* pr)
+{
+	ptr_record_free_mem(pr);  /* Free memory pointed by address. */
+	ptr_record_free_struct(pr); /* Free this record itself. */
 }
 
 PtrType
@@ -276,12 +294,6 @@ ptr_table_get_type(ptr_table** table, char* key)
 	ptr_record* temp = ptr_table_find(table, key);
 	return temp->type;
 }
-
-// PtrType
-// ptr_record_get_type(ptr_record* record)
-// {
-// 	return record->type;
-// }
 
 int
 ptr_record_is_ptr_null(ptr_table** table, char* key)
@@ -302,32 +314,54 @@ ptr_table_get_pptr(ptr_table** table, char* key)
 	return temp_pptr;
 }
 
-
-// private
-ptr_record*
-ptr_table_find(ptr_table** table, char* key)
+int
+ptr_table_del_records_except(ptr_table** table, char** keys, int key_num )
 {
-	ptr_record* temp;
-	HASH_FIND_STR(*table, key, temp);
-	return temp;
-}
+	/* keys is array of pointers to chars. */
+	ptr_record *current_record;
+	ptr_record *temp_record;
+	char* current_record_key;
+	char* key_name;
+	int idx;
+	int matched;
 
-ptr_record*
-ptr_table_insert(ptr_table** table, ptr_record* new_ptr_record)
-{
-	HASH_ADD_STR(*table, key , new_ptr_record );
-	return new_ptr_record;
+	for( idx = 0; idx < key_num ; ++idx ){
+		key_name = (char*) keys[idx];
+		printf("* %s\n", key_name);
+	}
+
+	for(current_record = *table; current_record != NULL; current_record=temp_record) {
+		current_record_key = current_record->key;
+		temp_record = current_record->hh.next;
+		matched = 0;
+		for( idx = 0; idx < key_num ; ++idx ){
+			key_name = (char*) keys[idx];
+			if(strcmp( current_record_key , key_name ) == 0){ /*matched*/
+				matched = 1;
+			}
+		}
+		if(matched == 1){
+			/* Don't delete the curent record. */
+		}else{
+			/* Delete the current record. */
+    		HASH_DEL( *table , current_record);  /* Just removed from hash. (Structure exists) */
+			ptr_record_free( current_record );  /* Free structure and momory pointed by address */
+		}
+	}
 }
 
 int
-ptr_table_update(ptr_record* pr, void* address, PtrType type, GCReq gc )
+ptr_table_del_all(ptr_table** table)
 {
-	pr->address = address;
-	pr->type = type;
-	pr->gc = gc;
-	return 1;
-}
+  ptr_record *current_record;
+  ptr_record *temp_record;
 
+  for(current_record = *table; current_record != NULL; current_record=temp_record) {
+    temp_record = current_record->hh.next;
+    HASH_DEL( *table , current_record);  /* Just removed from hash. (Structure exists) */
+	ptr_record_free( current_record );  /* Free structure and momory pointed by address */
+  }
+}
 
 void
 ptr_table_show_all(ptr_table** table)
@@ -362,6 +396,33 @@ ptr_table_show_all(ptr_table** table)
     }
 }
 
+
+
+// private
+ptr_record*
+ptr_table_find(ptr_table** table, char* key)
+{
+	ptr_record* temp;
+	HASH_FIND_STR(*table, key, temp);
+	return temp;
+}
+
+ptr_record*
+ptr_table_insert(ptr_table** table, ptr_record* new_ptr_record)
+{
+	HASH_ADD_STR(*table, key , new_ptr_record );
+	return new_ptr_record;
+}
+
+int
+ptr_table_update(ptr_record* pr, void* address, PtrType type, GCReq gc )
+{
+	pr->address = address;
+	pr->type = type;
+	pr->gc = gc;
+	return 1;
+}
+
 /*
 int main(int argc, char** argv){
 	struct _person {
@@ -390,11 +451,11 @@ int main(int argc, char** argv){
 	printf("\n");
 	ptr_table_show_all(&table);
 
-	ptr_table_del(&table, "toshi");
+	ptr_table_del_record(&table, "toshi");
 	printf("\n");
 	ptr_table_show_all(&table);
 
-	ptr_table_del(&table, "STR000000000001");
+	ptr_table_del_record(&table, "STR000000000001");
 	printf("\n");
 	ptr_table_show_all(&table);	
 }

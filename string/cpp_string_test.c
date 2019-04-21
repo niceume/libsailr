@@ -27,8 +27,32 @@ int main(int argc, char** argv)
 	printf( "%s\n" , cpp_string_read (obj7));
 	printf( "%p\n" , obj7);
 
+	cpp_object* obj8 = cpp_string_int2str( 123 );
+	cpp_object* obj9 = cpp_string_double2str( 123.456 );
+	printf( "%s\n" , cpp_string_read (obj8));
+	printf( "%s\n" , cpp_string_read (obj9));
+
+	cpp_object* obj10 = cpp_string_new("  Hello World   \n");
+	cpp_object* obj11 = cpp_string_strip(obj10);
+	cpp_object* obj12 = cpp_string_lstrip(obj10);
+	cpp_object* obj13 = cpp_string_rstrip(obj10);
+	printf("XXX");
+	printf( "%s" , cpp_string_read (obj10));
+	printf("XXX");
+	printf( "%s" , cpp_string_read (obj11));
+	printf("XXX");
+	printf( "%s" , cpp_string_read (obj12));
+	printf("XXX");
+	printf( "%s" , cpp_string_read (obj13));
+	printf("XXX");
 
 	cpp_string_free(obj3); // obj5 is also deleted.
 	cpp_string_free(obj6);
 	cpp_string_free(obj7);
+	cpp_string_free(obj8);
+	cpp_string_free(obj9);
+	cpp_string_free(obj10);
+	cpp_string_free(obj11);
+	cpp_string_free(obj12);
+	cpp_string_free(obj13);
 }

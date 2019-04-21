@@ -14,6 +14,42 @@ string_new_with_len(const c_char* str, int len)
 	return cpp_string_new_with_len( str, len);
 }
 
+string_object*
+string_clone(string_object* str)
+{
+	return (string_object*) cpp_string_clone( (cpp_object*) str );
+}
+
+string_object*
+string_int2str(int num)
+{
+	return cpp_string_int2str(num);
+}
+
+string_object*
+string_double2str(double num)
+{
+	return cpp_string_double2str(num);
+}
+
+string_object*
+string_strip( string_object* str)
+{
+	return (string_object*) cpp_string_strip((cpp_object*) str);
+}
+
+string_object*
+string_lstrip( string_object* str)
+{
+	return (string_object*) cpp_string_lstrip((cpp_object*) str);
+}
+
+string_object*
+string_rstrip( string_object* str)
+{
+	return (string_object*) cpp_string_rstrip((cpp_object*) str);
+}
+
 const c_char*
 string_read( string_object* str)
 {
@@ -29,12 +65,14 @@ string_concat( string_object* str1, string_object* str2 )
 	return (string_object*) cpp_string_concat((cpp_object*) str1, (cpp_object*) str2 );
 }
 
+
 string_object**
 string_ptr_concat( string_object* str1, string_object* str2 )
 {
 	string_object** str_obj = (string_object**) cpp_string_ptr_concat( str1, str2 );
 	return str_obj;
 }
+
 
 string_object*
 string_repeat( string_object* str, int rep )
@@ -46,6 +84,25 @@ string_object*
 string_subset( string_object* str, size_t from_idx, size_t to_idx)
 {
 	return cpp_string_subset( str, from_idx, to_idx );
+}
+
+
+int
+string_has_char( string_object* str, char c)
+{
+	return cpp_string_has_char((cpp_object*) str, c);
+}
+
+int
+string_str2int( string_object* str )
+{
+	return cpp_string_str2int((cpp_object*) str );
+}
+
+double
+string_str2double( string_object* str )
+{
+	return cpp_string_str2double((cpp_object*) str );
 }
 
 int

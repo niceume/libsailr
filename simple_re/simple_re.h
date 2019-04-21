@@ -15,7 +15,10 @@ typedef struct simple_re_ {
 	OnigRegion* matched;
 } simple_re ;
 
+// Global variable
+simple_re* re_last_matched ;
 
+// Function Prototypes
 simple_re* simple_re_compile( const char* pattern, const char* enc );
 int simple_re_match ( simple_re* re, const char* str );
 int simple_re_reset( simple_re* re);

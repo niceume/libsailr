@@ -162,6 +162,18 @@ sailr_ptr_table_update_string(ptr_table_object** table, char* key, string_type_o
 	return ptr_table_update_string((ptr_table**) table, key, (string_object**) str);
 }
 
+int
+sailr_ptr_table_del_records_except(ptr_table_object** table, char** keys, int key_num )
+{
+	return ptr_table_del_records_except((ptr_table**)table, keys, key_num );
+}
+
+int
+sailr_ptr_table_del_all(ptr_table_object** table)
+{
+	return ptr_table_del_all((ptr_table**) table);
+}
+
 void
 sailr_ptr_table_show_all(ptr_table_object** table)
 {

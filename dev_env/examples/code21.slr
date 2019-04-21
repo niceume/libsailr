@@ -1,7 +1,7 @@
 first = "Dr."
 second = "Ken"
 
-fullname = first + "-" + second 
+fullname = first + "-" + second + "(Kendrick Kang-Joh Jeong)"
 
 if (fullname == "Dr.-Ken"){
 	great_dr = "Yes";

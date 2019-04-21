@@ -149,9 +149,29 @@ vm_stack_push_null( vm_stack* stack , ptr_table** table, char* ptr_key)
 }
 
 int
-vm_stack_fcall( vm_stack* vmstack, char* fname , int num_args)
+vm_stack_push_corresp_item( vm_stack* stack , ptr_table** table, char* ptr_key)
 {
-	call_func(vmstack, fname, num_args);
+	ptr_record* record = ptr_table_find(table, ptr_key);
+	if(record->type == PTR_NULL ){
+		vm_stack_push_null( stack, table, ptr_key);
+	}else if(record->type == PTR_INT ){
+		vm_stack_push_pp_ival( stack, table, ptr_key);
+	}else if(record->type == PTR_DBL ){
+		vm_stack_push_pp_dval( stack, table, ptr_key);
+	}else if(record->type == PTR_STR ){
+		vm_stack_push_pp_str( stack, table, ptr_key);
+	}else if(record->type == PTR_REXP ){
+		vm_stack_push_pp_rexp( stack, table, ptr_key);
+	}else{
+		printf("ERROR: ptr_table holds unknown type for variable, %s\n", ptr_key);
+	}
+}
+
+int
+vm_stack_fcall( vm_stack* vmstack, char* fname , int num_args, ptr_table** table)
+{
+	printf("Function name: %s\n", fname);
+	call_func(vmstack, fname, num_args, table);
 }
 
 stack_item*

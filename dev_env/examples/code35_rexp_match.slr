@@ -1,0 +1,14 @@
+first = "Dr."
+second = "Ken"
+
+fullname = first + "-" + second 
+
+pattern = re/^Dr\.(.*)/
+
+if (fullname =~ pattern ){
+	great_dr = "Yes";
+} else {
+	great_dr = "No";
+}
+
+printf( rexp_matched(1) );

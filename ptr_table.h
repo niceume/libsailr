@@ -61,19 +61,19 @@ ptr_record* ptr_table_create_anonym_struct_string(ptr_table** table, struct_stri
 ptr_record* ptr_table_create_anonym_string(ptr_table** table, string_object** strptr);
 ptr_record* ptr_table_create_string(ptr_table** table, char* key, string_object** strptr);
 ptr_record* ptr_table_create_string_from_ptr(ptr_table** table, char* key, string_object** strptr);
-int ptr_table_update_stirng(ptr_table**, char* key, string_object** strptr);
 
 string_object* ptr_table_get_pp_string(ptr_table** table, char* key);
 const char* ptr_table_read_string(ptr_table** table, char* key);
 int ptr_table_update_string(ptr_table** , char* , string_object** );
+int ptr_record_update_string(ptr_record* pr , string_object** pp_str, GCReq gc);
 
 ptr_record* ptr_table_create_anonym_rexp(ptr_table** table, const char* pattern, const char* enc);
 
 ptr_record* ptr_table_create_null(ptr_table** table, char* key);
-int ptr_table_del(ptr_table** table, char* key);
-int ptr_record_free(ptr_record* );
-int ptr_table_free(ptr_table**);
-void ptr_table_show_all(ptr_table**);
+int ptr_table_del_record(ptr_table** table, char* key);
+int ptr_table_del_records_except(ptr_table** table, char** keys, int key_num );
+int ptr_table_del_all(ptr_table** table);
+void ptr_table_show_all(ptr_table** table);
 
 PtrType ptr_table_get_type(ptr_table** table, char* key);
 int ptr_record_is_ptr_null(ptr_table** table, char* key);
@@ -84,5 +84,7 @@ void** ptr_table_get_pptr(ptr_table** table, char* key);
 ptr_record* ptr_table_find(ptr_table** table, char* key);
 ptr_record* ptr_table_insert(ptr_table** table, ptr_record* pr);
 int ptr_table_update(ptr_record* pr, void* address, PtrType type, GCReq gc);
+int ptr_record_free(ptr_record* );
+int ptr_table_free(ptr_table**);
 
 #endif /* PTR_TABLE_H */

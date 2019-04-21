@@ -73,8 +73,9 @@ int vm_stack_push_pp_num( vm_stack* , ptr_table**, char* );
 int vm_stack_push_pp_str( vm_stack* , ptr_table**, char* );
 int vm_stack_push_pp_rexp( vm_stack* , ptr_table**, char* );
 int vm_stack_push_null( vm_stack* , ptr_table**, char* );
+int vm_stack_push_corresp_item( vm_stack* , ptr_table** , char* );
 
-int vm_stack_fcall( vm_stack* , char* , int );
+int vm_stack_fcall( vm_stack* , char* , int , ptr_table** );
 
 stack_item* vm_stack_pop( vm_stack* );
 

@@ -1,0 +1,12 @@
+greeting = "22"
+x = str_to_num( greeting )
+
+greeting = "23.2"
+bmi = str_to_num( greeting )
+
+if( bmi > x){
+  judgement = "Overweight"
+}else{
+  judgement = "Non-overweight"
+}
+

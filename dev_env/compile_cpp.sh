@@ -11,6 +11,9 @@
 # cd ..
 
 
+# Before running, make sure that required libraries exist in LD_LIBRARY_PATH
+# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/local/onigmo/lib
+
 make clean --directory ../  ONIG_INCLUDE_DIR=dev_env/onigmo/include
 make build --directory ../  ONIG_INCLUDE_DIR=dev_env/onigmo/include 
 

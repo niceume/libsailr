@@ -36,6 +36,9 @@ int sailr_ptr_table_update_int(ptr_table_object** table, char* key, int ival);
 int sailr_ptr_table_update_double(ptr_table_object** table, char* key, double dval);
 int sailr_ptr_table_update_string(ptr_table_object** table, char* key, string_type_object** str);
 
+int sailr_ptr_table_del_records_except(ptr_table_object** table, char** keys, int key_num );
+int sailr_ptr_table_del_all(ptr_table_object** table);
+
 void sailr_ptr_table_show_all(ptr_table_object** table);
 
 char sailr_ptr_table_get_type(ptr_table_object** table, char* key);

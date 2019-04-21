@@ -11,6 +11,7 @@
 
 /* 1-1. Lines to be included at the beginning of generated scanner. */
 %{
+#include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 
@@ -81,9 +82,15 @@ WORD {CHAR}{CHNUM}*
 <COMM>.*"*/"\n?		{ BEGIN INITIAL;};
 <COMM>.+\n				{ };
 
-"//"					{ BEGIN COMMONE ; };
-<COMMONE>\n			{ BEGIN INITIAL ; };
-<COMMONE>.*			{};
+"//"					{ 
+							/* printf("LEX: COMMONE start\n"); */
+							 BEGIN COMMONE ; 
+						};
+<COMMONE>.*\n			{ 
+							/* printf("LEX: COMMONE finished\n"); */
+							BEGIN INITIAL ; 
+						};
+	/* <COMMONE>.*			{ printf("LEX: %s\n", yytext ); }; */
 
 	/* Keywords for DATA Step */
 if		{BEGIN IFSTATE; printf("IF STATE!\n"); LEX_RETURN( KEY_IF );}
@@ -189,7 +196,8 @@ else	{BEGIN ELSESTATE; printf("ELSE STATE!\n"); LEX_RETURN( KEY_ELSE );}
 };
 
 	/* Regular expression literals */
-re"/"[^("/")]([^("/")\n]|"\/")*"/" {
+	/* re"/"[^("/")]([^("/")\n]|\\/)*"/" */
+re[/][^/]([^/\n]|\\[/])*[/]	{
 	lval->str = string_new_with_len((yytext+3), yyleng - 4);
 	LEX_RETURN( LIT_REXP ); 
 };

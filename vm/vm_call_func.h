@@ -3,6 +3,6 @@
 
 #include "vm_stack.h"
 
-int call_func(vm_stack* vmstack, char* fname, int num_args);
+int call_func(vm_stack* vmstack, char* fname, int num_args, ptr_table** table);
 
 #endif /* CALL_FUNC_H */

@@ -134,24 +134,19 @@ vm_stack_store_val(vm_stack* vmstack)
 			string_free(*(lvalue->pp_str));  // ToDo: Really need free?
 			*(lvalue->pp_str) = tmp_s_str;
 		}else if(rvalue->type == PP_STR){
-			printf("ASSING STRING VALUE");
+			printf("ASSINING STRING VALUE \n");
+
+			// Free lvalue string.
 			string_free(*(lvalue->pp_str));
-			printf("LVALUE: pointer to pointer to string.\n");
-			printf("LVALUE: String Value %s \n",string_read( *( lvalue->pp_str)));
-			printf("LVALUE: pointer to string %p \n", *( lvalue->pp_str) );
-			printf("LVALUE: pointer to pointer to string %p \n" , ( lvalue->pp_str));
 
-			printf("RVALUE: pointer to pointer to string.\n");
-			printf("RVALUE: String Value %s \n",string_read( *( rvalue->pp_str)));
-			printf("RVALUE: pointer to string %p \n", *( rvalue->pp_str) );
-			printf("RVALUE: pointer to pointer to string %p \n" , ( rvalue->pp_str));
-			(*(lvalue->pp_str)) = *(rvalue->pp_str);
+			// Clone rvalue string.
+			string_object* cloned_str = string_clone(*( rvalue->pp_str));
 
-			printf("RVALUE is assigned to LVALUE");
-			printf("LVALUE: pointer to pointer to string.\n");
-			printf("LVALUE: String Value %s \n",string_read( *( lvalue->pp_str)));
-			printf("LVALUE: pointer to string %p \n", *( lvalue->pp_str) );
-			printf("LVALUE: pointer to pointer to string %p \n" , ( lvalue->pp_str));
+			// Assign ptr_record (or lvalue) to the new string.
+			printf("Cloned string: %s \n" , string_read(cloned_str));
+			ptr_record_update_string(left_record, &cloned_str, GC_YES);
+			printf("Ptrtable string (for %s): %s (address: %p) \n" , left_record->key , string_read((string_object*)left_record->address), left_record->address);
+
 		}else{
 			printf("LHS is PP_IVAL and RHS is type, %d.", rvalue->type );
 		}

@@ -90,11 +90,10 @@ WORD {CHAR}{CHNUM}*
 							/* printf("LEX: COMMONE finished\n"); */
 							BEGIN INITIAL ; 
 						};
-	/* <COMMONE>.*			{ printf("LEX: %s\n", yytext ); }; */
 
 	/* Keywords for DATA Step */
-if		{BEGIN IFSTATE; printf("IF STATE!\n"); LEX_RETURN( KEY_IF );}
-else	{BEGIN ELSESTATE; printf("ELSE STATE!\n"); LEX_RETURN( KEY_ELSE );}
+if		{BEGIN IFSTATE; /* printf("IF STATE!\n"); */ LEX_RETURN( KEY_IF );}
+else	{BEGIN ELSESTATE; /* printf("ELSE STATE!\n"); */ LEX_RETURN( KEY_ELSE );}
 	/* Ignore \n once. */
 <IFSTATE>"{"" "* {BEGIN INITIAL; LEX_RETURN('{') ;}
 <IFSTATE>"{"" "*\n? {BEGIN INITIAL; LEX_RETURN('{') ;}
@@ -115,7 +114,7 @@ else	{BEGIN ELSESTATE; printf("ELSE STATE!\n"); LEX_RETURN( KEY_ELSE );}
 "*"	LEX_RETURN( OP_MULT );
 "/"	LEX_RETURN( OP_DIV );
 "%"	LEX_RETURN( OP_MOD );
-"!"	{printf("FACTOR OPERATOR DETECTED!! \n"); LEX_RETURN( FACTOR );}
+"!"	{ LEX_RETURN( FACTOR );}
 "^"	LEX_RETURN( OP_POWER );
 "**"	LEX_RETURN( OP_POWER );
 
@@ -186,7 +185,7 @@ else	{BEGIN ELSESTATE; printf("ELSE STATE!\n"); LEX_RETURN( KEY_ELSE );}
 
 \"([^\\\"]|\\.)*\"	{
 	lval->str = string_new_with_len((yytext + 1), yyleng - 2);
-	printf("LEXER: LIT_STR %s \n", yytext);
+	// printf("LEXER: LIT_STR %s \n", yytext);
 	LEX_RETURN( LIT_STR );
 };
 

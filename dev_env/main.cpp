@@ -6,57 +6,98 @@ extern "C" {
 #include <iostream>
 #include <string>
 #include <iterator>
+#include <cstring>
 #include "stdlib.h"
 #include "stdio.h"
+#include "getopt.h"
 
-
+int verboseflag = 0; /* 0: minimal output, 1: verbose output */
+#define VERBOSE( X ) do{ if(verboseflag != 0){ X } } while(0);
 
 int
 main(int argc, char** argv)
 {
-	char* source_name = argv[1];
+	// Code to parse options
+	// -v option enables verbose output.
+	int matched;
+	opterr = 0;
+	while( (matched = getopt( argc, argv, "vhi:")) != -1  ){
+	switch (matched){
+	case 'v':
+		verboseflag = 1;
+		std::cout << "Option -v is specified" << std::endl;
+		break;
+	default:
+		std::cerr << "Usage: " << argv[0] << " [-v]  \n" << std::endl;
+		exit(EXIT_FAILURE);
+		break;
+	}
+	}
+
+	// Select the filename.
+	VERBOSE( std::cout << "----- Obtaining file name -----" << std::endl; )
+	const char* source_name;
+	if (optind < argc ){
+		source_name = argv[optind];
+        VERBOSE( std::cout << "Non-parametered arg is filename of sailr code: " << source_name << std::endl; )
+	} else {
+		std::cerr << "ERRROR: File name is not specified." << std::endl;
+	}
+
+
+	// Open the code file
+	VERBOSE( std::cout << "----- Opening file -----" << std::endl; )
 	std::ifstream ifs(source_name);
 	if(ifs.fail()){
 		std::cerr << "Could not open file.\n" << std::endl;
 		return 0;
 	}
+
+
+	// Sailr code is passed to this program.
+	VERBOSE( std::cout << "----- Reading Sailr code -----" << std::endl; )
 	std::string code((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
-	std::cout <<  code << std::endl;
+	VERBOSE( std::cout <<  code << std::endl; )
+
 
 	// Initializing pointer table. 
+	VERBOSE( std::cout << "----- Initializing pointer table -----" << std::endl; )
 	ptr_table_object* table = sailr_ptr_table_init() ;
-    printf("table's pointer is %p \n", table);
+    VERBOSE( printf("Constructed and initialized table's pointer is %p \n", table); )
 
-	//	sailr_ptr_table_create_anonym_string(&table, "Hello, Japan!");
 
 	// Initializing parser_state, which stores TreeNode*.
-	std::cout << "Constructing parser! \n"  << std::endl ;
+	VERBOSE( std::cout << "----- Constructing parser -----"  << std::endl ; )
 	parser_state_object* ps = sailr_new_parser_state (source_name, table);
 	sailr_construct_parser( code.c_str(), ps );  // Now ps holds tree and table!!
 
-	std::cout << "Show variables." << std::endl;
+	VERBOSE( std::cout << "----- Show variables -----" << std::endl; )
+	VERBOSE( std::cout << "All the Variables (LHS or RHS detected at parse.y)" << std::endl; )
 	char** vars = sailr_varnames(ps);
 	int var_num = sailr_varnames_num(ps);
-	int var_idx;
+	VERBOSE( int var_idx;
 	for(var_idx=0; var_idx < var_num; var_idx++){
-		std::cout << vars[var_idx] << std::endl;
-	}
+		std::cout << vars[var_idx] << " ";
+	} 
+	std::cout << std::endl; )
 
-	std::cout << "Show LHS variables." << std::endl;
+	VERBOSE( std::cout << "LHS variables." << std::endl; )
 	char** lhs_vars = sailr_lhs_varnames(ps);
 	int lhs_var_num = sailr_lhs_varnames_num(ps);
-	int lhs_var_idx;
+	VERBOSE( int lhs_var_idx;
 	for(lhs_var_idx=0; lhs_var_idx < lhs_var_num; lhs_var_idx++){
-		std::cout << lhs_vars[lhs_var_idx] << std::endl;
-	}
+		std::cout << lhs_vars[lhs_var_idx] << " ";
+	} 
+	std::cout << std::endl; )
 
-	std::cout << "Show RHS variables." << std::endl;
+	VERBOSE( std::cout << "RHS variables." << std::endl; )
 	char** rhs_vars = sailr_rhs_varnames(ps);
 	int rhs_var_num = sailr_rhs_varnames_num(ps);
-	int rhs_var_idx;
+	VERBOSE( int rhs_var_idx;
 	for(rhs_var_idx=0; rhs_var_idx < rhs_var_num; rhs_var_idx++){
-		std::cout << rhs_vars[rhs_var_idx] << std::endl;
-	}
+		std::cout << rhs_vars[rhs_var_idx] << " ";
+	} 
+	std::cout << std::endl; )
 
 
 	// Assinging pointers onto table
@@ -167,53 +208,53 @@ main(int argc, char** argv)
 	sailr_ptr_table_create_null(&table, (char*)"great_dr" );
 
 	sailr_ptr_table_create_null(&table, (char*)"pattern" );
+	sailr_ptr_table_create_null(&table, (char*)"match" );
 	sailr_ptr_table_create_null(&table, (char*)"date" );
 	sailr_ptr_table_create_null(&table, (char*)"date_str" );
 
-	std::cout << "Show pointer table! At this point, annonym STRING should be already added.\n"  << std::endl ;
-    printf("table's pointer is %p \n", table);
-	sailr_ptr_table_show_all(&table);
+	VERBOSE( std::cout << "----- Showing pointer table (BEFORE CALCULATION) -----" << std::endl; )
+	VERBOSE( std::cout << "At this point, annonym strings should be already added."  << std::endl; )
+    VERBOSE( printf("table's pointer is %p \n", table); )
+	VERBOSE( sailr_ptr_table_show_all(&table); )
 
-	std::cout << "Show parser tree! \n"  << std::endl ;
-
+	VERBOSE( std::cout << "----- Showing parser tree -----"  << std::endl; )
 	sailr_tree_dump( ps );
 
-
-	std::cout << "Show pointer table again! \n"  << std::endl ;
-	sailr_ptr_table_show_all(&table);
-
-
+	VERBOSE( std::cout << "----- Generating VM instructions -----" << std::endl; ) 
+	VERBOSE( std::cout << "VM instructions are generated with parser state and pointer table " << std::endl; )
 	vm_inst_object* inst_list = sailr_gen_code( ps, table); // VM Code is generated.
+	VERBOSE( std::cout << "Generated. Showing..." << std::endl; )
+	VERBOSE( sailr_vm_inst_list_show ( inst_list );)
 
-	sailr_vm_inst_list_show ( inst_list ); // Show VM code list.
-
+	VERBOSE( std::cout << "----- Converting VM instructions -----" << std::endl; ) 
+	VERBOSE( std::cout << "Converting VM instruction list(linked list format) into VM instruction code (array format)" << std::endl; )
 	vm_inst_object* vmcode = sailr_vm_inst_list_to_code(inst_list);
 	int vmcode_size = sailr_vm_inst_list_size( inst_list);
 	
-	/* Run virtual machine!! */
+	/* Construct and run virtual machine */
+	VERBOSE(std::cout << "----- Constructing VM stack ------" << std::endl; )
 	vm_stack_object* vmstack = sailr_vm_stack_init();
+	VERBOSE(std::cout << "----- Running VM code on VM stack ------" << std::endl; )
 	sailr_vm_exec_code(vmcode, vmcode_size , table , vmstack);
 
-	/* Show Ptr Table */
-	std::cout << "Show pointer table! \n" << std::endl;
-	sailr_ptr_table_show_all(&table);
+	/* Pointer Table AFTER CALCULATION */
+	VERBOSE( std::cout << "----- Showing pointer table AFTER CALCULATION -----" << std::endl; )
+	VERBOSE( sailr_ptr_table_show_all(&table); )
 
 	/* Test Code to delete pointer table records. */
-	std::cout << "Delete pointer records except ...  \n" << std::endl;
-	char* record_list[] = {"_HEAD_OF_UTHASH_", "greeting","bmi", "date", "date_str"};
-	sailr_ptr_table_del_records_except(&table, record_list, sizeof(record_list) / sizeof(record_list[0]));
-
-	std::cout << "Show pointer table! \n" << std::endl;
-	sailr_ptr_table_show_all(&table);
+//	std::cout << "Delete pointer records except ...  \n" << std::endl;
+//	char* record_list[] = {"_HEAD_OF_UTHASH_", "greeting","bmi", "date", "date_str"};
+//	sailr_ptr_table_del_records_except(&table, record_list, sizeof(record_list) / sizeof(record_list[0]));
+//	sailr_ptr_table_show_all(&table);
 
     /* Free memory */
-	std::cout << "Free parser tree! \n" << std::endl;
+	VERBOSE( std::cout << "----- Memory areas are going to be freed -----" << std::endl; )
+	VERBOSE( std::cout << "Going to free parser tree \n" << std::endl; )
 	sailr_tree_free(ps);
-	std::cout << "Free pointer table!" << std::endl;
+	VERBOSE( std::cout << "Going to free pointer table" << std::endl; )
 	sailr_ptr_table_del_all(&table);
-	std::cout << "Free parser state object!" << std::endl;
-//	sailr_parser_state_free(ps);
-	std::cout << "Memory areas are successfully freed." << std::endl;
+	VERBOSE( std::cout << "Going to free parser state object" << std::endl; )
+	sailr_parser_state_free(ps);
 
 	return 1;
 }

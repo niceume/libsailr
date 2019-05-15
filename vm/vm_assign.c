@@ -3,7 +3,19 @@
 #include "common_string.h"
 #include "vm_stack.h"
 #include "vm_assign.h"
-#include "../ptr_table.h"
+#include "ptr_table.h"
+#include "simple_re.h"
+#include "helper.h"
+
+int vm_stack_assign_numval_to_ptr_dbl_record(ptr_record* left_record, stack_item* rvalue);
+int vm_stack_assign_numval_to_ptr_int_record(ptr_record* left_record, stack_item* rvalue);
+int vm_stack_assign_temp_str_to_record(ptr_record* left_record, stack_item* rvalue);
+int vm_stack_assign_copy_str_to_record(ptr_record* left_record, stack_item* rvalue);
+
+// Needed?
+int vm_stack_convert_str_item_into_void(ptr_record* left_record, stack_item* rvalue);
+
+
 
 int
 vm_stack_store_val(vm_stack* vmstack)
@@ -11,9 +23,11 @@ vm_stack_store_val(vm_stack* vmstack)
 	stack_item* lvalue = vm_stack_second(vmstack);
 	stack_item* rvalue = vm_stack_top(vmstack);
 	
+	// lvalue should point to heap memory to store objects or values, b/c they should be returned to library user.
+	// If they are not stored on heap, there are possibilities that they are automatically destroyed.
 	ptr_record* left_record;
 	if( (lvalue->type != NULL_ITEM) && (lvalue->type != PP_IVAL ) && (lvalue->type != PP_DVAL ) && (lvalue->type != PP_STR )){
-		printf("ERROR: lvalue should be pointer to pointer.\n");
+		printf("ERROR: lvalue should be pointer to pointer, such as PP_IVAL, PP_DVAL or PP_STR, or NULL_ITEM.\n");
 	} else {
 		left_record = (ptr_record*)lvalue->p_record;
 	}
@@ -23,9 +37,16 @@ vm_stack_store_val(vm_stack* vmstack)
 	char* tmp_str;
 	string_object* tmp_s_str;
 
-	if(lvalue->type == NULL_ITEM){
-		if(left_record->type == PTR_NULL){
-			if(rvalue->type == IVAL){
+
+	if(lvalue->type == NULL_ITEM){ // Unknown variables
+		// ------------------------------
+		// Unknown and undefined lvalue
+		// Library users do not know the types of these variables beforehand, and they are not defined yet.
+		// All the memory that is pointed by this address shoud be GC_YES. 
+		// ------------------------------
+		if(left_record->type == PTR_NULL){  // Undefined variables
+			if(rvalue->type == IVAL){ // Undefined varialbes become defined ones.
+				DEBUG_PRINT("Thin lvalue is an unknown and undefined variable, which becomes PTR_INT.\n");
 				// change type from PTR_NULL to PTR_INT on ptr_table.
 				left_record->type = PTR_INT;
 				left_record->address = malloc(sizeof(int));
@@ -34,9 +55,11 @@ vm_stack_store_val(vm_stack* vmstack)
 				left_record->ex_addr = malloc(sizeof(double));
 				left_record->ex_gc = GC_YES;
 				// assign value to the newly allocated memory.
-				memcpy( left_record->address, &(rvalue->ival), sizeof(int));
-				*((int*)left_record->ex_addr) = 0;
+				// memcpy( left_record->address, &(rvalue->ival), sizeof(int));
+				*((int*)left_record->address) = rvalue->ival ;
+				*((double*)left_record->ex_addr) = 0.0;
 			}else if( rvalue->type == DVAL){
+				DEBUG_PRINT("Thin lvalue is an unknown and undefined variable, which becomes PTR_DBL.\n");
 				// change type from PTR_NULL to PTR_DBL on ptr_table.
 				left_record->type = PTR_DBL;
 				left_record->address = malloc(sizeof(double));
@@ -45,115 +68,160 @@ vm_stack_store_val(vm_stack* vmstack)
 				left_record->ex_addr = malloc(sizeof(int));
 				left_record->ex_gc = GC_YES;
 				// assign value to the newly allocated memory.
-				memcpy( left_record->address, &(rvalue->dval), sizeof(double));
-				*((double*)left_record->ex_addr) = 0.0;
+				// memcpy( left_record->address, &(rvalue->dval), sizeof(double));
+				*((double*)left_record->address) = rvalue->dval ;
+				*((int*)left_record->ex_addr) = 0;
 			}else if( rvalue->type == PP_STR){
+				DEBUG_PRINT("Thin lvalue is an unknown and undefined variable, which becomes PTR_STR.\n");
 				// change type from PTR_NULL to PTR_STR on ptr_table.
 				left_record->type = PTR_STR;
-				left_record->address = (void*) string_new(string_read((string_object*) *(rvalue->pp_str)));
+				if( vm_stack_item_is_temp(rvalue) ){ // If rvalue is temporary, use the object.
+					left_record->address = (string_object*) *(rvalue->pp_str);
+					free(rvalue->pp_str);
+					rvalue->pp_str = NULL;
+					rvalue->type = VOID_ITEM;
+				}else{  // If rvalue is not tempoary, create a new string and manage it 
+					left_record->address = (string_object*) string_new(string_read((string_object*) *(rvalue->pp_str)));
+				}
 				left_record->gc = GC_YES;
-				// ToDo: Do I need to free the string on rvalue ??
-				// ToDo: I think to answer this, we need to know the GC flag of the record corresponding to this stack item.
+
 			}else if( rvalue->type == PP_REXP){
+				DEBUG_PRINT("Thin lvalue is an unknown and undefined variable, which becomes PTR_REXP.\n");
 				// change type from PTR_NULL to PTR_STR on ptr_table.
 				left_record->type = PTR_REXP;
-				left_record->address = (void*) *(rvalue->pp_rexp) ;
+				if( vm_stack_item_is_temp(rvalue) ){ // If rvalue is temporary, use the object.
+					left_record->address = (simple_re*) *(rvalue->pp_rexp);
+					free(rvalue->pp_rexp);
+					rvalue->pp_rexp = NULL;
+					rvalue->type = VOID_ITEM;
+				}else{  // If rvalue is not tempoary, create a new regular expression object and manage it 
+					left_record->address = (simple_re*) simple_re_compile( (*(rvalue->pp_rexp))->pattern , SAILR_CHAR_ENCODING );
+				}
 				left_record->gc = GC_YES;
 			}else{
-				// ToDo: ERROR
+				printf("ERROR: Only IVAL, DVAL, PP_STR or PP_REXP can be rvalue for assignment operator.\n");
             }
-		}else if(left_record->type == PTR_INT){ // Type compatible
-			if(rvalue->type == IVAL){
-				// continue to be left_record->type == PTR_INT
-				left_record->gc = GC_YES;
-				*((int*)left_record->address) = rvalue->ival;
-			}else if( rvalue->type == DVAL){ // Type mismatch
-				ptr_record_swap_addresses(left_record); // Main address type is now PTR_DBL
-				left_record->gc = GC_YES;
-				*((double*)left_record->address) = rvalue->dval;
-			}else {
-				printf("ERROR: Invalid");
-			}
+
+		// ------------------------------
+		// Unknown but defined lvalue
+		// Library users do not know the types of these variables beforehand, but they are already defined during execution.
+		// ------------------------------
+		// Unknown but defined variable as PTR_INT
+		}else if(left_record->type == PTR_INT){ 
+			DEBUG_PRINT("This lvalue is an originally unknown but is now defined variable, PTR_INT.\n");
+			vm_stack_assign_numval_to_ptr_int_record(left_record, rvalue);
+		// Unknown but defined variable as PTR_DBL
 		}else if(left_record->type == PTR_DBL){
-			if(rvalue->type == IVAL){// Type mismatch
-				ptr_record_swap_addresses(left_record); // Main address type is now PTR_INT
-				left_record->gc = GC_YES;
-				*((int*)left_record->address) = rvalue->ival;
-			}else if( rvalue->type == DVAL){ // Type compatible
-				// continue to be left_record->type == PTR_DBL
-				left_record->gc = GC_YES;
-				*((double*)left_record->address) = rvalue->dval;
-			}else {
-				printf("ERROR: Invalid");
-			}
+			DEBUG_PRINT("This lvalue is an originally unknown but is now defined variable, PTR_DBL.\n");
+			vm_stack_assign_numval_to_ptr_dbl_record(left_record, rvalue);
+		// Unknown but defined variable as PTR_STR
 		}else if(left_record->type == PTR_STR){
 			if(rvalue->type == PP_STR){
-				// ToDo: Do I really need to create new string object here??
-				left_record->address = (void*) string_new(string_read((string_object*) *(rvalue->pp_str)));
-				left_record->gc = GC_YES;
-				// ToDo: Do I need to free the string on rvalue ??
-				// ToDo: I think to answer this, we need to know the GC flag of the record corresponding to this stack item.
+				ptr_record_free_gc_required_memory( left_record );
+				if( vm_stack_item_is_temp(rvalue) ){ // If rvalue is temporary, use the object.
+					vm_stack_assign_temp_str_to_record(left_record, rvalue);
+				}else{  // If rvalue is not tempoary, create a new string and manage it 
+					vm_stack_assign_copy_str_to_record(left_record, rvalue);					
+				}
+				left_record->gc = left_record->gc; // No change.
 			}else {
-				printf("ERROR: Invalid");
+				printf("ERROR: Object other than PP_STR is trying to be assigned to PTR_STR.\n");
 			}
 		}
+
+	// ------------------------------
+	// Known and defined lvalue
+	// Library users know the types of these variables beforehand.
+	// ------------------------------
+	// as PP_IVAL. 
 	}else if(lvalue->type == PP_IVAL){
-		if(rvalue->type == IVAL){  // Type compatible
-			printf("Assign int rvalue to lvalue pointer to pointer.\n");
-			memcpy( *(lvalue->pp_ival), &(rvalue->ival), sizeof(int));
-			printf("Value: %d, Pointer: %p \n", **(lvalue->pp_ival), *(lvalue->pp_ival) );
-		}else if(rvalue->type == DVAL){  // Type mismatch
-			printf("NOTE: LHS is int, RHS is double. LHS variable becomes double. \n");
-			// ToDo: Don't I need to free original value?
-			ptr_record_swap_addresses(left_record); // Main address type is now PTR_DBL
-			memcpy( *(lvalue->pp_dval), &(rvalue->dval), sizeof(double));
+		if(left_record->type != PTR_INT){
+			printf("ERROR: ptr record should be PTR_INT. This branch should never be executed. \n");
 		}else{
-			printf("LHS is PP_IVAL and RHS is type, %d.", rvalue->type );
+			vm_stack_assign_numval_to_ptr_int_record(left_record, rvalue);
 		}
+
+	// as PP_DVAL
 	}else if(lvalue->type == PP_DVAL){
-		if(rvalue->type == IVAL){  // Type mismatch
-			// ToDo: Don't I need to free original value?
-			ptr_record_swap_addresses(left_record); // Main address type is now PTR_INT
-			memcpy( *(lvalue->pp_ival), &(rvalue->ival), sizeof(int));
-		}else if(rvalue->type == DVAL){  // Type compatible
-			printf("Assign double rvalue to lvalue pointer to pointer.\n");
-			memcpy( *(lvalue->pp_dval), &(rvalue->dval), sizeof(double));
-			printf("Value: %f, Pointer: %p \n", **(lvalue->pp_dval), *(lvalue->pp_dval) );
+		if(left_record->type != PTR_DBL){
+			printf("ERROR: ptr record should be PTR_DBL. This branch should never be executed. \n");
 		}else{
-			printf("LHS is PP_IVAL and RHS is type, %d.", rvalue->type );
+			vm_stack_assign_numval_to_ptr_dbl_record(left_record, rvalue);
 		}
+
+	// as PP_STR
 	}else if(lvalue->type == PP_STR){
-		if(rvalue->type == IVAL){ // Mismatch
-			sprintf( tmp_str , "%d" , rvalue->ival);
-			tmp_s_str = string_new(tmp_str );
-			string_free(*(lvalue->pp_str));  // ToDo: Really need free?
-			*(lvalue->pp_str) = tmp_s_str;
-		}else if(rvalue->type == DVAL){
-			sprintf( tmp_str , "%f" , rvalue->dval);
-			tmp_s_str = string_new(tmp_str );
-			string_free(*(lvalue->pp_str));  // ToDo: Really need free?
-			*(lvalue->pp_str) = tmp_s_str;
-		}else if(rvalue->type == PP_STR){
-			printf("ASSINING STRING VALUE \n");
-
-			// Free lvalue string.
-			string_free(*(lvalue->pp_str));
-
-			// Clone rvalue string.
-			string_object* cloned_str = string_clone(*( rvalue->pp_str));
-
-			// Assign ptr_record (or lvalue) to the new string.
-			printf("Cloned string: %s \n" , string_read(cloned_str));
-			ptr_record_update_string(left_record, &cloned_str, GC_YES);
-			printf("Ptrtable string (for %s): %s (address: %p) \n" , left_record->key , string_read((string_object*)left_record->address), left_record->address);
-
+		if(left_record->type != PTR_STR){
+			printf("ERROR: ptr record should be PTR_STR. This branch should never be executed. \n");
 		}else{
-			printf("LHS is PP_IVAL and RHS is type, %d.", rvalue->type );
+			if(rvalue->type == PP_STR){
+				ptr_record_free_gc_required_memory( left_record );
+				if( vm_stack_item_is_temp(rvalue) ){ // If rvalue is temporary, use the object.
+					vm_stack_assign_temp_str_to_record(left_record, rvalue);
+				}else{  // If rvalue is not tempoary, create a new string and manage it 
+					vm_stack_assign_copy_str_to_record(left_record, rvalue);					
+				}
+				left_record->gc = left_record->gc; // No change.
+			}else {
+				printf("ERROR: Object other than PP_STR is trying to be assigned to PTR_STR.\n");
+			}
 		}
 	}
 
-	vmstack->sp = ((vmstack->sp) - 2);
+	vm_stack_clean_and_pop( vmstack , 2 );
 	return 1;
+}
+
+int
+vm_stack_assign_numval_to_ptr_dbl_record(ptr_record* left_record, stack_item* rvalue)
+{
+			if(rvalue->type == IVAL){// Type mismatch
+				DEBUG_PRINT("lvalue is PTR_DBL and rvalue is IVAL, and assign the value after converting the lvalue into PTR_INT.");
+				// Main address type is now PTR_INT
+				ptr_record_swap_addresses(left_record); 
+				*((int*)left_record->address) = rvalue->ival;
+				left_record->gc = left_record->gc; // This heap area is usually prepared by library user.
+			}else if( rvalue->type == DVAL){ // Type compatible
+				// continue to be left_record->type == PTR_DBL
+				*((double*)left_record->address) = rvalue->dval;
+				left_record->gc = left_record->gc; // This heap area is usually prepared by library user.
+			}else {
+				printf("ERROR: Object other than IVAL an DVAL is trying to be assigned to PTR_DBL.\n");
+			}
+}
+
+int
+vm_stack_assign_numval_to_ptr_int_record(ptr_record* left_record, stack_item* rvalue)
+{
+			if(rvalue->type == IVAL){ // Type compatible
+				DEBUG_PRINT("lvalue is PTR_INT and rvalue is IVAL, and just assign the value.");
+				// continue to be left_record->type == PTR_INT
+				*((int*)left_record->address) = rvalue->ival;
+				left_record->gc = left_record->gc; // This heap area is usually prepared by library user.
+			}else if( rvalue->type == DVAL){ // Type mismatch
+				DEBUG_PRINT("lvalue is PTR_INT and rvalue is DVAL, and assign the value after converting the lvalue into PTR_DBL.");
+				// Main address type is now PTR_DBL
+				ptr_record_swap_addresses(left_record); 
+				*((double*)left_record->address) = rvalue->dval;
+				left_record->gc = left_record->gc; // This heap area is usually prepared by library user.
+			}else {
+				printf("ERROR: Object other than IVAL an DVAL is trying to be assigned to PTR_INT.\n");
+			}
+}
+
+int
+vm_stack_assign_temp_str_to_record(ptr_record* left_record, stack_item* rvalue)
+{
+	left_record->address = (void*) *(rvalue->pp_str);
+	free(rvalue->pp_str);
+	rvalue->pp_str = NULL;
+	rvalue->type = VOID_ITEM;
+}
+
+int
+vm_stack_assign_copy_str_to_record(ptr_record* left_record, stack_item* rvalue)
+{
+	left_record->address = (void*) string_new(string_read((string_object*) *(rvalue->pp_str)));
 }
 
 

@@ -3,8 +3,8 @@ LEX = flex
 CC = gcc
 CPPC := g++
 AR = ar rvs
-CFLAGS += -fPIC -O3 -Ivm -Istring -Isimple_re -Isimple_date -I$(ONIG_INCLUDE_DIR)
-CPPCFLAGS += -std=c++11 -fPIC -O3 -Ivm -Istring
+CFLAGS += -fPIC -O3 -I. -Ivm -Istring -Isimple_re -Isimple_date -I$(ONIG_INCLUDE_DIR) $(CC_USER_DEFINES)
+CPPCFLAGS += -std=c++11 -fPIC -O3 -Ivm -Istring $(CPPC_USER_DEFINES)
 RM = rm -f
 
 TARGET = libsailr.a

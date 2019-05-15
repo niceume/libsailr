@@ -5,6 +5,7 @@
 #include "vm_label.h"
 #include "gen_code_util.h"
 
+#include "helper.h"
 
 /* Helper Functions ---------------- */
 
@@ -46,7 +47,6 @@ gen_code_str(TreeNode* nd )  // Terminal OK
 //	printf("instruction for VM to push pp to STR: %s. \n", nd->e1.str_key);
 	char* key = nd->e1.str_key;
 	vm_inst* code = new_vm_inst_push_pp_str(key);
-//	printf("instruction for VM to push pp to STR: %s. \n", nd->e1.str_key);
 	return code; 
 }
 
@@ -73,7 +73,7 @@ gen_code_ident(TreeNode* nd, ptr_table* table)  // Terminal OK
 	} else if (record->type == PTR_NULL){
 		code = new_vm_inst_push_null(id_name);
 	} else {
-		printf("Inappropriate type is specified for varialbe. \n");
+		printf("ERROR: Inappropriate type is specified for varialbe. \n");
 	}
 	return code; 
 }
@@ -119,7 +119,7 @@ convert_op(char* op_name)
 	} else if ( strcmp( op_name, "REXP_MATCH") == 0 ) {
 		return VM_REXP_MATCH;
 	} else {
-		printf("ERROR:node op has undefined oprator!!\n");
+		printf("ERROR: node op has undefined oprator!!\n");
 	}
 }
 
@@ -197,7 +197,7 @@ vm_inst* gen_code(TreeNode* nd, ptr_table* table){
 
   switch (nd->type){
   case NODE_PRGM:
-    printf("NODE_PRGM\n");
+    DEBUG_PRINT("NODE_PRGM\n");
     tmp_code1 = gen_code(nd->e1.nd, table);
     vm_inst* termin_code = new_vm_inst_command(VM_END);
     nd_code = vm_inst_list_cat( tmp_code1 , termin_code );
@@ -205,7 +205,7 @@ vm_inst* gen_code(TreeNode* nd, ptr_table* table){
 	break;
 
   case NODE_STMT:
-    printf("NODE_STMT\n");
+    DEBUG_PRINT("NODE_STMT\n");
     tmp_code1 = gen_code(nd->e1.nd, table);
     if(nd->e3.sibling != NULL){
 		tmp_code3 = gen_code(nd->e3.sibling, table);
@@ -217,37 +217,37 @@ vm_inst* gen_code(TreeNode* nd, ptr_table* table){
     break;
 
   case NODE_INT:  // terminal node
-    printf("NODE_INT\n");
+    DEBUG_PRINT("NODE_INT\n");
 	nd_code = gen_code_int(nd);
     return nd_code;
     break;
 
   case NODE_DBL:  // terminal node
-    printf("NODE_DBL\n");
+    DEBUG_PRINT("NODE_DBL\n");
     nd_code = gen_code_double(nd);
     return nd_code;
     break;
 
   case NODE_STR:  // terminal node
-    printf("NODE_STR\n");
+    DEBUG_PRINT("NODE_STR\n");
     nd_code = gen_code_str(nd);
     return nd_code;
     break;
 
   case NODE_REXP:  // terminal node
-    printf("NODE_REXP\n");
+    DEBUG_PRINT("NODE_REXP\n");
     nd_code = gen_code_rexp(nd);
     return nd_code;
     break;
 
   case NODE_IDENT:  // terminal node
-    printf("NODE_IDENT\n");
+    DEBUG_PRINT("NODE_IDENT\n");
     nd_code = gen_code_ident(nd, table);
     return nd_code;
     break;
 
   case NODE_OP:
-    printf("NODE_OP\n");
+    DEBUG_PRINT("NODE_OP\n");
     cmd = convert_op(nd->e1.op);
     tmp_code2 = gen_code(nd->e2.nd, table);
     tmp_code3 = gen_code(nd->e3.nd, table);
@@ -256,7 +256,7 @@ vm_inst* gen_code(TreeNode* nd, ptr_table* table){
     break;
 
   case NODE_UNIOP:
-    printf("NODE_UNIOP\n");
+    DEBUG_PRINT("NODE_UNIOP\n");
     cmd = convert_op(nd->e1.op);
     tmp_code2 = gen_code(nd->e2.nd, table);
     nd_code = gen_code_unitary_op( cmd , tmp_code2 );
@@ -264,7 +264,7 @@ vm_inst* gen_code(TreeNode* nd, ptr_table* table){
 	break;
 
   case NODE_LET:
-    printf("NODE_LET\n");
+    DEBUG_PRINT("NODE_LET\n");
     tmp_code1 = gen_code(nd->e1.nd, table);
     tmp_code2 = gen_code(nd->e2.nd, table);
     nd_code = gen_code_let( tmp_code1, tmp_code2 );
@@ -272,39 +272,39 @@ vm_inst* gen_code(TreeNode* nd, ptr_table* table){
     break;
 
   case NODE_FCALL:
-    printf("NODE_FCALL\n");
+    DEBUG_PRINT("NODE_FCALL\n");
     char* fname = nd->e1.nd->e1.id;
     int num_arg;
     if( nd->e3.nd->type == NODE_FARG ){
-      printf("function, %s \n", fname);
+      DEBUG_PRINT("function, %s \n", fname);
       tmp_code3 = gen_code(nd->e3.nd, table); /* Code for FARG */
       num_arg = count_num_farg( nd );
-      printf("function, %s , with %d args \n", fname, num_arg);
+      DEBUG_PRINT("function, %s , with %d args \n", fname, num_arg);
       nd_code = gen_code_fcall(fname, num_arg, tmp_code3 );
     }else if( nd->e3.nd->type == NODE_NULL ){
       nd_code = gen_code_fcall(fname, 0, NULL);
     }else{
-      printf("ERROR: Unintended node under NODE_FCALL\n");
+      DEBUG_PRINT("ERROR: Unintended node under NODE_FCALL\n");
     }
     return nd_code;
     break;
 
   case NODE_FARG:
-    printf("NODE_FARG\n");
+    DEBUG_PRINT("NODE_FARG\n");
     tmp_code1 = gen_code(nd->e1.nd, table);
     if( nd->e3.sibling != NULL ){
-      printf("I have small sibling. \n");
+      DEBUG_PRINT("Small sibling exists \n");
 	  tmp_code3 = gen_code(nd->e3.sibling, table);
       nd_code = vm_inst_list_cat( tmp_code1, tmp_code3);
     }else{
-      printf("I don't have any more sibling. \n");
+      DEBUG_PRINT("No siblings exist \n");
       nd_code = tmp_code1;
     }
     return nd_code;
 	break;
 
   case NODE_IF:
-    printf("NODE_IF\n");
+    DEBUG_PRINT("NODE_IF\n");
     tmp_code1 = gen_code(nd->e1.nd, table);
     nd_code = tmp_code1;
 
@@ -346,9 +346,9 @@ vm_inst* gen_code(TreeNode* nd, ptr_table* table){
     break;
 
   case NODE_NULL:
-    printf("This part should not be executed.\n");
+    DEBUG_PRINT("This part should not be executed.\n");
     break;
-
   }
+  DEBUG_FLUSH();
 }
 

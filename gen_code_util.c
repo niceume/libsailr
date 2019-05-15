@@ -4,6 +4,7 @@
 
 #include "gen_code_util.h"
 #include "vm_code.h"
+#include "helper.h"
 
 vm_inst*
 new_vm_inst_command( VM_CMD cmd )
@@ -61,7 +62,6 @@ new_vm_inst_push_pp_str( char* ptr_key )
 vm_inst*
 new_vm_inst_push_pp_rexp( char* ptr_key )
 {
-	printf("Going to generate VM code for REXP\n");
 	vm_inst* temp_inst = new_vm_inst_command( VM_PUSH_PP_REXP );
 	temp_inst->ptr_key = ptr_key;
 	return temp_inst;
@@ -172,8 +172,9 @@ vm_inst_list_display_all( vm_inst_list* list )
 	char* curr_cmd;
 	vm_inst* curr_inst;
 	curr_inst = list;
-    printf("At this point, VM instructions just holds 'key name' for ptr_table record.\n");
-    printf("For values, VM instructions holds values themselves.\n");
+    DEBUG_PRINT("For ptr_table record, VM instructions just holds 'key name'.\n");
+    DEBUG_PRINT("For values, VM instructions holds values themselves.\n");
+
 	do{
 		vm_inst_display( curr_inst );
 		curr_inst = curr_inst->next;

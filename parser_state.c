@@ -1,9 +1,11 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "parser_state.h"
 #include "var_hash.h"
+#include "helper.h"
 
 parser_state*
-new_parser_state(char* fname, ptr_table* table)
+new_parser_state(const char* fname, ptr_table* table)
 {
 	parser_state* ps = (parser_state*)malloc(sizeof(parser_state));
 	ps->fname = fname;
@@ -21,11 +23,16 @@ new_parser_state(char* fname, ptr_table* table)
 int
 parser_state_free(parser_state* ps)
 {
-	free(ps->fname); // Free fname
-	// Tree and ptrtable are already freed.
+	// fname is constant. Should not be freed.
+	// Tree is already freed.
+	// Ptrtable is already freed.
+	DEBUG_PRINT("Going to free vars\n");
 	var_hash_free(&(ps->vars)); // Free vars
+	DEBUG_PRINT("Going to free lhsvars\n");
 	var_hash_free(&(ps->lhsvars)); // Free lhsvars
+	DEBUG_PRINT("Going to free rhsvars\n");
 	var_hash_free(&(ps->rhsvars)); // Free rhsvars
-	free(ps);
+	DEBUG_PRINT("Going to free parser state object\n");
+	free(ps); // Free parser_state
 	return 1;
 }

@@ -129,7 +129,7 @@ int
 arg_list_finalize(vm_stack* vmstack, int num_args, arg_list* alist)
 {
   arg_list_free(alist);
-  vmstack->sp = vmstack->sp - num_args;
+  vm_stack_clean_and_pop(vmstack, num_args);
 }
 
 int
@@ -137,10 +137,10 @@ arg_item_next( arg_item** item )
 {
   *item = (*item)->next;
   if(*item != NULL){
-    printf("The item is not null.\n");
+//    printf("The next arg_item is not null.\n");
     return 1;
   }else{
-    printf("The item is null.\n");
+//    printf("The next arg_item is null.\n");
     return 0;
   }
 }
@@ -239,7 +239,6 @@ arg_item_string_obj( arg_item* arg)
   }else{
     printf("ERROR: the stack item does not hold double value. \n");
   }
-  printf("STRING OBJECT IS OBTAINED: %s\n", string_read(temp_obj));
   return (string_object*) temp_obj;
 }
 

@@ -47,9 +47,9 @@ ptr_table_add (ptr_table** table, char* key, void** address, PtrType type, GCReq
 		result = new_ptr_record;
 	} else {
         if(type != PTR_NULL){
-    		ptr_table_update( result, *address, type, gc );
+    		ptr_record_update( result, *address, type, gc );
         }else{
-    		ptr_table_update( result, NULL, type, gc );
+    		ptr_record_update( result, NULL, type, gc );
         }
 
 	}
@@ -96,7 +96,7 @@ ptr_table_read_string(ptr_table** table, char* key)
 {
   ptr_record* result = ptr_table_find(table, key);
   void* ptr_address = result->address;
-  printf("The pointer referred is : %p", ptr_address);
+//  printf("The pointer referred is : %p", ptr_address);
   return string_read ((string_object*) ptr_address);
 }
 
@@ -176,17 +176,6 @@ create_new_rexp_key(){
 	return new_str ; 
 }
 
-/*
-ptr_record*
-ptr_table_create_anonym_struct_string(ptr_table** table, struct_string** str)
-{
-	char* new_key;
-	new_key = create_new_str_key();
-	ptr_record* new_ptr_record;
-	new_ptr_record = ptr_table_add(table, new_key, (void**)str, PTR_STR, GC_YES);
-	return new_ptr_record ;
-}
-*/
 
 ptr_record*
 ptr_table_create_anonym_string(ptr_table** table, string_object** strptr)
@@ -209,7 +198,8 @@ ptr_table_create_string(ptr_table** table, char* key, string_object** strptr)
 ptr_record*
 ptr_table_create_string_from_ptr(ptr_table** table, char* key, string_object** strptr)
 {
-	return ptr_table_create_string(table, key, strptr);
+	ptr_record* result = ptr_table_create_string(table, key, strptr);
+	return result;
 }
 
 int
@@ -250,7 +240,6 @@ ptr_table_create_null(ptr_table** table, char* key)
 	ptr_record* result = NULL;
     void** ppv = NULL;
 	result = ptr_table_add(table, key, ppv, PTR_NULL, GC_NO);
-    printf("void pointer \n");
 	return result;
 }
 
@@ -269,10 +258,30 @@ ptr_table_del_record(ptr_table** table, char* key)
 }
 
 int
-ptr_record_free_mem(ptr_record* pr)
+ptr_record_free_gc_required_memory(ptr_record* pr)
 {
-	if(pr->gc == GC_YES)
-		free(pr->address);
+//	ptr_record_show(pr);
+	if(pr->gc == GC_YES){
+		switch( pr->type ){	
+			case PTR_INT:
+			case PTR_DBL:
+				free(pr->address);
+				break;
+			case PTR_STR:
+				string_free((string_object*)pr->address);
+				break;
+			case PTR_REXP:
+				simple_re_free((simple_re*)pr->address);
+				break;
+			case PTR_NULL:
+				// Nothing to be freed
+				break;
+			default:
+				free(pr->address);
+				break;
+		}
+		pr->address = NULL;
+	}
 }
 
 int
@@ -284,7 +293,7 @@ ptr_record_free_struct(ptr_record* pr)
 int
 ptr_record_free(ptr_record* pr)
 {
-	ptr_record_free_mem(pr);  /* Free memory pointed by address. */
+	ptr_record_free_gc_required_memory(pr);  /* Free memory pointed by address. */
 	ptr_record_free_struct(pr); /* Free this record itself. */
 }
 
@@ -368,6 +377,13 @@ ptr_table_show_all(ptr_table** table)
 {
     ptr_record *pr;
     for( pr = *table ; pr != NULL; pr=(ptr_record *)pr->hh.next) {
+		ptr_record_show(pr);
+    }
+}
+
+void
+ptr_record_show(ptr_record* pr)
+{
 		if(pr->type == PTR_INT){
         	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%d\t (ADR:%p\t TYPE:%d\t GC:%d\t VAL:%lf) \n", 
 			pr->key, pr->address, pr->type, pr->gc, *((int*)(pr->address)),
@@ -377,7 +393,7 @@ ptr_table_show_all(ptr_table** table)
 			pr->key, pr->address, pr->type, pr->gc, *((double*)(pr->address)),
 			pr->ex_addr, pr->ex_type, pr->ex_gc, *((int*)(pr->ex_addr)));
 		}else if(pr->type == PTR_STR){
-        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%s\t (ADR:%p)\n", 
+        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%s\t (ADR:%p --Extra space is not used for string--)\n", 
 			pr->key, pr->address, pr->type, pr->gc, string_read((string_object*)(pr->address)),
 			pr->ex_addr );
 		}else if(pr->type == PTR_REXP){
@@ -393,7 +409,6 @@ ptr_table_show_all(ptr_table** table)
 			pr->key, pr->address, pr->type, pr->gc,
 			pr->ex_addr);
 		}
-    }
 }
 
 
@@ -415,7 +430,7 @@ ptr_table_insert(ptr_table** table, ptr_record* new_ptr_record)
 }
 
 int
-ptr_table_update(ptr_record* pr, void* address, PtrType type, GCReq gc )
+ptr_record_update(ptr_record* pr, void* address, PtrType type, GCReq gc )
 {
 	pr->address = address;
 	pr->type = type;

@@ -84,9 +84,9 @@ stmts		: stmt					{ $$ = new_node_stmt($1); }
 					$$ = pushback_node_stmt($1, new_node_stmt($3));
 					}
 
-stmt		: assign_stmt			{ printf("ASSIGN STMT!!!") ;$$ = $1; }
-			| if_stmt				{ printf("IF STMT!!!") ;$$ = $1; }
-			| expr					{ printf("JUST STMT!!!") ;$$ = $1; }
+stmt		: assign_stmt			{ /*printf("ASSIGN STMT!!!"); */ $$ = $1; }
+			| if_stmt				{ /*printf("IF STMT!!!"); */ $$ = $1; }
+			| expr					{ /*printf("JUST STMT!!!"); */ $$ = $1; }
 
 expr		: fcall				{ $$ = $1; }
 			| expr AND expr		{ $$ = new_node_op("AND", $1, $3); }

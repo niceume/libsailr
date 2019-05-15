@@ -4,8 +4,9 @@
 #include <stdbool.h>
 
 #include "vm_code.h"
-#include "../ptr_table.h"
-#include "../simple_re/simple_re.h"
+#include "ptr_table.h"
+#include "simple_re/simple_re.h"
+#include "string/common_string.h"
 
 // Stack type and name
 
@@ -17,7 +18,8 @@
 	Y(PP_DVAL, "PP_DVAL") \
 	Y(PP_STR, "PP_STR") \
 	Y(PP_REXP, "PP_REXP") \
-	Y(NULL_ITEM, "NULL_ITEM")
+	Y(NULL_ITEM, "NULL_ITEM")\
+	Y(VOID_ITEM, "VOID_ITEM")
 
 #define Y(a, b) a,
 enum _ItemType {
@@ -28,7 +30,6 @@ enum _ItemType {
 typedef enum _ItemType ItemType;
 
 char* display_item_type(ItemType type);
-
 
 // Stack structure for VM
 
@@ -44,9 +45,13 @@ struct _stack_item {
 		simple_re** pp_rexp;
 		void* ptr;
 	};
-    ptr_record* p_record;
+    ptr_record* p_record;  /* Pointer to ptr_record. If the object is just temporary, NOT_ON_PTR_TABLE is assigned. */
 };
 typedef struct _stack_item stack_item ;
+
+#define JUST_A_VALUE  NULL
+#define TEMP_OBJECT  NULL
+#define NOT_ON_PTR_TABLE  NULL
 
 #define MAXSTACKSIZE 1000
 
@@ -71,14 +76,19 @@ int vm_stack_push_pp_ival( vm_stack* , ptr_table**, char* );
 int vm_stack_push_pp_dval( vm_stack* , ptr_table**, char* );
 int vm_stack_push_pp_num( vm_stack* , ptr_table**, char* );
 int vm_stack_push_pp_str( vm_stack* , ptr_table**, char* );
+int vm_stack_push_temp_pp_str( vm_stack*, string_object** );
 int vm_stack_push_pp_rexp( vm_stack* , ptr_table**, char* );
 int vm_stack_push_null( vm_stack* , ptr_table**, char* );
 int vm_stack_push_corresp_item( vm_stack* , ptr_table** , char* );
+int vm_stack_push_boolean( vm_stack* , bool );
 
 int vm_stack_fcall( vm_stack* , char* , int , ptr_table** );
 
 stack_item* vm_stack_pop( vm_stack* );
+int vm_stack_clean_top(vm_stack* vmstack);
+int vm_stack_clean_and_pop( vm_stack* , int n);
 
+bool vm_stack_item_is_temp( stack_item* item );
 void vm_stack_display_item( vm_stack*, int );
 void vm_stack_display_all( vm_stack* );
 int vm_stack_end( vm_stack* );

@@ -42,6 +42,6 @@ call_func( vm_stack* vmstack, char* fname, int num_args, ptr_table** table )
     }else if(FUNC_NAME_IS(fname, "date_format")){
         sailr_func_date_format(vmstack, num_args, table);
 	}else{
-        printf("Function, %s , cannot be found. \n", fname );
+        printf("ERROR: Function, %s , cannot be found. \n", fname );
     }
 }

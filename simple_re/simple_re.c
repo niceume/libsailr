@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "helper.h"
 
 simple_re* re_last_matched = NULL;
 
@@ -15,7 +16,7 @@ simple_re_new()
 simple_re*
 simple_re_compile( const char* pattern, const char* enc )
 {
-	OnigRegexType* regex;
+	OnigRegexType* regexp = malloc(sizeof(OnigRegexType));
 	UChar* pattern_start = (UChar*) pattern; 
 	int len = strlen(pattern);
 	UChar* pattern_end = pattern_start + len ;
@@ -24,14 +25,14 @@ simple_re_compile( const char* pattern, const char* enc )
 	OnigErrorInfo einfo;
 
 	int return_value;
-	return_value = onig_new( &regex, pattern_start , pattern_end , ONIG_OPTION_SINGLELINE , onig_enc, onig_syntax , &einfo);
+	return_value = onig_new_without_alloc( regexp, pattern_start , pattern_end , ONIG_OPTION_SINGLELINE , onig_enc, onig_syntax , &einfo);
 
 	if(return_value != ONIG_NORMAL){
-		printf("INVALID REGULAR EXPRESSION: %s \n", pattern);
+		printf("ERROR: Invalied regular epxression: %s \n", pattern);
 	}
 
 	simple_re* new_re = simple_re_new();
-	new_re->regexp = regex;
+	new_re->regexp = regexp;
 	char* copy_pattern = (char*) malloc(strlen(pattern) * sizeof(char) + 1 );
 	strncpy( copy_pattern, pattern, strlen(pattern));
 	copy_pattern[strlen(pattern)] = '\0';
@@ -62,8 +63,7 @@ simple_re_set_matched_region( simple_re* re, OnigRegion* region)
 int
 simple_re_match ( simple_re* re , const char* str)
 {
-	printf("REGEXP: %s\n", simple_re_read_pattern(re));
-	printf("STRING: %s\n", str);
+	DEBUG_PRINT ("onig_search is going to be executed. REGEXP: %s, STRING: %s\n", simple_re_read_pattern(re), str );
 
 	simple_re_reset(re);
 	simple_re_set_str( re, str );
@@ -77,16 +77,16 @@ simple_re_match ( simple_re* re , const char* str)
 
 	OnigPosition return_value;
 	return_value = onig_search(regexp, text, end_ptr, start_ptr, end_ptr, region , ONIG_OPTION_NONE);
-	printf("onig_search is executed: %d \n", (int)return_value);
+	// printf("onig_search is executed: %d \n", (int)return_value);
 
 	// This is important for back reference.
 	re_last_matched = re;
 
 	if( return_value == ONIG_MISMATCH){
-		printf("Unmatched\n");
+		DEBUG_PRINT("Regular expression is unmatched\n");
 		return -1;
 	}else {
-		printf("Matched\n");
+		DEBUG_PRINT("Regular expression is matched\n");
 		return 1;
 	}
 }
@@ -113,7 +113,7 @@ simple_re_matched_str( simple_re* re , int idx )
 	char* new_str;
 
 	if(re->matched == NULL){
-		printf("No available matched information. \n ");
+		printf("WARNING: No available matched information. \n ");
 		matched_str = NULL ;
 		return matched_str ;
 	}
@@ -121,13 +121,13 @@ simple_re_matched_str( simple_re* re , int idx )
 	matched = re->matched;
 	num_groups = simple_re_matched_group_num( re );
 	if(idx < 0 | idx > num_groups ){
-		printf("Index is not within matched groups. \n");
+		printf("ERROR: Index is not within matched groups. \n");
 		matched_str = NULL;
 		return matched_str ;
 	}else{
 		length = matched->end[idx] - matched->beg[idx]  ; 
-		printf("Length: %d \n", length);
-		printf("from:%ld to:%ld length:%d \n", matched->beg[idx], matched->end[idx], length );
+//		printf("Length: %d \n", length);
+//		printf("from:%ld to:%ld length:%d \n", matched->beg[idx], matched->end[idx], length );
 		new_str = (char*) malloc( (length + 1) * sizeof(char)) ;
 		strncpy( new_str , re->str + matched->beg[idx] , length );
 		new_str[length] = '\0';
@@ -165,6 +165,18 @@ simple_re_free( simple_re* re )
 	if(re->regexp != NULL){
 		onig_free( re->regexp );
 		re->regexp = NULL;
+	}
+	if(re->pattern != NULL){
+		free(re->pattern );
+		re->pattern = NULL;
+	}
+	if(re->str != NULL){
+		free(re->str );
+		re->str = NULL;
+	}
+	if(re->matched != NULL){
+		onig_region_free( re->matched , 1);
+		re->matched = NULL;
 	}
 	free(re);
 	return 1;

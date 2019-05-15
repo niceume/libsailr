@@ -8,7 +8,6 @@
 int
 vm_rexp_match(vm_stack* vmstack)
 {
-	int sp = vmstack->sp;
 	stack_item* stack = vmstack->stack;
 	stack_item* top_item = vm_stack_top(vmstack);
 	stack_item* sec_item = vm_stack_second(vmstack);
@@ -43,9 +42,8 @@ vm_rexp_match(vm_stack* vmstack)
 		result_bool = false;
 	}
 
-	vmstack->sp = vmstack->sp - 1; 
-	sec_item->type = BOOLEAN ;
-	sec_item->boolean = result_bool;
+	vm_stack_clean_and_pop(vmstack, 2); 
+	vm_stack_push_boolean(vmstack, result_bool);
 }
 
 	

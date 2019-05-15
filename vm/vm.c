@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "ptr_table.h"
+#include "helper.h"
 
 // Using information of vm_code
 // VM does
@@ -19,41 +20,44 @@ int vm_run_inst (vm_inst* , ptr_table* , vm_stack* );
 int
 vm_exec_code( vm_inst* code , int num_insts , ptr_table* table , vm_stack* vmstack)
 {
-	int idx = 0;
+	int inst_idx = 0;
 	int move_forward = 0;	
 	stack_item* top_item;
 	vm_inst* inst;
 
-	for(  ; idx < num_insts ; ++idx ){
-		printf("----Current Stack----\n");
+	for(  ; inst_idx < num_insts ; ++inst_idx ){
+		DEBUG_PRINT("\n===== Current Stack (sp=%d) =====\n", vmstack->sp );
 		vm_stack_display_all(vmstack);
 
-		inst = &(code[idx]);
+		inst = &(code[inst_idx]);
 		if(inst->cmd == VM_JMP){
-			move_forward = vm_code_jmp(code, idx, inst->label , num_insts);
-			printf("VM_JMP: move forward by %d .\n", move_forward);
-			idx = idx + move_forward ;
+			move_forward = vm_code_jmp(code, inst_idx, inst->label , num_insts);
+			DEBUG_PRINT("----- VM INSTRUCTION ----- \n");
+			DEBUG_PRINT("VM_JMP: move forward by %d .\n", move_forward);
+			inst_idx = inst_idx + move_forward ;
 		}else if(inst->cmd == VM_FJMP){
 			top_item = &( vmstack->stack[vmstack->sp] );
 			if( (top_item->type == BOOLEAN) && (top_item->boolean == false) ){
-				move_forward = vm_code_jmp(code, idx, inst->label , num_insts);
-				idx = idx + move_forward ;
+				move_forward = vm_code_jmp(code, inst_idx, inst->label , num_insts);
+				DEBUG_PRINT("----- VM INSTRUCTION ----- \n");
+				DEBUG_PRINT("VM_JMP: move forward by %d .\n", move_forward);
+				inst_idx = inst_idx + move_forward ;
 
 				//The top item on stack should be removed.
-				vmstack->sp = vmstack->sp - 1;
+				vm_stack_clean_and_pop( vmstack , 1 ) ;
 			} else if( (top_item->type == BOOLEAN) && (top_item->boolean == true) ){
-				printf("Top item of the current stack is boolean. and it says 'true' \n");
+				DEBUG_PRINT("Top item of the current stack is boolean. and it says 'true' \n");
 				//The top item on stack should be removed.
-				vmstack->sp = vmstack->sp - 1;
+				vm_stack_clean_and_pop( vmstack , 1 ) ;
 
 			} else {
-				printf("Top item of the current stack is not boolean... \n");
+				printf("ERROR: Top item of the current stack is not boolean... \n");
 			}
 		}else {
-			printf("=> RUN INSTRUCTION: %s \n", vm_cmd_to_string(inst->cmd) );
+			DEBUG_PRINT("----- VM INSTRUCTION ----- \n");
+			DEBUG_PRINT("%s(%d/%d)\n", vm_cmd_to_string(inst->cmd), inst_idx, num_insts);
 			vm_run_inst(inst, table , vmstack);
 		}
-		printf("idx : %d %d (max %d)\n", idx, inst->cmd, num_insts);
 	}
 }
 
@@ -69,11 +73,11 @@ vm_run_inst (vm_inst* inst, ptr_table* table, vm_stack* vmstack )
 		vm_stack_push_dval(vmstack, inst->dval);
 		break;
 	case VM_PUSH_PP_IVAL:
-        printf("This instruction is not used. Use VM_PUSH_PP_NUM.");
+        printf("ERROR: This instruction is not used. Use VM_PUSH_PP_NUM.");
 		vm_stack_push_pp_ival(vmstack, &table, inst->ptr_key);
 		break;
 	case VM_PUSH_PP_DVAL:
-        printf("This instruction is not used. Use VM_PUSH_PP_NUM.");
+        printf("ERROR: This instruction is not used. Use VM_PUSH_PP_NUM.");
 		vm_stack_push_pp_dval(vmstack, &table, inst->ptr_key);
 		break;
 	case VM_PUSH_PP_NUM:
@@ -93,7 +97,7 @@ vm_run_inst (vm_inst* inst, ptr_table* table, vm_stack* vmstack )
 		break;
 	case VM_FJMP:
 	case VM_JMP:
-		printf("This code should never be run. ");
+		printf("ERROR: This code should never be run. ");
 		break;
 	case VM_END:
 		vm_stack_end(vmstack);
@@ -103,13 +107,12 @@ vm_run_inst (vm_inst* inst, ptr_table* table, vm_stack* vmstack )
 		break;
 	case VM_STO:
 		vm_stack_store_val(vmstack);
-		ptr_table_show_all(&table);
 		break;
 	case VM_FCALL:
 		vm_stack_fcall(vmstack, inst->fname, inst->num_arg, &table );
 		break;
 	case VM_ADDX:
-		vm_calc_addx(vmstack);
+		vm_calc_addx(vmstack, &table);
 		break;
 	case VM_MULX:
 		vm_calc_mulx(vmstack);
@@ -167,6 +170,7 @@ vm_run_inst (vm_inst* inst, ptr_table* table, vm_stack* vmstack )
 		break;
 	}
 
+//	ptr_table_show_all(&table);
 	return move_forward;
 }
 

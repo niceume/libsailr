@@ -1,0 +1,24 @@
+All the files under this libsailr source tree follow the license, modified BSD license (i.e. 3 clause BSD license) as described in COPYING.txt, except the following third party libraries.
+
+
+## Third party libraries
+
+
+* uthash
+
+Copyright (c) 2005-2018, Troy D. Hanson  http://troydhanson.github.com/uthash/
+All rights reserved.
+
+
+* onigmo
+
+Copyright (c) 2002-2018  K.Kosako  <kkosako0@gmail.com>
+Copyright (c) 2011-2019  K.Takata  <kentkt AT csc DOT jp>
+All rights reserved.
+
+
+* getopt_port
+
+Copyright (c) 2012-2017, Kim Grasman <kim.grasman@gmail.com>
+All rights reserved.
+

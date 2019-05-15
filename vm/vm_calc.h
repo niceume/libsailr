@@ -2,8 +2,9 @@
 #define VM_CALC_H
 
 #include "vm_stack.h"
+#include "ptr_table.h"
 
-int vm_calc_addx(vm_stack*);
+int vm_calc_addx(vm_stack*, ptr_table** table);
 int vm_calc_mulx(vm_stack*);
 int vm_calc_subx(vm_stack*);
 int vm_calc_powx(vm_stack*);

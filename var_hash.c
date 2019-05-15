@@ -31,7 +31,7 @@ var_hash_add_name (var_hash** hash, char* name)
 		strncpy( new_elem->name, name, MAX_KEY_LEN - 1) ;
 		new_elem->dummy = 0;
 		var_hash_insert(hash, new_elem);
-		printf("%s added", new_elem->name);
+//		printf("%s added", new_elem->name);
 		return new_elem;
 	}else{
 		return result;
@@ -64,9 +64,9 @@ char**
 var_hash_names(var_hash** hash)
 {
 	int hash_size = var_hash_size(hash);
-	printf("hash size: %d\n", hash_size);
+//	printf("hash size: %d\n", hash_size);
 	if(hash_size == 0){
-		printf("No variables.\n");
+//		printf("No variables.\n");
 		return NULL;
 	}
 	char** hash_names = (char**) malloc(hash_size * sizeof(char*));
@@ -90,7 +90,7 @@ var_hash_names(var_hash** hash)
 void
 var_hash_print_names(var_hash** hash)
 {
-	printf("Now printing....\n");
+	printf("printing names in hash....\n");
 	char** names = var_hash_names(hash);
 	int size = var_hash_size(hash);
 	int idx;
@@ -105,7 +105,7 @@ var_hash_free(var_hash** hash){
 	var_elem* temp;
 
 	HASH_ITER(hh, *hash, elem, temp) {
-		printf("Delete %s\n", elem->name );
+//		printf("Delete %s\n", elem->name );
 		free(elem);
 	}
 }

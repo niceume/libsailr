@@ -11,4 +11,6 @@ if (fullname =~ pattern ){
 	great_dr = "No";
 }
 
-printf( rexp_matched(1) );
+match = rexp_matched(1)
+
+print( match );

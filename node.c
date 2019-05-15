@@ -1,5 +1,6 @@
 #include "node.h"
 #include "ptr_table.h"
+#include "helper.h"
 
 int node_cnt = 0;
 
@@ -118,8 +119,8 @@ new_node_str( string_object* str , ptr_table* table )
   TreeNode* nd = (TreeNode*)malloc(sizeof(TreeNode));
   nd->type = NODE_STR;
   nd->e1.str_key = record->key ;
-  printf("table's pointer is %p \n", table);
-  ptr_table_show_all(&table);
+  // printf("table's pointer is %p \n", table);
+  // ptr_table_show_all(&table);
   return nd;
 }
 
@@ -127,12 +128,12 @@ TreeNode*
 new_node_rexp( string_object* pattern , ptr_table* table )
 {
   NEW_NODE_HEADER
-  ptr_record* record = ptr_table_create_anonym_rexp(&table, string_read(pattern), "UTF-8" );
+  ptr_record* record = ptr_table_create_anonym_rexp(&table, string_read(pattern), SAILR_CHAR_ENCODING );
   TreeNode* nd = (TreeNode*)malloc(sizeof(TreeNode));
   nd->type = NODE_REXP;
   nd->e1.rexp_key = record->key ;
-  printf("table's pointer is %p \n", table);
-  ptr_table_show_all(&table);
+  // printf("table's pointer is %p \n", table);
+  // ptr_table_show_all(&table);
   return nd;
 }
 
@@ -239,10 +240,10 @@ count_num_farg(TreeNode* fcall_node)
 {
   int count;
   if(fcall_node->e3.nd->type == NODE_NULL){
-    printf("NODE_NULL");
+    // printf("NODE_NULL");
     return 0;
   }else if(fcall_node->e3.nd->type == NODE_FARG){
-    printf("NODE_FARG");
+    // printf("NODE_FARG");
     count = 0;
   }else{
     return -1;

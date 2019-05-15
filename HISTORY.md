@@ -141,12 +141,38 @@ make build
     + Stop Memory Leak
     + Free pointer table at last
 
+## Ver 0.60 (May. 15 2019)
+
+* Major improvements.
+* Refactoring2
+    + Introduce DEBUG_PRINT macro (in helper.h) for C part.
+* Improve vm_calc.c (1)
+    + Take care of INT_MIN and INT_MAX for integers. Performance is not efficient, but before int calculation, double calculation and integer range check is conducted.
+    + deal with missing values.
+        + At parsing phase, missing values are already treated as nan in double.
+        + Be careful not to convert it into integer unexpectedly.
+* Improve vm_calc.c (2) , vm/func/c_func , vm_assign.c , vm_rexp.c and vm_stack.c
+    + Prevent from dealing with stack pointer directly. 
+        + Use stack vm_stack_push_*** and vm_stack_clean_and_pop()
+    + For vm_assign.c, it is refactored.
+* Rethink about libsailr API. (for users to prevent memory leak easily.)
+    + "Users should use pointers like PTR_INT, PTR_DBL and PTR_STR on ptr_table."
+        + User should not use IVAL, DVAL. 
+    + *Users should usually prepare memory for those known variables* , and they should be freed manually.
+* Made vm_assign.c tidy
+* Refactor pp2val.c (using vm_stack_item_is_temp() function)
+* Refactor ptr_table: ptr_record_free_memory_if_gc_required() function. This should use string_free(), simple_re_free(). 
+
+
 ## Plan 
 
+* Macro to add variables for users to ptr_table.
+    + When adding value to ptr_table, missing values should be taken care of.
+        + Missing value should be added as nan in double.
 * Refactoring2
 	+ Avoid (char*) casting
     + Functions in ptr_table.c. Pointer to pointer may be used wrongly; possibility for some local pointers are destroyed unintentionally.
-* Matched regular expressions also need to be cleared for every row.
+* Matched regular expressions also need to be cleared for every row. Provide such functionalities.
 
 
 ## Abondoned Ideas

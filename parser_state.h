@@ -7,7 +7,7 @@
 /* Struct for parser state */
 
 typedef struct {
-  char* fname;
+  const char* fname;
   void *tree;
   int lineno;
   int tline;
@@ -18,7 +18,7 @@ typedef struct {
   var_hash* rhsvars;
 } parser_state;
 
-parser_state* new_parser_state(char* fname, ptr_table* table);
+parser_state* new_parser_state(const char* fname, ptr_table* table);
 int parser_state_free(parser_state* ps);
 
 #endif /* PARSER_STATE_H */

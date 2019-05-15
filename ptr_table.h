@@ -73,17 +73,20 @@ ptr_record* ptr_table_create_null(ptr_table** table, char* key);
 int ptr_table_del_record(ptr_table** table, char* key);
 int ptr_table_del_records_except(ptr_table** table, char** keys, int key_num );
 int ptr_table_del_all(ptr_table** table);
+
+void ptr_record_show(ptr_record* pr);
 void ptr_table_show_all(ptr_table** table);
 
 PtrType ptr_table_get_type(ptr_table** table, char* key);
 int ptr_record_is_ptr_null(ptr_table** table, char* key);
 void** ptr_table_get_pptr(ptr_table** table, char* key);
 
+int ptr_record_free_gc_required_memory(ptr_record*);
 
 // private
 ptr_record* ptr_table_find(ptr_table** table, char* key);
 ptr_record* ptr_table_insert(ptr_table** table, ptr_record* pr);
-int ptr_table_update(ptr_record* pr, void* address, PtrType type, GCReq gc);
+int ptr_record_update(ptr_record* pr, void* address, PtrType type, GCReq gc);
 int ptr_record_free(ptr_record* );
 int ptr_table_free(ptr_table**);
 

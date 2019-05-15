@@ -87,9 +87,11 @@ cpp_string_read (cpp_object* obj )
 	std::string* str;
 	if (obj != NULL){
 		str = static_cast<std::string*>(obj);
+//		std::cout << *str << std::endl;
+//		printf("%s\n", str->c_str());
 		return str->c_str();
 	}else{ 
-		std::cout << "String is NULL ??\n" << std::endl;
+		std::cout << "WARNING: String is NULL?\n" << std::endl;
 		return "";
 	}
 }
@@ -100,18 +102,10 @@ cpp_string_concat (cpp_object* obj1 , cpp_object* obj2 )
 //	std::cout << "start concat" << std::endl;
 	std::string* str1 = static_cast<std::string*>(obj1);
 	std::string* str2 = static_cast<std::string*>(obj2);
-	std::string str_a = *str1;
-	std::string str_b = *str2; // std::string( *str2);
-
-//	std::cout << "concat1: " << str_a << std::endl ;
-//	printf("(pointer: %p )\n", str1);
-//	std::cout << "concat2(std::string): " << str_b << std::endl ;
-//	std::cout << "concat2(->c_str()): " << str2->c_str() << std::endl ;
-//	std::cout << "concat2(->data()): " << str2->data() << std::endl ;
-//	printf("(pointer: %p )\n", str2);
-
-	std::string* new_str = new std::string( str_a + str_b );
-	return (void*) new_str;
+	std::stringstream ss;
+	ss << *str1 << *str2;
+	std::string* new_p_str = new std::string( ss.str() );
+	return (void*) new_p_str;
 }
 
 
@@ -119,9 +113,9 @@ cpp_object**
 cpp_string_ptr_concat (cpp_object* obj1 , cpp_object* obj2 )
 {
 	std::string* str1 = static_cast<std::string*>(obj1);
-	std::cout << (*str1) << std::endl;
+	// std::cout << (*str1) << std::endl;
 	std::string* str2 = static_cast<std::string*>(obj2);
-	std::cout << (*str2) << std::endl;
+	// std::cout << (*str2) << std::endl;
 	std::stringstream ss;
 	ss << *str1 << *str2;
 	std::string* new_p_str = new std::string( ss.str() );

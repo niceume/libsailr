@@ -10,8 +10,9 @@ typedef void string_type_object;
 typedef void parser_state_object;
 
 ptr_table_object*     sailr_ptr_table_init();
-parser_state_object*  sailr_new_parser_state(char* , ptr_table_object* );
-int                   sailr_construct_parser (const char* code , parser_state_object* ps);
+parser_state_object*  sailr_new_parser_state(const char* , ptr_table_object* );
+int                   sailr_construct_parser (const char* code , parser_state_object* ps); 
+int                   sailr_parser_state_free(parser_state_object* ps);
 void                  sailr_tree_dump( parser_state_object* ps ); 
 int                   sailr_tree_free( parser_state_object* ps ); 
 vm_inst_object*       sailr_gen_code( parser_state_object* ps , ptr_table_object*); // VM Code is generated.

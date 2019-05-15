@@ -46,12 +46,13 @@ sailr_func_print(vm_stack* vmstack, int num_args)
   arg_item* argitem = arglist; 
 
   string_object* tmp_str;
-  string_object* new_str = string_new("");
+  string_object* new_str;
   string_object* new_str2 ;
 
   for( argitem = arglist ; argitem != NULL; arg_item_next(&argitem) ){
     ASSIGN_STRING_PTR( tmp_str , argitem , "ERROR: Unsupported types are specified" );
-    new_str = string_concat(new_str, tmp_str);
+    new_str2 = string_concat(new_str, tmp_str);
+	new_str = new_str2;
   }
   printf("%s\n", string_read(new_str));
   arg_list_finalize( vmstack, num_args, arglist ); // Move sp pointer & deallocate arg_list* 

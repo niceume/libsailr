@@ -24,7 +24,7 @@ DEPS:=$(OBJS:.o=.d) $(OBJS_STR:.o=.d) $(OBJS_RE:.o=.d) $(OBJS_DATE:.o=.d) $(OBJS
 # List "objfile depends on source and header"
 -include $(DEPS)
 
-.PHONY: build
+.PHONY: build test
 
 build : parse.o lex.o  $(TARGET) 
 
@@ -67,6 +67,12 @@ simple_date/cpp_date.o : simple_date/cpp_date.cpp
 simple_date/%.o : simple_date/%.c
 	$(CC) -c -o $@ $^  $(CFLAGS) -I. -MMD -MP
 
+test : 
+	@echo "\033[1;34m Make sure you have rebuilt $(TARGET) before running tests \033[0m"
+	@echo "\033[1;34m CUnit tests for $(TARGET) \033[0m"
+	$(CC) test/test_main.c $(TARGET) -o test/run_test -Wall -I. -lstdc++ -lm -L/usr/local/lib -lcunit -Ldev_env/onigmo/lib -lonigmo
+	test/run_test
+
 clean :
 	$(RM) *.o
 	$(RM) vm/*.o
@@ -74,38 +80,45 @@ clean :
 	$(RM) simple_re/*.o
 	$(RM) simple_date/*.o
 	$(RM) vm/func/c_func/*.o
+	$(RM) test/*.o
 	$(RM) *.d
 	$(RM) vm/*.d
 	$(RM) string/*.d
 	$(RM) simple_re/*.d
 	$(RM) simple_date/*.d
 	$(RM) vm/func/c_func/*.d
+	$(RM) test/*.d
 	$(RM) *.so
 	$(RM) vm/*.so
 	$(RM) string/*.so
 	$(RM) simple_re/*.so
 	$(RM) simple_date/*.so
 	$(RM) vm/func/c_func/*.so
+	$(RM) test/*.so
 	$(RM) *.a
 	$(RM) vm/*.a
 	$(RM) string/*.a
 	$(RM) simple_re/*.a
 	$(RM) simple_date/*.a
 	$(RM) vm/func/c_func/*.a
+	$(RM) test/*.a
 	$(RM) a.out
 	$(RM) vm/a.out
 	$(RM) string/a.out
 	$(RM) simple_re/a.out
 	$(RM) simple_date/a.out
 	$(RM) vm/func/c_func/a.out
+	$(RM) test/a.out
 	$(RM) core
 	$(RM) vm/core
 	$(RM) string/core
 	$(RM) simple_re/core
 	$(RM) simple_date/core
 	$(RM) vm/func/c_func/core
+	$(RM) test/core
 	$(RM) y.tab.c y.tab.h y.output
 	$(RM) lex.yy.c
+	$(RM) test/*.xml
 	$(RM) $(TARGET)
 
 

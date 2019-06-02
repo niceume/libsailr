@@ -43,9 +43,10 @@ tree_free( TreeNode* nd, int level)
     free(nd);
     break;
   case NODE_FCALL:
-    tree_free(nd->e1.nd, level);
-    if( nd->e3.nd != NULL )
+    if( nd->e3.nd != NULL ){
       tree_free(nd->e3.nd, level + 1);
+	}
+    tree_free(nd->e1.nd, level);
     DEBUG_PRINT("%s%s(%s)\n", rep_spaces(level), "Free NODE_FCALL",nd->e1.nd->e1.id);
     free(nd);
     break;

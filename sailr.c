@@ -151,6 +151,45 @@ sailr_ptr_table_create_anonym_string(ptr_table_object** table, const char* str)
 }
 
 
+char
+sailr_ptr_table_get_type(ptr_table_object** table, char* key)
+{
+	ptr_record* record = ptr_table_find((ptr_table**) table, key);
+	switch(record->type){
+		case PTR_INT:
+			return 'i';
+		break;
+		case PTR_DBL:
+			return 'd';
+		break;
+		case PTR_STR:
+			return 's';
+		break;
+		case PTR_REXP:
+			return 'r';
+		break;
+		case PTR_NULL:
+			return 'n';
+		break;
+		default:
+			printf("This branch should not be executed.");
+			return 'x';
+		break;
+	}
+}
+
+int sailr_ptr_record_is_ptr_null(ptr_table_object** table, char* key)
+{
+	return ptr_record_is_ptr_null((ptr_table**) table, key);
+}
+
+void**
+sailr_ptr_table_get_pptr(ptr_table_object** table, char* key)
+{
+	return ptr_table_get_pptr((ptr_table**) table, key);
+}
+
+
 string_type_object*
 sailr_ptr_table_get_pp_string(ptr_table_object** table, char* key){
   return (string_type_object*) ptr_table_get_pp_string((ptr_table**)table, key);
@@ -161,13 +200,6 @@ sailr_ptr_table_read_string(ptr_table_object** table, char* key){
   return  ptr_table_read_string((ptr_table**)table, key);
 }
 
-
-string_type_object*
-sailr_new_string(const char* str)
-{
-	string_object* new_str = string_new(str);
-	return (string_type_object*) new_str;
-}
 
 int
 sailr_ptr_table_update_int(ptr_table_object** table, char* key, int ival)
@@ -199,46 +231,23 @@ sailr_ptr_table_del_all(ptr_table_object** table)
 	return ptr_table_del_all((ptr_table**) table);
 }
 
+
+// Utility
+
 void
 sailr_ptr_table_show_all(ptr_table_object** table)
 {
 	ptr_table_show_all((ptr_table**) table);
 }
 
-char
-sailr_ptr_table_get_type(ptr_table_object** table, char* key)
+
+string_type_object*
+sailr_new_string(const char* str)
 {
-	ptr_record* record = ptr_table_find((ptr_table**) table, key);
-	switch(record->type){
-		case PTR_INT:
-			return 'i';
-		break;
-		case PTR_DBL:
-			return 'd';
-		break;
-		case PTR_STR:
-			return 's';
-		break;
-		case PTR_NULL:
-			return 'n';
-		break;
-		default:
-			printf("This branch should not be executed.");
-			return 'x';
-		break;
-	}
+	string_object* new_str = string_new(str);
+	return (string_type_object*) new_str;
 }
 
-int sailr_ptr_record_is_ptr_null(ptr_table_object** table, char* key)
-{
-	return ptr_record_is_ptr_null((ptr_table**) table, key);
-}
-
-void**
-sailr_ptr_table_get_pptr(ptr_table_object** table, char* key)
-{
-	return ptr_table_get_pptr((ptr_table**) table, key);
-}
 
 // Functions fro var_hash, varnames
 

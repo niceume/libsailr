@@ -88,12 +88,12 @@ stmt		: assign_stmt			{ /*printf("ASSIGN STMT!!!"); */ $$ = $1; }
 			| if_stmt				{ /*printf("IF STMT!!!"); */ $$ = $1; }
 			| expr					{ /*printf("JUST STMT!!!"); */ $$ = $1; }
 
-expr		: fcall				{ $$ = $1; }
-			| expr AND expr		{ $$ = new_node_op("AND", $1, $3); }
+expr		: expr AND expr		{ $$ = new_node_op("AND", $1, $3); }
 			| expr OR expr			{ $$ = new_node_op("OR", $1, $3); }
 			| arg					{ $$ = $1; }
 
-arg		: arg OP_PLUS arg		{ $$ = new_node_op("PLUS", $1, $3); }
+arg		: fcall				{ $$ = $1; }
+			| arg OP_PLUS arg		{ $$ = new_node_op("PLUS", $1, $3); }
 			| arg OP_SUB arg		{ $$ = new_node_op("SUB", $1, $3); }
 			| arg OP_MULT arg		{ $$ = new_node_op("MULT", $1, $3); }
 			| arg OP_DIV arg		{ $$ = new_node_op("DIV", $1, $3); }

@@ -14,10 +14,14 @@
 # Before running, make sure that required libraries exist in LD_LIBRARY_PATH
 # ALso make them accessible with export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/local/onigmo/lib
 
+# For debugging lexer and parser
+# Switch parse.y global variable, int yydebug = 1; /* 0 : no debug, 1: debug */
+# yacc -v outputs output.y 
+
 # pass user defined optinos to makefile or compiler. -D option passes the following variable. -DDEBUG means that DEBUG macro variable will be defined when compilation.
 
 make clean --directory ../  ONIG_INCLUDE_DIR=dev_env/onigmo/include
-make build --directory ../  ONIG_INCLUDE_DIR=dev_env/onigmo/include # CC_USER_DEFINES="-DDEBUG"
+make build --directory ../  ONIG_INCLUDE_DIR=dev_env/onigmo/include  #CC_USER_DEFINES="-DDEBUG"
 
 NO_COLOR='\033[0m'
 LIGHT_RED='\033[1;31m'

@@ -358,7 +358,7 @@ vm_stack_display_all(vm_stack* vmstack)
 int
 vm_stack_end( vm_stack* vmstack ){
 	if (vmstack->sp > 0 ) {
-		printf("CAUTION: There are some items left on virtual stack machine.\n");
+		DEBUG_PRINT("CAUTION: There are some items left on virtual stack machine.\n");
 		vm_stack_display_all(vmstack);
 	}
 	vm_stack_free(vmstack);

@@ -150,6 +150,11 @@ main(int argc, char** argv)
 	string_type_object* greeting = sailr_new_string("Hello World");
 	sailr_ptr_table_create_string_from_ptr( &table, (char*) "greeting" , &greeting);
 
+	sailr_ptr_table_create_null(&table, (char*)"greeting2" );
+
+	string_type_object* hello = sailr_new_string("Hello World");
+	sailr_ptr_table_create_string_from_ptr( &table, (char*) "hello" , &hello);
+
 	string_type_object* univ = sailr_new_string("U");
 	sailr_ptr_table_create_string_from_ptr( &table, (char*) "univ" , &univ);
 
@@ -204,6 +209,8 @@ main(int argc, char** argv)
 	sailr_ptr_table_create_null(&table, (char*)"workaholic_asian_name" );
 	sailr_ptr_table_create_null(&table, (char*)"first" );
 	sailr_ptr_table_create_null(&table, (char*)"second" );
+	sailr_ptr_table_create_null(&table, (char*)"firstname" );
+	sailr_ptr_table_create_null(&table, (char*)"lastname" );
 	sailr_ptr_table_create_null(&table, (char*)"fullname" );
 	sailr_ptr_table_create_null(&table, (char*)"great_dr" );
 
@@ -211,6 +218,14 @@ main(int argc, char** argv)
 	sailr_ptr_table_create_null(&table, (char*)"match" );
 	sailr_ptr_table_create_null(&table, (char*)"date" );
 	sailr_ptr_table_create_null(&table, (char*)"date_str" );
+
+	sailr_ptr_table_create_null(&table, (char*)"greeting_rexp" );
+	sailr_ptr_table_create_null(&table, (char*)"email_rexp" );
+
+	sailr_ptr_table_create_null(&table, (char*)"email_tom" );
+	sailr_ptr_table_create_null(&table, (char*)"email_full" );
+	sailr_ptr_table_create_null(&table, (char*)"email_local" );
+	sailr_ptr_table_create_null(&table, (char*)"email_domain" );
 
 	VERBOSE( std::cout << "----- Showing pointer table (BEFORE CALCULATION) -----" << std::endl; )
 	VERBOSE( std::cout << "At this point, annonym strings should be already added."  << std::endl; )

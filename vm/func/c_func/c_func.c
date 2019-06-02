@@ -46,7 +46,7 @@ sailr_func_print(vm_stack* vmstack, int num_args)
   arg_item* argitem = arglist; 
 
   string_object* tmp_str;
-  string_object* new_str;
+  string_object* new_str = string_new("");
   string_object* new_str2 ;
 
   for( argitem = arglist ; argitem != NULL; arg_item_next(&argitem) ){

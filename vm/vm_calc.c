@@ -159,6 +159,17 @@ item_is_bool (stack_item* item)
 		return false;
 }
 
+bool
+item_is_nan (stack_item* item)
+{
+	if( item->type == DVAL ){
+		if( isnan( item->dval )){
+			return true;
+		}
+	}
+	return false;
+}
+
 // -------------------------------
 
 
@@ -467,6 +478,16 @@ vm_calc_eq(vm_stack* vmstack)
 	stack_item_pp2value( sec_item ); 
 	bool result_bool;
 
+	if( item_is_nan(sec_item) && item_is_nan(top_item)){
+		result_bool = true;
+		goto eq_compared;
+	}else if(item_is_nan(sec_item) || item_is_nan(top_item)){
+		result_bool = false;
+		goto eq_compared;
+	}else{
+		// None of the items are nan.
+	}
+
 	if( item_is_num(sec_item) && item_is_num(top_item)){
 		stack_item_pp2value( top_item );
 		stack_item_pp2value( sec_item );
@@ -486,12 +507,64 @@ vm_calc_eq(vm_stack* vmstack)
 		printf("ERROR: Types are invalied for VM_EQ command.\n");
 		return 0;
 	}
+
+	eq_compared:
+
 	vmstack->sp = vmstack->sp - 1; 
 	sec_item->type = BOOLEAN ;
 	sec_item->boolean = result_bool;
 	return 1;
 }
 
+
+int
+vm_calc_neq(vm_stack* vmstack)
+{
+	int sp = vmstack->sp;
+	stack_item* stack = vmstack->stack;
+	stack_item* top_item = vm_stack_top(vmstack);
+	stack_item* sec_item = vm_stack_second(vmstack);
+	stack_item_pp2value( top_item ); 
+	stack_item_pp2value( sec_item ); 
+	bool result_bool;
+
+	if( item_is_nan(sec_item) && item_is_nan(top_item)){
+		result_bool = false;
+		goto neq_compared;
+	}else if(item_is_nan(sec_item) && item_is_nan(top_item)){
+		result_bool = true;
+		goto neq_compared;
+	}else{
+		// None of the items are nan.
+	}
+
+	if( item_is_num(sec_item) && item_is_num(top_item)){
+		stack_item_pp2value( top_item );
+		stack_item_pp2value( sec_item );
+		if((top_item->type == IVAL) && (sec_item->type == IVAL)){
+			result_bool = ( sec_item->ival != top_item->ival ) ;
+		}else if((top_item->type == IVAL) && (sec_item->type == DVAL)){
+			result_bool = ( sec_item->dval != top_item->ival ) ;
+		}else if((top_item->type == DVAL) && (sec_item->type == IVAL)){
+			result_bool = ( sec_item->ival != top_item->dval ) ;
+		}else if((top_item->type == DVAL) && (sec_item->type == DVAL)){
+			result_bool = ( sec_item->dval != top_item->dval ) ;
+		}
+	}else if(item_is_str(sec_item) && item_is_str(top_item)){
+		result_bool = !(string_compare( *(sec_item->pp_str), *(top_item->pp_str) )) ;
+		result_bool;
+	}else{
+		printf("ERROR: Types are invalied for VM_EQ command.\n");
+		return 0;
+	}
+
+	neq_compared:
+
+	vmstack->sp = vmstack->sp - 1; 
+	sec_item->type = BOOLEAN ;
+	sec_item->boolean = result_bool;
+	return 1;
+}
 
 #define DEFINE_LOGICAL_OPERATOR( OP ) \
 ({ \
@@ -525,12 +598,6 @@ vm_calc_eq(vm_stack* vmstack)
 	sec_item->boolean = result_bool; \
 	return 1; \
 })
-
-int
-vm_calc_neq(vm_stack* vmstack)
-{
-	DEFINE_LOGICAL_OPERATOR( != ) ;
-}
 
 int
 vm_calc_gt(vm_stack* vmstack)

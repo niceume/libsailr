@@ -1,0 +1,9 @@
+hello = 'Hello' 
+firstname = 'Mickey' 
+lastname = 'Mouse' 
+fullname = firstname + ' ' + lastname 
+greeting = hello + ', ' + fullname 
+print(greeting) 
+greeting2 = greeting 
+greeting = 'Good bye, ' + fullname  
+print(greeting)

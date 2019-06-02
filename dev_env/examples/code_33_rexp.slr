@@ -1,0 +1,17 @@
+
+greeting = 'Hello World' 
+greeting_rexp = re/^(\w*)/ 
+greeting_rexp =~ greeting  
+hello = rexp_matched(1) 
+print(hello)
+
+email_tom = 'tom2019@gmail.com' 
+email_rexp = re/^([a-zA-z0-9\.\+\-\*\/\?]+)@([a-zA-Z0-9\.]+)\.([a-zA-Z]+?)$/ 
+email_rexp =~ email_tom 
+email_full = rexp_matched(0) 
+email_local =  rexp_matched(1) 
+email_domain = rexp_matched(2) + '.' + rexp_matched(3) 
+print(email_full) 
+print(email_local) 
+print(email_domain) 
+

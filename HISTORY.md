@@ -163,6 +163,23 @@ make build
 * Refactor pp2val.c (using vm_stack_item_is_temp() function)
 * Refactor ptr_table: ptr_record_free_memory_if_gc_required() function. This should use string_free(), simple_re_free(). 
 
+## Ver 0.61 (Jun. 1 2019)
+
+* Unit tests are introduced. (CUnit)
+* Along with the tests, bug fixes wree done.
+	+ Examples:
+	+ fcall was reduced to expr, but now is reduced to arg (in parse.y)
+	+ Operations for missing values are corrected.
+		+ For eq(==), when both sides have nan, return true. If either side has nan, return false. For neq(!=), the behavior is opposite.
+		+ For other operators, like + - * =, follow C math.h implementation, meaning returning false
+			+ https://stackoverflow.com/questions/38798791/nan-comparison-rule-in-c-c
+	+ Dealing with comments is difficult.
+		+ (Start) states are explicitly defined for most of the rules.
+		+ One line comments and multiple line comments are implemented.
+		+ One line comments should work like a terminator.
+		+ Multiple line comments should start in a new line at current implementation. DON'T insert it wihtin a statement.
+			+ (ref.) http://www.cs.man.ac.uk/~pjj/cs2121/ex2_str_comm.html 
+
 
 ## Plan 
 

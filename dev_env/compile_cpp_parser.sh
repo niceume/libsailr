@@ -21,7 +21,7 @@
 # pass user defined optinos to makefile or compiler. -D option passes the following variable. -DDEBUG means that DEBUG macro variable will be defined when compilation.
 
 make clean --directory ../  ONIG_INCLUDE_DIR=dev_env/onigmo/include
-make build --directory ../  ONIG_INCLUDE_DIR=dev_env/onigmo/include  #CC_USER_DEFINES="-DDEBUG"
+make build --directory ../  ONIG_INCLUDE_DIR=dev_env/onigmo/include  # CC_USER_DEFINES="-DDEBUG"
 
 NO_COLOR='\033[0m'
 LIGHT_RED='\033[1;31m'
@@ -39,7 +39,7 @@ LIGHT_BLUE='\033[1;34m'
 
 echo -e "${Green}For debug purpose, pass -DDEBUG to 'make build' and run the executable with -v option.${NO_COLOR}"
 
-g++ -std=c++11 -Wall -o myparsercpp main.cpp -I../ -I../string -I../simple_re -Ionigmo/include -Igetopt/ -lm -L../ -lsailr -Lonigmo/lib -lonigmo
+g++ -std=c++11 -Wall -o myparsercpp main.cpp -I../ -I../string -I../simple_re -Ionigmo/include -Igetopt_port/ -lm -L../ -lsailr -Lonigmo/lib -lonigmo
 
 
 

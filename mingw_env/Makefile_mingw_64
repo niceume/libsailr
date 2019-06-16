@@ -1,16 +1,12 @@
 YACC = bison -y -d
 LEX = flex
-CC = gcc
-CPPC := g++
-AR = ar rvs
-CFLAGS += -fPIC -O3 -I. -Ivm -Istring -Isimple_re -Isimple_date -I$(ONIG_INCLUDE_DIR) $(CC_USER_DEFINES)
-CPPCFLAGS += -std=c++11 -fPIC -O3 -Ivm -Istring $(CPPC_USER_DEFINES)
+CC = x86_64-w64-mingw32-gcc
+CPPC := x86_64-w64-mingw32-g++
+CFLAGS += -fPIC -O3 -static -I. -Ivm -Istring -Isimple_re -Isimple_date -I$(ONIG_INCLUDE_DIR) $(CC_USER_DEFINES)
+CPPCFLAGS += -std=c++11 -fPIC -static -O3 -Ivm -Istring $(CPPC_USER_DEFINES)
 RM = rm -f
 
-TARGET = libsailr.a
-ifeq (Windows_NT,$(OS))
-TARGET:=$(subst .a , .lib , $(TARGET))
-endif
+TARGET = sailr.dll
 
 SRCS=$(filter-out y.tab.c lex.yy.c, $(wildcard *.c)) $(wildcard vm/*.c) 
 OBJS:=$(SRCS:.c=.o) parse.o lex.o
@@ -29,7 +25,7 @@ DEPS:=$(OBJS:.o=.d) $(OBJS_STR:.o=.d) $(OBJS_RE:.o=.d) $(OBJS_DATE:.o=.d) $(OBJS
 build : parse.o lex.o  $(TARGET) 
 
 $(TARGET) : $(OBJS)  $(OBJS_STR)  $(OBJS_RE) $(OBJS_DATE) $(OBJS_CFUNC)
-	$(AR) $(TARGET) $(OBJS) $(OBJS_STR) $(OBJS_RE) $(OBJS_DATE) $(OBJS_CFUNC)
+	$(CC) -shared -o $(TARGET) $(OBJS) $(OBJS_STR) $(OBJS_RE) $(OBJS_DATE) $(OBJS_CFUNC) -L$(ONIG_LIB_DIR) -lonigmo -static-libgcc -lstdc++ 
 
 # yacc creates y.tab.c. -d => y.tab.h. -v => y.output.
 
@@ -53,7 +49,7 @@ vm/%.o : vm/%.c
 	$(CC) -c -o $@ $^  $(CFLAGS) -I. -MMD -MP
 
 string/cpp_string.o : string/cpp_string.cpp
-	$(CPPC) -c -o $@ $^ $(CPPCFLAGS) -MMD -MP 
+	$(CPPC) -c -o $@ $^ $(CPPCFLAGS) -MMD -MP  -static-libstdc++
 
 string/%.o : string/%.c 
 	$(CC) -c -o $@ $^  $(CFLAGS) -I. -MMD -MP
@@ -62,7 +58,7 @@ simple_re/%.o : simple_re/%.c
 	$(CC) -c -o $@ $^  $(CFLAGS) -I. -MMD -MP
 
 simple_date/cpp_date.o : simple_date/cpp_date.cpp
-	$(CPPC) -c -o $@ $^ $(CPPCFLAGS) -MMD -MP 
+	$(CPPC) -c -o $@ $^ $(CPPCFLAGS) -MMD -MP   -static-libstdc++
 
 simple_date/%.o : simple_date/%.c
 	$(CC) -c -o $@ $^  $(CFLAGS) -I. -MMD -MP
@@ -70,8 +66,8 @@ simple_date/%.o : simple_date/%.c
 test : 
 	@echo "\033[1;34m Make sure you have rebuilt $(TARGET) before running tests \033[0m"
 	@echo "\033[1;34m CUnit tests for $(TARGET) \033[0m"
-	$(CC) test/test_main.c $(TARGET) -o test/a.out -Wall -I. -lstdc++ -lm -L/usr/local/lib -lcunit -Ldev_env/onigmo/lib -lonigmo
-	test/a.out
+	$(CC) test/test_main.c $(TARGET) -o test/run_test -Wall -I. -lstdc++ -lm -L/usr/local/lib -lcunit -L$(ONIG_LIB_DIR) -lonigmo
+	test/run_test
 
 clean :
 	$(RM) *.o

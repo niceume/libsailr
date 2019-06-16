@@ -75,7 +75,7 @@ int yydebug = 0; /* 0 : no debug, 1: debug */
 
 program	: prgm					{ p->tree = new_node_prgm( $1 );}
 
-prgm		: stmts opt_termins	{ $$ = $1;  }
+prgm		: opt_termins stmts opt_termins	{ $$ = $2;  }
 			| opt_termins			{ $$ = NULL; }
 
 stmts		: stmt					{ $$ = new_node_stmt($1); }

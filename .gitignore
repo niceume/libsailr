@@ -24,4 +24,11 @@ core
 
 /dev_env/onigmo/*
 /regexp/onig/*
+/mingw_env/onigmo/*
+
+
+# Ignore build files of mingw
+
+/mingw_env/build/32/*
+/mingw_env/build/64/*
 

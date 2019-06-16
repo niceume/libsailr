@@ -180,6 +180,12 @@ make build
 		+ Multiple line comments should start in a new line at current implementation. DON'T insert it wihtin a statement.
 			+ (ref.) http://www.cs.man.ac.uk/~pjj/cs2121/ex2_str_comm.html 
 
+## Ver 0.62 (Jun. 16 2019)
+
+* Start to support 32bit/64bit windows platform using mingw-w64.
+	+ See build scripts/envs under mingw_env directory.
+* Period becomes available for column name. (iris data includes period.)
+
 
 ## Plan 
 

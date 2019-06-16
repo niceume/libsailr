@@ -49,16 +49,16 @@ test_missing_test1( void )
 "  }\n"
 "}\n" 
 " \n"
-"message3 = '' \n"
+"message.us.mars.ratio = '' \n"
 "if( us_mars_ratio > 1 ){ \n"
-"  message3 = 'US is bigger than Mars.'  \n"
+"  message.us.mars.ratio = 'US is bigger than Mars.'  \n"
 "}else if( us_mars_ratio <= 1){\n"
-"  message3 = 'US is not bigger than Mars.'  \n"
+"  message.us.mars.ratio = 'US is not bigger than Mars.'  \n"
 "}else{ \n"
 "  if( us_mars_ratio == . ) {\n"
-"    message3 = 'The relationship data is missing.' \n"
+"    message.us.mars.ratio = 'The relationship data is missing.' \n"
 "  }else{\n"
-"    message3 = 'The relation is not unknown, but not missing.'\n"
+"    message.us.mars.ratio = 'The relation is not unknown, but not missing.'\n"
 "  }\n"
 "}\n" ;
 
@@ -77,7 +77,7 @@ test_missing_test1( void )
 	sailr_ptr_table_create_null(&table, (char*)"us_mars_ratio" );
 	sailr_ptr_table_create_null(&table, (char*)"message1" );
 	sailr_ptr_table_create_null(&table, (char*)"message2" );
-	sailr_ptr_table_create_null(&table, (char*)"message3" );
+	sailr_ptr_table_create_null(&table, (char*)"message.us.mars.ratio" );
 
 	// Creating virtual machine codes
 	vm_inst_object* inst_list = sailr_gen_code( ps, table); // VM Code is generated.
@@ -99,7 +99,7 @@ test_missing_test1( void )
 	char st_us_mars_ratio = sailr_ptr_table_get_type(&table, (char*)"us_mars_ratio");
 	char st_message1 = sailr_ptr_table_get_type(&table, (char*)"message1");
 	char st_message2 = sailr_ptr_table_get_type(&table, (char*)"message2");
-	char st_message3 = sailr_ptr_table_get_type(&table, (char*)"message3");
+	char st_message3 = sailr_ptr_table_get_type(&table, (char*)"message.us.mars.ratio");
 
 	CU_ASSERT_EQUAL( st_us_pop , 'd');
 	CU_ASSERT_EQUAL( st_phil_pop , 'i');
@@ -119,10 +119,10 @@ test_missing_test1( void )
 	double s_us_mars_ratio = *((double*) *sailr_ptr_table_get_pptr(&table, (char*)"us_mars_ratio"));
 	const char* s_message1 = sailr_ptr_table_read_string(&table, (char*)"message1");
 	const char* s_message2 = sailr_ptr_table_read_string(&table, (char*)"message2");
-	const char* s_message3 = sailr_ptr_table_read_string(&table, (char*)"message3"); 
+	const char* s_message3 = sailr_ptr_table_read_string(&table, (char*)"message.us.mars.ratio"); 
 
 	double nan_value = sqrt(-1);
-	printf("nan value is %f \n", nan_value);
+//	printf("nan value is %f \n", nan_value);
 	CU_ASSERT_DOUBLE_EQUAL( s_us_pop , 3.3, 0.01 );
 	CU_ASSERT_EQUAL( s_phil_pop , 1 );
 	CU_ASSERT_TRUE( isnan( s_mars_pop ) ); // nan
@@ -130,11 +130,11 @@ test_missing_test1( void )
 	CU_ASSERT_TRUE( isnan( s_mars_phil_ratio) ); // nan
 	CU_ASSERT_TRUE( isnan( s_us_mars_ratio ) ); // nan
 	CU_ASSERT_STRING_EQUAL( s_message1, "The relationship data is missing.");
-	printf("%s \n", s_message1);
+//	printf("%s \n", s_message1);
 	CU_ASSERT_STRING_EQUAL( s_message2, "The relationship data is missing.");
-	printf("%s \n", s_message2);
+//	printf("%s \n", s_message2);
 	CU_ASSERT_STRING_EQUAL( s_message3, "The relationship data is missing.");
-	printf("%s \n", s_message3);
+//	printf("%s \n", s_message3);
 
 	// Clean up
 	sailr_tree_free(ps);

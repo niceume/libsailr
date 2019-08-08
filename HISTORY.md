@@ -184,11 +184,36 @@ make build
 
 * Start to support 32bit/64bit windows platform using mingw-w64.
 	+ See build scripts/envs under mingw_env directory.
-* Period becomes available for column name. (iris data includes period.)
+* Period(.) is allowed to be included for variable name or column name. (iris data includes period.)
+
+## Ver 0.63 (Aug. 8 2019)
+
+* Move 32bit/64bit windows build scripts outside of this repository.
+* Added compiler flags
+    + Explicitly use "-std=c99", "std=c++11" for compilers
+    + Use "-g" for debugging purpose (This does not slow donw execution)
+    + "-fstack-protector-strong" for C/C++ compilers
+        + This flag is disabled for mingw compiler.
+        + See the conditional in makefile.
+    + These are learnt from testthat library compilations.
+* In Makefile
+    + $^ is replaced with $<
+        + $^ : All the prerequisites
+        + $< : The 1st prerequisite
+        + The Makefile uses -include $(DEPS) & -MD -MMP mechanism, meaning that header files are set to be prerequisites for target file.
+            + Only the 1st prerequisite should be compiled. Prerequisite at 2nd and after are header files, so they should not be listed in gcc/g++ arguments.
+* Under dev_env directory
+    + Makefile is used for test parser (myparsercpp) compilation.
+    + Onigmo source for this test parser is put under dev_env/onigmo_src
+        + This onigmo_src is ignored from git. 
+        + Download onigmo source and extract the files there. 
 
 
 ## Plan 
 
+* Make parser reentrant
+* Avoid global varaible. Allow this library to be used in concurrent program.
+* Some script language extension. BSD licensed language is best (e.g. Lua, mruby or Gauche??)
 * Macro to add variables for users to ptr_table.
     + When adding value to ptr_table, missing values should be taken care of.
         + Missing value should be added as nan in double.

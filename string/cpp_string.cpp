@@ -21,6 +21,59 @@ cpp_string_new_with_len(const char* str, int len)
 }
 
 cpp_object*
+cpp_string_new_unescaped_string( cpp_object* obj )
+{
+	std::string* ori_str = static_cast<std::string*>(obj);
+	std::string* new_str = new std::string();
+	std::cout << (*ori_str) << "(" << ori_str->length() << ")" << std::endl;
+
+	if (ori_str->empty()){
+		std::cout << "LENGTH is zero" << std::endl;
+		return (cpp_object*) new_str;
+	}
+
+	size_t ori_capacity = ori_str->capacity() ;
+	if(new_str->capacity() < (ori_capacity + 1)){
+		new_str->reserve(ori_capacity + 1);
+	}
+	
+	char new_char;
+	for( auto it = ori_str->begin(); it != ori_str->end(); ++it){
+		if( *it == '\\'){
+			++it;
+			if( it == ori_str->end()){
+				printf("ERROR: string litereal should not end with single backslash.");
+				break;
+;			}
+			switch (*it){
+			case 't' : new_char = '\t';
+			break;
+			case 'n' : new_char = '\n';
+			break;
+			case 'r' : new_char = '\r';
+			break;
+			case '\\' : new_char = '\\';
+			break; 
+			case '\'' : new_char = '\'';
+			break;
+			case '"' : new_char = '"';
+			break;
+			case '?' : new_char = '?';
+			break;
+			default : new_char = *it ;
+			break;
+			}
+		}else{
+			new_char = *it;
+		}
+//		std::cout << "---" << new_char << "---" << std::endl;
+		new_str->push_back(new_char) ;
+	}
+	return (cpp_object*) new_str;
+}
+
+
+cpp_object*
 cpp_string_clone (cpp_object* obj)
 {
 	std::string* ori_str = static_cast<std::string*>(obj);

@@ -22,9 +22,8 @@ core
 
 # Ignore onigmo files
 
-/dev_env/onigmo/*
-/regexp/onig/*
-/mingw_env/onigmo/*
+/dev_env/onigmo_src/*
+/dev_env/onigmo_build/*
 
 
 # Ignore build files of mingw

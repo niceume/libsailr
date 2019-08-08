@@ -1,0 +1,26 @@
+old_asian = 0
+age = 65
+/* Old Asians live
+all over the world.
+*/
+race = "Asian-Pac-Islander"
+
+// Hello
+if(race == "White"){
+  race_id = 1   // White
+}else if(race == "Black"){
+  race_id = 2    // Black
+}else if(race =~ re/Asian/ ){
+  race_id = 3 ; // Asian
+  if(age > 50 ){  
+    old_asian = 1  // Old Asian
+  }
+}else{
+  race_id = 4  // Others
+}
+
+
+print('Hello World \n')
+print("Hello World \n")
+print('Hello World \n')
+print("Hello World \n")

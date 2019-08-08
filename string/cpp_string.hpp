@@ -8,6 +8,7 @@ extern "C" {
 #endif
 	cpp_object* cpp_string_new (const char*);
 	cpp_object* cpp_string_new_with_len (const char* , int);
+	cpp_object* cpp_string_new_unescaped_string(cpp_object* obj);
 	cpp_object* cpp_string_clone( cpp_object* );
 	cpp_object* cpp_string_int2str( int num);
 	cpp_object* cpp_string_double2str( double num);

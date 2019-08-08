@@ -1,16 +1,21 @@
 YACC = bison -y -d
 LEX = flex
 CC = gcc
-CPPC := g++
+CPPC = g++
 AR = ar rvs
-CFLAGS += -fPIC -O3 -I. -Ivm -Istring -Isimple_re -Isimple_date -I$(ONIG_INCLUDE_DIR) $(CC_USER_DEFINES)
-CPPCFLAGS += -std=c++11 -fPIC -O3 -Ivm -Istring $(CPPC_USER_DEFINES)
+CFLAGS := $(CFLAGS) -std=c99 -g -fPIC -O3 -I. -Ivm -Istring -Isimple_re -Isimple_date -I$(ONIG_INCLUDE_DIR) $(CC_USER_DEFINES)
+CPPCFLAGS := $(CPPFLAGS) -std=c++11 -g  -fPIC -O3 -Ivm -Istring $(CPPC_USER_DEFINES)
 RM = rm -f
 
-TARGET = libsailr.a
-ifeq (Windows_NT,$(OS))
-TARGET:=$(subst .a , .lib , $(TARGET))
+UNAME := $(shell uname)
+ifneq (,$(findstring MINGW,$(UNAME)))
+    # MINGW found => mingw system
+else
+    CFLAGS := $(CFLAGS) -fstack-protector-strong
+    CPPCFLAGS := $(CPPCFLAGS) -fstack-protector-strong 
 endif
+
+TARGET = libsailr.a
 
 SRCS=$(filter-out y.tab.c lex.yy.c, $(wildcard *.c)) $(wildcard vm/*.c) 
 OBJS:=$(SRCS:.c=.o) parse.o lex.o
@@ -47,30 +52,30 @@ lex.o : lex.l  # lex.yy.c is includgin y.tab.h
 	$(CC) -o lex.o -c lex.yy.c $(CFLAGS)  # This file requires y.tab.h
 
 %.o : %.c 
-	$(CC) -c -o $@ $^  $(CFLAGS) -MMD -MP
+	$(CC) -c -o $@ $<  $(CFLAGS) -MMD -MP
 
 vm/%.o : vm/%.c 
-	$(CC) -c -o $@ $^  $(CFLAGS) -I. -MMD -MP
+	$(CC) -c -o $@ $<  $(CFLAGS) -I. -MMD -MP
 
 string/cpp_string.o : string/cpp_string.cpp
-	$(CPPC) -c -o $@ $^ $(CPPCFLAGS) -MMD -MP 
+	$(CPPC) -c -o $@ $< $(CPPCFLAGS) -MMD -MP 
 
 string/%.o : string/%.c 
-	$(CC) -c -o $@ $^  $(CFLAGS) -I. -MMD -MP
+	$(CC) -c -o $@ $<  $(CFLAGS) -I. -MMD -MP
 
 simple_re/%.o : simple_re/%.c
-	$(CC) -c -o $@ $^  $(CFLAGS) -I. -MMD -MP
+	$(CC) -c -o $@ $<  $(CFLAGS) -I. -MMD -MP
 
 simple_date/cpp_date.o : simple_date/cpp_date.cpp
-	$(CPPC) -c -o $@ $^ $(CPPCFLAGS) -MMD -MP 
+	$(CPPC) -c -o $@ $< $(CPPCFLAGS) -MMD -MP 
 
 simple_date/%.o : simple_date/%.c
-	$(CC) -c -o $@ $^  $(CFLAGS) -I. -MMD -MP
+	$(CC) -c -o $@ $<  $(CFLAGS) -I. -MMD -MP
 
 test : 
 	@echo "\033[1;34m Make sure you have rebuilt $(TARGET) before running tests \033[0m"
 	@echo "\033[1;34m CUnit tests for $(TARGET) \033[0m"
-	$(CC) test/test_main.c $(TARGET) -o test/a.out -Wall -I. -lstdc++ -lm -L/usr/local/lib -lcunit -Ldev_env/onigmo/lib -lonigmo
+	$(CC) test/test_main.c $(TARGET) -o test/a.out -Wall -I. -lstdc++ -lm -L/usr/local/lib -lcunit -Ldev_env/onigmo_build/lib -lonigmo
 	test/a.out
 
 clean :

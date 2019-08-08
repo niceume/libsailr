@@ -15,6 +15,15 @@ string_new_with_len(const c_char* str, int len)
 }
 
 string_object*
+string_new_unescaped_and_delete_ori(string_object* str)
+{
+	string_object* new_str = cpp_string_new_unescaped_string( str );
+	string_free( str );
+	return new_str;
+}
+
+
+string_object*
 string_clone(string_object* str)
 {
 	return (string_object*) cpp_string_clone( (cpp_object*) str );

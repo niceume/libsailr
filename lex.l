@@ -200,7 +200,11 @@ WORD {CHAR}{CHNUMP}*
 
 	/* Identifier such as variable names, and function names */
 <INITIAL,IFSTATE,ELSESTATE>{WORD}		{
-	lval->id = strdup( (char *) yytext) ;
+	size_t ident_len = strlen( (char*) yytext);
+	char* new_str = (char*) malloc(sizeof(char) * (ident_len + 1));
+	strncpy(new_str, (char*)yytext, ident_len);
+	new_str[ident_len] = '\0';
+	lval->id = new_str ;
 	LEX_RETURN( IDENT );
 };
 
@@ -224,7 +228,7 @@ WORD {CHAR}{CHNUMP}*
 
 
 <INITIAL,IFSTATE,ELSESTATE>\"([^\\\"]|\\.)*\"	{
-	lval->str = string_new_with_len((yytext + 1), yyleng - 2);
+	lval->str = string_new_unescaped_and_delete_ori( string_new_with_len((yytext + 1), yyleng - 2));
 	// printf("LEXER: LIT_STR %s \n", yytext);
 	LEX_RETURN( LIT_STR );
 };

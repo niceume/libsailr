@@ -209,9 +209,13 @@ make build
         + Download onigmo source and extract the files there. 
 
 
+## Ver 0.64 (Sep. 10 2019)
+
+* Parser (bison/flex) is now reentrant.
+
+
 ## Plan 
 
-* Make parser reentrant
 * Avoid global varaible. Allow this library to be used in concurrent program.
 * Some script language extension. BSD licensed language is best (e.g. Lua, mruby or Gauche??)
 * Macro to add variables for users to ptr_table.

@@ -16,16 +16,24 @@ int yydebug = 0; /* 0 : no debug, 1: debug */
 }
 
 /* Options about parser function  and how to interact with yylex() */
-/* pure-parser makes variables local. To share it with another binary,*/
+/* pure-parser makes variables local. Note that currenlty pusre-parser is deprecated, and %define api.pure full is strongly recommended. */
+/* (ref) https://homeunix.nl/manual/bison/NEWS */
+/* To share values with another binary,*/
 /* you need to pass it via function arguments. */
 /* parse-param: argument for yyparse() and yyerror() definition. */
 /* Then you can use p in actions from yyparse() .*/
 /* Also you can write "int yyerror(parser_state* p , char* str){} "*/
 /* lex-param: additional argument to pass  when calling yylex(). */
-%pure-parser
-%parse-param {parser_state *p }
-%lex-param {p}
-/* This results in calling as "int yylex(YYSTYPE *lval, parser_state *p);" */
+%define api.pure full
+/*(ref) https://stackoverflow.com/questions/12468282/making-bison-flex-parser-reentrant-with-integral-yystype*/
+%parse-param {parser_state *p } {void* scanner } 
+/* This results in adding "parser_state* " argument to yyparse() */
+/* yyerror() also takes the same parameters from parse-param*/
+%lex-param {parser_state *p } {void* scanner} 
+/* This results in adding "parser_state* " argument to yylex() */
+/* About %parse-param and %lex-param, */
+/* See this ref. https://stackoverflow.com/questions/34418381/how-to-reference-lex-or-parse-parameters-in-flex-rules */
+
 
 /* ***************************** */
 /*  Non-terminals                */
@@ -170,10 +178,11 @@ opt_termins	: /* empty */
 
 %%
 
-int yyerror(parser_state* p, char* s)
+int yyerror(parser_state* p, void* scanner, char* s)
 {
-  extern int yylineno;
   p->yynerrs++;
-  fprintf(stderr, "%d: %s\n", yylineno, s);
+  fprintf(stderr, "%d: %s\n", p->lineno, s);
+  /* yylineno does not seem to work in reentrant parser, b/c it's global.*/
+  /* Instead, the line number is set in parser_state by tokenizer or scanner. */
 }
 

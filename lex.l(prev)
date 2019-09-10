@@ -9,6 +9,9 @@
 /* (ref.1) https://stackoverflow.com/questions/37266322/creating-comments-in-lex-and-yacc */
 /* (ref.2) https://stackoverflow.com/questions/40564020/how-can-we-add-comments-in-flex-bison-source-code */
 
+/* This definition part comes in the first part of lex.yy.c */
+/* The subroutine part comes at the end of lex.yy.c */ 
+
 /* 1-1. Lines to be included at the beginning of generated scanner. */
 %{
 #include <stdio.h>
@@ -40,6 +43,7 @@ extern void lexerror(parser_state* , char);
 
 %}
 
+/* IF YOU CANNOT LINKs FUNCTIONS WHEN CREATING REENTRANT PARSER, MAKE SURE CORRESPONDING OPTIONS ARE ENEABLED. */
 /* 1-2. Options to be enabled in code */
 /* Generated yylex()'s function prototype. (By default, no argument.)*/
 %{
@@ -52,16 +56,25 @@ extern void lexerror(parser_state* , char);
 /* Enable yylineno variable. */
 %option yylineno
 
+/* Enable (start) state stack. */
+/* For reentrant parser. http://www.stackoverflow.com/flex-reentrant-with_start-conditions */
+/* Functions that become available: yy_push_state(int) , yy_pop_state(). I don't know the reason, but yy_top_state() caused segmentation error,  but YY_START works. */
+
+%option stack
+
 
 /* 2. Macros that are expanded in rules */
 
 CHAR   [a-zA-Z_]|[\302-\337][\200-\277]|[\340-\357][\200-\277][\200-\277]|[\360-\367][\200-\277][\200-\277]|[\370-\373][\200-\277][\200-\277][\200-\277][\200-\277]|[\374-\375][\200-\277][\200-\277][\200-\277][\200-\277][\200-\277]
 CHNUM  ({CHAR}|[0-9])
-WORD {CHAR}{CHNUM}*
+CHNUMP ({CHAR}|[0-9.])
+WORD {CHAR}{CHNUMP}*
 
-/* 3. (Start) states that can become active when BEGIN <state> is called in actions. */
+/* 3. (Start) states that can become active when BEGIN <state> is called in actions, but I use yy_push_state(int) and yy_pop_state(). BEGIN does not seem to work with state stack. */
 
 %start  COMM COMMONE IFSTATE ELSESTATE
+
+
 
 %%
 
@@ -78,99 +91,130 @@ WORD {CHAR}{CHNUM}*
 	/* **************** */
 
 	/*  For comments */
-"/*"					{ BEGIN COMM; };
-<COMM>.*"*/"\n?		{ BEGIN INITIAL;};
-<COMM>.+\n				{ };
+<INITIAL,IFSTATE,ELSESTATE>"/*"				{ yy_push_state(COMM) ; };
 
-"//"					{ 
-							/* printf("LEX: COMMONE start\n"); */
-							 BEGIN COMMONE ; 
+<COMM>"*/"				{ 
+						yy_pop_state() ;
 						};
-<COMMONE>.*\n			{ 
-							/* printf("LEX: COMMONE finished\n"); */
-							BEGIN INITIAL ; 
+
+<COMM>\n				{};
+
+<COMM>[^*]				{
+						/* Not containing stars */
 						};
+
+<COMM>"*"/[^/]			{
+						/* Words not starting with star and tailed with slash. */
+						};
+
+<COMM>.					{};
+
+<INITIAL,IFSTATE,ELSESTATE>"//"					{ 
+							/* printf("INITIAL:%d, COMM:%d, COMMONE:%d, IFSTATE:%d, ELSESTATE:%d\n", INITIAL, COMM, COMMONE, IFSTATE, ELSESTATE); */
+							yy_push_state(COMMONE);
+							/* printf("LEX: start : %d\n", YY_START);  */
+							LEX_RETURN( TERMIN );
+						};
+<COMMONE>\n				{ 
+							yy_pop_state(); 
+							/* printf("LEX: COMMONE finished, start => %d \n", YY_START); */
+						};
+<COMMONE>.*				{  };
+
 
 	/* Keywords for DATA Step */
-if		{BEGIN IFSTATE; /* printf("IF STATE!\n"); */ LEX_RETURN( KEY_IF );}
-else	{BEGIN ELSESTATE; /* printf("ELSE STATE!\n"); */ LEX_RETURN( KEY_ELSE );}
+<INITIAL,IFSTATE,ELSESTATE>if		{		
+				if( YY_START == ELSESTATE){
+					yy_pop_state();
+				}
+				yy_push_state(IFSTATE);
+				/* printf("IF STATE! %d\n", YY_START); */
+				LEX_RETURN( KEY_IF );};
+<INITIAL,IFSTATE,ELSESTATE>else	{
+				yy_push_state(ELSESTATE);
+				/* printf("ELSE STATE! %d\n", YY_START); */
+				LEX_RETURN( KEY_ELSE );};
 	/* Ignore \n once. */
-<IFSTATE>"{"" "* {BEGIN INITIAL; LEX_RETURN('{') ;}
-<IFSTATE>"{"" "*\n? {BEGIN INITIAL; LEX_RETURN('{') ;}
-<IFSTATE>\n" "*"{"" "*\n?  {BEGIN INITIAL;LEX_RETURN('{') ;}
-<IFSTATE>\n  {BEGIN INITIAL;}
+<IFSTATE>"{"" "* {yy_pop_state(); /* printf("POP STATE! %d\n", YY_START);*/ LEX_RETURN('{') ;  };
+<IFSTATE>"{"" "*\n? {yy_pop_state(); /* printf("POP STATE! %d\n", YY_START);*/ LEX_RETURN('{') ; };
+<IFSTATE>\n" "*"{"" "*\n?  {yy_pop_state(); /* printf("POP STATE! %d\n", YY_START);*/ LEX_RETURN('{') ;};
+<IFSTATE>\n  {yy_pop_state(); /* printf("POP STATE! %d\n", YY_START);*/ };
 	/* Ignore \n once. */
-<ELSESTATE>"{"" "* {BEGIN INITIAL; LEX_RETURN('{') ;}
-<ELSESTATE>"{"" "*\n? {BEGIN INITIAL; LEX_RETURN('{') ;}
-<ELSESTATE>\n" "*"{"" "*\n?  {BEGIN INITIAL; LEX_RETURN('{') ;}
-<ELSESTATE>\n  {BEGIN INITIAL;}
+<ELSESTATE>"{"" "* {yy_pop_state(); /* printf("POP STATE! %d\n", YY_START);*/ LEX_RETURN('{') ; };
+<ELSESTATE>"{"" "*\n? {yy_pop_state(); /* printf("POP STATE! %d\n", YY_START);*/ LEX_RETURN('{') ; };
+<ELSESTATE>\n" "*"{"" "*\n?  {yy_pop_state(); /* printf("POP STATE! %d\n", YY_START);*/ LEX_RETURN('{') ; };
+<ELSESTATE>\n  {yy_pop_state(); /* printf("POP STATE! %d\n", YY_START);*/ };
 
 	/* Ignore complete space lines */
-^[ \t]*\n					{};
+<INITIAL>^[ \t]*\n					{};
 
 	/* For operators */
-"+"	LEX_RETURN( OP_PLUS );
-"-"	LEX_RETURN( OP_SUB );
-"*"	LEX_RETURN( OP_MULT );
-"/"	LEX_RETURN( OP_DIV );
-"%"	LEX_RETURN( OP_MOD );
-"!"	{ LEX_RETURN( FACTOR );}
-"^"	LEX_RETURN( OP_POWER );
-"**"	LEX_RETURN( OP_POWER );
+<INITIAL,IFSTATE,ELSESTATE>"+"	LEX_RETURN( OP_PLUS );
+<INITIAL,IFSTATE,ELSESTATE>"-"	LEX_RETURN( OP_SUB );
+<INITIAL,IFSTATE,ELSESTATE>"*"	LEX_RETURN( OP_MULT );
+<INITIAL,IFSTATE,ELSESTATE>"/"	LEX_RETURN( OP_DIV );
+<INITIAL,IFSTATE,ELSESTATE>"%"	LEX_RETURN( OP_MOD );
+<INITIAL,IFSTATE,ELSESTATE>"!"	{ LEX_RETURN( FACTOR );}
+<INITIAL,IFSTATE,ELSESTATE>"^"	LEX_RETURN( OP_POWER );
+<INITIAL,IFSTATE,ELSESTATE>"**"	LEX_RETURN( OP_POWER );
 
 	/* For comparison */
-"=="	LEX_RETURN( OP_EQ );
-"!="	LEX_RETURN( OP_NEQ );
-">"	LEX_RETURN( OP_GT );
-"<"	LEX_RETURN( OP_LT );
-">="	LEX_RETURN( OP_GE );
-"<="	LEX_RETURN( OP_LE );
+<INITIAL,IFSTATE,ELSESTATE>"=="	LEX_RETURN( OP_EQ );
+<INITIAL,IFSTATE,ELSESTATE>"!="	LEX_RETURN( OP_NEQ );
+<INITIAL,IFSTATE,ELSESTATE>">"	LEX_RETURN( OP_GT );
+<INITIAL,IFSTATE,ELSESTATE>"<"	LEX_RETURN( OP_LT );
+<INITIAL,IFSTATE,ELSESTATE>">="	LEX_RETURN( OP_GE );
+<INITIAL,IFSTATE,ELSESTATE>"<="	LEX_RETURN( OP_LE );
 
 	/* For logical operators */
-"and"	LEX_RETURN( AND );
-"or"	LEX_RETURN( OR );
-"&&"	LEX_RETURN( AND );
-"||"	LEX_RETURN( OR );
+<INITIAL,IFSTATE,ELSESTATE>"and"	LEX_RETURN( AND );
+<INITIAL,IFSTATE,ELSESTATE>"or"	LEX_RETURN( OR );
+<INITIAL,IFSTATE,ELSESTATE>"&&"	LEX_RETURN( AND );
+<INITIAL,IFSTATE,ELSESTATE>"||"	LEX_RETURN( OR );
 
 	/* For assignment */
-"<-"	LEX_RETURN( ASSIGN );
-"="	LEX_RETURN( ASSIGN );
+<INITIAL,IFSTATE,ELSESTATE>"<-"	LEX_RETURN( ASSIGN );
+<INITIAL,IFSTATE,ELSESTATE>"="	LEX_RETURN( ASSIGN );
 
 	/* For regular expression matching */
-"=~"	LEX_RETURN( REXP_MATCH );
+<INITIAL,IFSTATE,ELSESTATE>"=~"	LEX_RETURN( REXP_MATCH );
 
 	/* For Parentheses and Blocks */
-"("	LEX_RETURN( '(' );
-")"	LEX_RETURN( ')' );
-"{"	LEX_RETURN( '{' );
-"}"	LEX_RETURN( '}' );
+<INITIAL,IFSTATE,ELSESTATE>"("	LEX_RETURN( '(' );
+<INITIAL,IFSTATE,ELSESTATE>")"	LEX_RETURN( ')' );
+<INITIAL,IFSTATE,ELSESTATE>"{"	LEX_RETURN( '{' );
+<INITIAL,IFSTATE,ELSESTATE>"}"	LEX_RETURN( '}' );
 
 	/* For missing numbers */
-"."		{
+<INITIAL,IFSTATE,ELSESTATE>"."		{
 	lval->nd = new_node_nan_double( );
 	LEX_RETURN( NA_NUM );
 };
 
 	/* For Macro (Plan) */
-"%{"	LEX_RETURN( PLCUR );
-"%}"	LEX_RETURN( PRCUR );
+<INITIAL,IFSTATE,ELSESTATE>"%{"	LEX_RETURN( PLCUR );
+<INITIAL,IFSTATE,ELSESTATE>"%}"	LEX_RETURN( PRCUR );
 
 	/* For list identities (Plan) */
-","	LEX_RETURN( COMMA );
+<INITIAL,IFSTATE,ELSESTATE>","	LEX_RETURN( COMMA );
 
 	/* Identifier such as variable names, and function names */
-{WORD}		{
-	lval->id = strdup( (char *) yytext) ;
+<INITIAL,IFSTATE,ELSESTATE>{WORD}		{
+	size_t ident_len = strlen( (char*) yytext);
+	char* new_str = (char*) malloc(sizeof(char) * (ident_len + 1));
+	strncpy(new_str, (char*)yytext, ident_len);
+	new_str[ident_len] = '\0';
+	lval->id = new_str ;
 	LEX_RETURN( IDENT );
 };
 
 	/* Number */
-([1-9][0-9]*)|0	{
+<INITIAL,IFSTATE,ELSESTATE>([1-9][0-9]*)|0	{
 	lval->nd = new_node_int(yytext);
 	LEX_RETURN( LIT_NUM );
 };
 
-(([1-9][0-9]*)|0)\.[0-9]*	{
+<INITIAL,IFSTATE,ELSESTATE>(([1-9][0-9]*)|0)\.[0-9]*	{
 	lval->nd = new_node_double(yytext);
 	LEX_RETURN( LIT_NUM );
 };
@@ -183,35 +227,35 @@ else	{BEGIN ELSESTATE; /* printf("ELSE STATE!\n"); */ LEX_RETURN( KEY_ELSE );}
 	/* \"       Ending with double quote. */
 
 
-\"([^\\\"]|\\.)*\"	{
-	lval->str = string_new_with_len((yytext + 1), yyleng - 2);
+<INITIAL,IFSTATE,ELSESTATE>\"([^\\\"]|\\.)*\"	{
+	lval->str = string_new_unescaped_and_delete_ori( string_new_with_len((yytext + 1), yyleng - 2));
 	// printf("LEXER: LIT_STR %s \n", yytext);
 	LEX_RETURN( LIT_STR );
 };
 
-\'([^\\\']|\\.)*\'	{
+<INITIAL,IFSTATE,ELSESTATE>\'([^\\\']|\\.)*\'	{
 	lval->str = string_new_with_len((yytext+1), yyleng - 2);
 	LEX_RETURN( LIT_STR );
 };
 
 	/* Regular expression literals */
 	/* re"/"[^("/")]([^("/")\n]|\\/)*"/" */
-re[/][^/]([^/\n]|\\[/])*[/]	{
+<INITIAL,IFSTATE,ELSESTATE>re[/][^/]([^/\n]|\\[/])*[/]	{
 	lval->str = string_new_with_len((yytext+3), yyleng - 4);
 	LEX_RETURN( LIT_REXP ); 
 };
 
 	/*  Terminators */
 	/* Sequential terminators are dealt as a single terminator. */
-[;\n]+	{
+<INITIAL,IFSTATE,ELSESTATE>[;\n]+	{
 	LEX_RETURN( TERMIN );
 };
 
 	/* Spaces */
-[ \t]	{ };
+<INITIAL,IFSTATE,ELSESTATE>[ \t]*	{ };
 
 	/* Other characters */
-. {
+<INITIAL,IFSTATE,ELSESTATE>. {
 	char c = yytext[0];
 	lexerror(p, c);
 };
@@ -227,3 +271,5 @@ void lexerror(parser_state* p, char c){
 	fprintf(stderr, "('%c').\n", c);
 	exit(1);
 }
+
+

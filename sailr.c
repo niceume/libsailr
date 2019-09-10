@@ -49,9 +49,17 @@ sailr_new_parser_state(const char* fname, ptr_table_object* table)
 int
 sailr_construct_parser (const char* code , parser_state_object* ps)
 {
-	yy_scan_string(code);
-	int result = yyparse((parser_state*) ps);
-    yylex_destroy();
+	/* %option reentrant in lex.l enables reentrant scanner (=tokenizer) */
+	/* We need to track the tokenizer object, and pass it to parser appropriately.*/
+	/* The tokenizer is initialized by yylex_init() */
+	/* The parser function brings code into tokenizer's buffer by yy_scan_string() */
+	/* The parser function works with tokenizer in yyparse*() */
+	/* The tokenizer is destroyed by yylex_destroy() */
+	void* scanner;
+	yylex_init(&scanner);
+	yy_scan_string(code, scanner);
+	int result = yyparse( (parser_state*) ps, scanner );
+    yylex_destroy(scanner);
 	return result;
 }
 

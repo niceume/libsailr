@@ -22,12 +22,14 @@
 #include "common_string.h"
 #include "node.h"
 
-// LEX_RETURN(int c) works just in the sme way as calling return, but update parser_state's property.
+// yyget_lineno can obtain 
+// 
+extern int yyget_lineno(yyscan_t);
 static int
-lex_return(parser_state *p, int c)
+lex_return(parser_state *p, yyscan_t scanner, int c)
 {
   p->lineno = p->tline;
-  p->tline = yylineno;
+  p->tline = yyget_lineno(scanner);
   return c;
 }
 
@@ -35,33 +37,42 @@ lex_return(parser_state *p, int c)
 /* y.tab.h should be included after functions for nodes and struct_srings. */
 #include "y.tab.h"
 
-#define LEX_RETURN(c) return  lex_return(p, c)
+// LEX_RETURN(int c) works just in the sme way as calling return, but update parser_state's property such as line number.
+#define LEX_RETURN(c) return  lex_return(p, yyscanner, c)
 
 /* lexerror is defined in subroutine section. */
 /* But here you need prototypes to use in rules appropriately. */
-extern void lexerror(parser_state* , char);
+extern void lexerror( parser_state* , yyscan_t,  char);
 
 %}
 
 /* IF YOU CANNOT LINKs FUNCTIONS WHEN CREATING REENTRANT PARSER, MAKE SURE CORRESPONDING OPTIONS ARE ENEABLED. */
 /* 1-2. Options to be enabled in code */
-/* Generated yylex()'s function prototype. (By default, no argument.)*/
+/* Generated yylex()'s function prototype. */
+/* bison-bridge option adds an additional parameter, "yyscan_t scanner", to yylex() function. */
+/* lex-param option in parser.y adds additional parameters, in this case, yyscan_t scanner and parser_state *p */
+
+/* (ref) http://gensoft.pasteur.fr/docs/flex/2.6.1/Bison-Bridge.html */
+/* %option bison-bridge => global variable, yylval, becomes YYSTYPE* lval in arguemnt of yylex(). */
+/* %option reentrant =>  yylex() is expected to have yyscan_t scanner in its arguments", and functions take one additional argument, scanner_t. */
+/* https://www.cs.virginia.edu/~cr4bd/flex-manual/Extra-Reentrant-Argument.html#Extra-Reentrant-Argument */
+%option bison-bridge reentrant 
 %{
-#define YY_DECL int yylex(YYSTYPE *lval, parser_state *p)
+/* By putting appropriate declaration here, compiile time conflicts are resolved. The parameter names can be used in rule section as they are expanded in yylex().*/
+#define YY_DECL int yylex(YYSTYPE* yylval_param, parser_state* p, yyscan_t yyscanner )
 %}
+
+/* Track line number */
+%option yylineno
 
 /* Usually you do not need yywarp() function. */
 %option noyywrap
 
-/* Enable yylineno variable. */
-%option yylineno
 
 /* Enable (start) state stack. */
-/* For reentrant parser. http://www.stackoverflow.com/flex-reentrant-with_start-conditions */
 /* Functions that become available: yy_push_state(int) , yy_pop_state(). I don't know the reason, but yy_top_state() caused segmentation error,  but YY_START works. */
-
+/* Using start state in reentrant parser. http://www.stackoverflow.com/flex-reentrant-with_start-conditions  */
 %option stack
-
 
 /* 2. Macros that are expanded in rules */
 
@@ -91,10 +102,10 @@ WORD {CHAR}{CHNUMP}*
 	/* **************** */
 
 	/*  For comments */
-<INITIAL,IFSTATE,ELSESTATE>"/*"				{ yy_push_state(COMM) ; };
+<INITIAL,IFSTATE,ELSESTATE>"/*"				{ yy_push_state(COMM, yyscanner) ; };
 
 <COMM>"*/"				{ 
-						yy_pop_state() ;
+						yy_pop_state(yyscanner) ;
 						};
 
 <COMM>\n				{};
@@ -111,12 +122,12 @@ WORD {CHAR}{CHNUMP}*
 
 <INITIAL,IFSTATE,ELSESTATE>"//"					{ 
 							/* printf("INITIAL:%d, COMM:%d, COMMONE:%d, IFSTATE:%d, ELSESTATE:%d\n", INITIAL, COMM, COMMONE, IFSTATE, ELSESTATE); */
-							yy_push_state(COMMONE);
+							yy_push_state(COMMONE, yyscanner);
 							/* printf("LEX: start : %d\n", YY_START);  */
 							LEX_RETURN( TERMIN );
 						};
 <COMMONE>\n				{ 
-							yy_pop_state(); 
+							yy_pop_state(yyscanner); 
 							/* printf("LEX: COMMONE finished, start => %d \n", YY_START); */
 						};
 <COMMONE>.*				{  };
@@ -125,25 +136,25 @@ WORD {CHAR}{CHNUMP}*
 	/* Keywords for DATA Step */
 <INITIAL,IFSTATE,ELSESTATE>if		{		
 				if( YY_START == ELSESTATE){
-					yy_pop_state();
+					yy_pop_state(yyscanner);
 				}
-				yy_push_state(IFSTATE);
+				yy_push_state(IFSTATE, yyscanner);
 				/* printf("IF STATE! %d\n", YY_START); */
 				LEX_RETURN( KEY_IF );};
 <INITIAL,IFSTATE,ELSESTATE>else	{
-				yy_push_state(ELSESTATE);
+				yy_push_state(ELSESTATE, yyscanner);
 				/* printf("ELSE STATE! %d\n", YY_START); */
 				LEX_RETURN( KEY_ELSE );};
 	/* Ignore \n once. */
-<IFSTATE>"{"" "* {yy_pop_state(); /* printf("POP STATE! %d\n", YY_START);*/ LEX_RETURN('{') ;  };
-<IFSTATE>"{"" "*\n? {yy_pop_state(); /* printf("POP STATE! %d\n", YY_START);*/ LEX_RETURN('{') ; };
-<IFSTATE>\n" "*"{"" "*\n?  {yy_pop_state(); /* printf("POP STATE! %d\n", YY_START);*/ LEX_RETURN('{') ;};
-<IFSTATE>\n  {yy_pop_state(); /* printf("POP STATE! %d\n", YY_START);*/ };
+<IFSTATE>"{"" "* {yy_pop_state(yyscanner); /* printf("POP STATE! %d\n", YY_START);*/ LEX_RETURN('{') ;  };
+<IFSTATE>"{"" "*\n? {yy_pop_state(yyscanner); /* printf("POP STATE! %d\n", YY_START);*/ LEX_RETURN('{') ; };
+<IFSTATE>\n" "*"{"" "*\n?  {yy_pop_state(yyscanner); /* printf("POP STATE! %d\n", YY_START);*/ LEX_RETURN('{') ;};
+<IFSTATE>\n  {yy_pop_state(yyscanner); /* printf("POP STATE! %d\n", YY_START);*/ };
 	/* Ignore \n once. */
-<ELSESTATE>"{"" "* {yy_pop_state(); /* printf("POP STATE! %d\n", YY_START);*/ LEX_RETURN('{') ; };
-<ELSESTATE>"{"" "*\n? {yy_pop_state(); /* printf("POP STATE! %d\n", YY_START);*/ LEX_RETURN('{') ; };
-<ELSESTATE>\n" "*"{"" "*\n?  {yy_pop_state(); /* printf("POP STATE! %d\n", YY_START);*/ LEX_RETURN('{') ; };
-<ELSESTATE>\n  {yy_pop_state(); /* printf("POP STATE! %d\n", YY_START);*/ };
+<ELSESTATE>"{"" "* {yy_pop_state(yyscanner); /* printf("POP STATE! %d\n", YY_START);*/ LEX_RETURN('{') ; };
+<ELSESTATE>"{"" "*\n? {yy_pop_state(yyscanner); /* printf("POP STATE! %d\n", YY_START);*/ LEX_RETURN('{') ; };
+<ELSESTATE>\n" "*"{"" "*\n?  {yy_pop_state(yyscanner); /* printf("POP STATE! %d\n", YY_START);*/ LEX_RETURN('{') ; };
+<ELSESTATE>\n  {yy_pop_state(yyscanner); /* printf("POP STATE! %d\n", YY_START);*/ };
 
 	/* Ignore complete space lines */
 <INITIAL>^[ \t]*\n					{};
@@ -187,7 +198,7 @@ WORD {CHAR}{CHNUMP}*
 
 	/* For missing numbers */
 <INITIAL,IFSTATE,ELSESTATE>"."		{
-	lval->nd = new_node_nan_double( );
+	yylval_param->nd = new_node_nan_double( );
 	LEX_RETURN( NA_NUM );
 };
 
@@ -204,18 +215,18 @@ WORD {CHAR}{CHNUMP}*
 	char* new_str = (char*) malloc(sizeof(char) * (ident_len + 1));
 	strncpy(new_str, (char*)yytext, ident_len);
 	new_str[ident_len] = '\0';
-	lval->id = new_str ;
+	yylval_param->id = new_str ;
 	LEX_RETURN( IDENT );
 };
 
 	/* Number */
 <INITIAL,IFSTATE,ELSESTATE>([1-9][0-9]*)|0	{
-	lval->nd = new_node_int(yytext);
+	yylval_param->nd = new_node_int(yytext);
 	LEX_RETURN( LIT_NUM );
 };
 
 <INITIAL,IFSTATE,ELSESTATE>(([1-9][0-9]*)|0)\.[0-9]*	{
-	lval->nd = new_node_double(yytext);
+	yylval_param->nd = new_node_double(yytext);
 	LEX_RETURN( LIT_NUM );
 };
 
@@ -228,20 +239,20 @@ WORD {CHAR}{CHNUMP}*
 
 
 <INITIAL,IFSTATE,ELSESTATE>\"([^\\\"]|\\.)*\"	{
-	lval->str = string_new_unescaped_and_delete_ori( string_new_with_len((yytext + 1), yyleng - 2));
+	yylval_param->str = string_new_unescaped_and_delete_ori( string_new_with_len((yytext + 1), yyleng - 2));
 	// printf("LEXER: LIT_STR %s \n", yytext);
 	LEX_RETURN( LIT_STR );
 };
 
 <INITIAL,IFSTATE,ELSESTATE>\'([^\\\']|\\.)*\'	{
-	lval->str = string_new_with_len((yytext+1), yyleng - 2);
+	yylval_param->str = string_new_with_len((yytext+1), yyleng - 2);
 	LEX_RETURN( LIT_STR );
 };
 
 	/* Regular expression literals */
 	/* re"/"[^("/")]([^("/")\n]|\\/)*"/" */
 <INITIAL,IFSTATE,ELSESTATE>re[/][^/]([^/\n]|\\[/])*[/]	{
-	lval->str = string_new_with_len((yytext+3), yyleng - 4);
+	yylval_param->str = string_new_with_len((yytext+3), yyleng - 4);
 	LEX_RETURN( LIT_REXP ); 
 };
 
@@ -257,7 +268,7 @@ WORD {CHAR}{CHNUMP}*
 	/* Other characters */
 <INITIAL,IFSTATE,ELSESTATE>. {
 	char c = yytext[0];
-	lexerror(p, c);
+	lexerror(p, yyscanner, c);
 };
 
 %%
@@ -265,9 +276,8 @@ WORD {CHAR}{CHNUMP}*
 /* User Code     */
 /* ************* */
 
-extern int  yylineno;
-void lexerror(parser_state* p, char c){
-	fprintf(stderr, "%s:%d:lexical error", p->fname, yylineno);
+void lexerror(parser_state* p, yyscan_t scanner, char c){
+	fprintf(stderr, "%s:%d:lexical error", p->fname, yyget_lineno(scanner));
 	fprintf(stderr, "('%c').\n", c);
 	exit(1);
 }

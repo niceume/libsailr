@@ -14,7 +14,8 @@ enum _PtrType{
 	PTR_DBL,
 	PTR_STR,
 	PTR_REXP,
-	PTR_NULL
+	PTR_NULL,
+	PTR_INFO
 };
 typedef enum _PtrType PtrType ;
 
@@ -39,6 +40,11 @@ struct _ptr_record {
 typedef struct _ptr_record ptr_record ;
 typedef ptr_record ptr_table;
 
+struct _ptr_table_info {
+	int str_counter;
+	int rexp_counter;
+};
+typedef struct _ptr_table_info ptr_table_info ;
 
 ptr_table*  ptr_table_init();
 ptr_record* ptr_table_add(ptr_table** table, char* key, void** address, PtrType type, GCReq gc);

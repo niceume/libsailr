@@ -213,6 +213,12 @@ make build
 
 * Parser (bison/flex) is now reentrant.
 
+## Ver 0.65 (Sep.11 2019)
+
+* Global variables in ptr_table.c are removed. 
+    + Those counter information for anonymous string and regexp are stored in the 1st element of ptr_table object.
+    + The type is defined as 
+
 
 ## Plan 
 

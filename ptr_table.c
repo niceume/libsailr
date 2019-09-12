@@ -4,18 +4,20 @@
 #include "common_string.h"
 #include "simple_re.h"
 
-static int str_counter = 0;
-static int rexp_counter = 0;
 
 ptr_table*
 ptr_table_init (){
 	ptr_table *table = NULL;
 	ptr_record* new_ptr_record;
+	ptr_table_info* new_ptr_table_info;
 	new_ptr_record = (ptr_record *)malloc(sizeof(ptr_record));
-	strncpy( new_ptr_record->key , "_HEAD_OF_UTHASH_", MAX_KEY_LEN) ; 
-	new_ptr_record->address = (void*) NULL;
-	new_ptr_record->type = PTR_NULL;
-	new_ptr_record->gc = GC_NO;
+	strncpy( new_ptr_record->key , "_HEAD_OF_UTHASH_", MAX_KEY_LEN) ;
+	new_ptr_table_info = (ptr_table_info *) malloc(sizeof(ptr_table_info));
+	new_ptr_table_info->str_counter = 0;
+	new_ptr_table_info->rexp_counter = 0;
+	new_ptr_record->address = new_ptr_table_info;
+	new_ptr_record->type = PTR_INFO;
+	new_ptr_record->gc = GC_YES;
 	new_ptr_record->ex_addr = (void*) NULL;
 	new_ptr_record->ex_type = PTR_NULL;
 	new_ptr_record->ex_gc = GC_NO;
@@ -159,20 +161,22 @@ ptr_record_swap_addresses(ptr_record* pr)
 
 
 char*
-create_new_str_key(){
+create_new_str_key(ptr_table** table){
 	char* new_str = (char *)malloc(sizeof(char)*16);
-	str_counter = str_counter + 1 ;
+	ptr_table_info* info = (ptr_table_info*) ((*table)->address) ;
+	info->str_counter = (info->str_counter) + 1;
     char* prefix = (char*) "STR%012d";
-	sprintf(new_str, prefix , str_counter);
+	sprintf(new_str, prefix , info->str_counter);
 	return new_str ; 
 }
 
 char*
-create_new_rexp_key(){
+create_new_rexp_key(ptr_table** table){
 	char* new_str = (char *)malloc(sizeof(char)*16);
-	rexp_counter = rexp_counter + 1 ;
+	ptr_table_info* info = (ptr_table_info*) ((*table)->address) ;
+	info->rexp_counter = (info->rexp_counter) + 1;
     char* prefix = (char*) "REXP%011d";
-	sprintf(new_str, prefix , rexp_counter);
+	sprintf(new_str, prefix , info->rexp_counter);
 	return new_str ; 
 }
 
@@ -181,7 +185,7 @@ ptr_record*
 ptr_table_create_anonym_string(ptr_table** table, string_object** strptr)
 {
 	char* new_key;
-	new_key = create_new_str_key();
+	new_key = create_new_str_key(table);
 	ptr_record* new_ptr_record;
 	new_ptr_record = ptr_table_add(table, new_key, (void**)strptr, PTR_STR, GC_YES);
 	return new_ptr_record ;
@@ -226,7 +230,7 @@ ptr_record*
 ptr_table_create_anonym_rexp(ptr_table** table, const char* pattern, const char* enc)
 {
 	char* new_key;
-	new_key = create_new_rexp_key();
+	new_key = create_new_rexp_key(table);
 	simple_re* new_re;
 	new_re = simple_re_compile( pattern, enc );
 	ptr_record* new_ptr_record;
@@ -275,6 +279,9 @@ ptr_record_free_gc_required_memory(ptr_record* pr)
 				break;
 			case PTR_NULL:
 				// Nothing to be freed
+				break;
+			case PTR_INFO:
+				free((ptr_table_info*)pr->address);
 				break;
 			default:
 				free(pr->address);
@@ -402,12 +409,13 @@ ptr_record_show(ptr_record* pr)
 			pr->ex_addr );
 		}else if(pr->type == PTR_NULL){
         	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t (ADR:%p) \n", 
-			pr->key, pr->address, pr->type, pr->gc,
-			pr->ex_addr);
+			pr->key, pr->address, pr->type, pr->gc, pr->ex_addr);
+		}else if(pr->type == PTR_INFO){
+        	printf("KEY:%s\t ADR:%p\t TYPE:%s\t GC:%d\t (ADR:%p) \n", 
+			pr->key, pr->address, "INFO" , pr->gc, pr->ex_addr);
 		}else{
         	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t (ADR:%p) \n", 
-			pr->key, pr->address, pr->type, pr->gc,
-			pr->ex_addr);
+			pr->key, pr->address, pr->type, pr->gc,	pr->ex_addr);
 		}
 }
 

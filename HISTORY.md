@@ -217,12 +217,18 @@ make build
 
 * Global variables in ptr_table.c are removed. 
     + Those counter information for anonymous string and regexp are stored in the 1st element of ptr_table object.
-    + The type is defined as 
+    + The type is defined in ptr_table_info that is stored in the seed element called "_HEAD_OF_UTHASH_"
+
+## Ver 0.66 
+
+* ptr_table now holds information whether null variable (Known but not defined) obtains type definition.
+    + ptr_table_info->null_update holds this information. This does not holds which variable became defined.
 
 
 ## Plan 
 
-* Avoid global varaible. Allow this library to be used in concurrent program.
+* Avoid directly manipulate ptr_table's properties. Provide functions and use them.
+* Matched regular expressions also need to be cleared for every row. Provide such functionalities.
 * Some script language extension. BSD licensed language is best (e.g. Lua, mruby or Gauche??)
 * Macro to add variables for users to ptr_table.
     + When adding value to ptr_table, missing values should be taken care of.
@@ -230,7 +236,6 @@ make build
 * Refactoring2
 	+ Avoid (char*) casting
     + Functions in ptr_table.c. Pointer to pointer may be used wrongly; possibility for some local pointers are destroyed unintentionally.
-* Matched regular expressions also need to be cleared for every row. Provide such functionalities.
 
 
 ## Abondoned Ideas

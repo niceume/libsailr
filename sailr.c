@@ -248,6 +248,12 @@ sailr_ptr_table_show_all(ptr_table_object** table)
 	ptr_table_show_all((ptr_table**) table);
 }
 
+int // 0 : non-null_updated.  1: null_updated.
+sailr_ptr_table_info_get_null_updated( ptr_table_object** table)
+{
+	return ptr_table_info_get_null_updated((ptr_table**) table);
+}
+
 
 string_type_object*
 sailr_new_string(const char* str)

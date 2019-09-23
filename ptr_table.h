@@ -6,6 +6,7 @@
 
 #include "uthash.h"
 #include "common_string.h"
+#include <stdbool.h>
 
 #define MAX_KEY_LEN 511
 
@@ -43,6 +44,7 @@ typedef ptr_record ptr_table;
 struct _ptr_table_info {
 	int str_counter;
 	int rexp_counter;
+	int null_updated;
 };
 typedef struct _ptr_table_info ptr_table_info ;
 
@@ -80,8 +82,11 @@ int ptr_table_del_record(ptr_table** table, char* key);
 int ptr_table_del_records_except(ptr_table** table, char** keys, int key_num );
 int ptr_table_del_all(ptr_table** table);
 
-void ptr_record_show(ptr_record* pr);
 void ptr_table_show_all(ptr_table** table);
+void ptr_record_show(ptr_record* pr);
+ptr_table* ptr_record_obtain_table(ptr_record* pr);
+int ptr_table_info_set_null_updated(ptr_table** table, int updated_value);
+int ptr_table_info_get_null_updated(ptr_table** table);
 
 PtrType ptr_table_get_type(ptr_table** table, char* key);
 int ptr_record_is_ptr_null(ptr_table** table, char* key);
@@ -95,5 +100,7 @@ ptr_record* ptr_table_insert(ptr_table** table, ptr_record* pr);
 int ptr_record_update(ptr_record* pr, void* address, PtrType type, GCReq gc);
 int ptr_record_free(ptr_record* );
 int ptr_table_free(ptr_table**);
+
+bool ptr_table_points_to_header(ptr_table** table);
 
 #endif /* PTR_TABLE_H */

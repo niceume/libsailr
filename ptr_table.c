@@ -15,6 +15,7 @@ ptr_table_init (){
 	new_ptr_table_info = (ptr_table_info *) malloc(sizeof(ptr_table_info));
 	new_ptr_table_info->str_counter = 0;
 	new_ptr_table_info->rexp_counter = 0;
+	new_ptr_table_info->null_updated = 0;
 	new_ptr_record->address = new_ptr_table_info;
 	new_ptr_record->type = PTR_INFO;
 	new_ptr_record->gc = GC_YES;
@@ -392,33 +393,81 @@ void
 ptr_record_show(ptr_record* pr)
 {
 		if(pr->type == PTR_INT){
-        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%d\t (ADR:%p\t TYPE:%d\t GC:%d\t VAL:%lf) \n", 
+        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%d\t (EXTR_ADR:%p\t TYPE:%d\t GC:%d\t VAL:%lf) \n", 
 			pr->key, pr->address, pr->type, pr->gc, *((int*)(pr->address)),
 			pr->ex_addr, pr->ex_type, pr->ex_gc, *((double*)(pr->ex_addr)) );
 		}else if(pr->type == PTR_DBL){
-        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%lf\t (ADR:%p\t TYPE:%d\t GC:%d\t VAL:%d)\n", 
+        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%lf\t (EXTR_ADR:%p\t TYPE:%d\t GC:%d\t VAL:%d)\n", 
 			pr->key, pr->address, pr->type, pr->gc, *((double*)(pr->address)),
 			pr->ex_addr, pr->ex_type, pr->ex_gc, *((int*)(pr->ex_addr)));
 		}else if(pr->type == PTR_STR){
-        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%s\t (ADR:%p --Extra space is not used for string--)\n", 
+        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%s\t (EXTR_ADR:%p --Extra space is not used for string--)\n", 
 			pr->key, pr->address, pr->type, pr->gc, string_read((string_object*)(pr->address)),
 			pr->ex_addr );
 		}else if(pr->type == PTR_REXP){
-        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%s\t (ADR:%p)\n", 
+        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%s\t (EXTR_ADR:%p)\n", 
 			pr->key, pr->address, pr->type, pr->gc, simple_re_read_pattern((simple_re*)(pr->address)),
 			pr->ex_addr );
 		}else if(pr->type == PTR_NULL){
-        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t (ADR:%p) \n", 
+        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t (EXTR_ADR:%p) \n", 
 			pr->key, pr->address, pr->type, pr->gc, pr->ex_addr);
 		}else if(pr->type == PTR_INFO){
-        	printf("KEY:%s\t ADR:%p\t TYPE:%s\t GC:%d\t (ADR:%p) \n", 
+        	printf("KEY:%s\t ADR:%p\t TYPE:%s\t GC:%d\t (EXTR_ADR:%p) ", 
 			pr->key, pr->address, "INFO" , pr->gc, pr->ex_addr);
+			ptr_table_info* pti = (ptr_table_info*) (pr->address);
+			printf("\t str_counter %d, rexp_counter %d, null_updated %d \n", pti->str_counter, pti->rexp_counter, pti->null_updated);
 		}else{
-        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t (ADR:%p) \n", 
+        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t (EXTR_ADR:%p) \n", 
 			pr->key, pr->address, pr->type, pr->gc,	pr->ex_addr);
 		}
 }
 
+
+ptr_table*
+ptr_record_obtain_table(ptr_record* pr)
+{
+	ptr_record* temp ;
+	ptr_record* pre_temp;
+	ptr_table** table;
+
+    for( temp = pr ; temp != NULL; temp = (ptr_record*) (temp->hh.prev)) {
+		pre_temp = temp;
+    }
+	table = &pre_temp;
+	if( ptr_table_points_to_header(table) ){
+		return *table;
+	}else{
+		printf("ERROR: The function cannot find header of UTHASH.\n");
+	}
+}
+
+int
+ptr_table_info_set_null_updated(ptr_table** table, int updated_value)
+{
+	ptr_record* pr;
+	if(ptr_table_points_to_header(table)){
+		pr = (ptr_record*) *table;
+		((ptr_table_info*) (pr->address))->null_updated = updated_value;
+		return 1;
+	}else{
+		printf("ERROR: The pointer passed is not pointing to valid ptr_table.");
+		return 0;
+	}
+}
+
+int
+ptr_table_info_get_null_updated(ptr_table** table)
+{
+	ptr_record* pr;
+	if(ptr_table_points_to_header(table)){
+		pr = (ptr_record*) *table;
+		ptr_table_info* pti = (ptr_table_info*) (pr->address);
+		return pti->null_updated;
+	}else{
+		printf("ERROR: The pointer passed is not pointing to valid ptr_table. This branch works, but should never executed. ");
+		return 0; 
+	}
+}
 
 
 // private
@@ -444,6 +493,17 @@ ptr_record_update(ptr_record* pr, void* address, PtrType type, GCReq gc )
 	pr->type = type;
 	pr->gc = gc;
 	return 1;
+}
+
+bool
+ptr_table_points_to_header(ptr_table** table)
+{
+	ptr_record* pr = (ptr_record*) (*table);
+	if( (pr->type == PTR_INFO) &&  (strcmp(pr->key , "_HEAD_OF_UTHASH_") == 0) ){
+		return true;
+	}else{
+		return false;
+	}
 }
 
 /*

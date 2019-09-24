@@ -23,6 +23,10 @@ test_func_test1( void )
 "seven_str = str_repeat( num_to_str(7), 7);"
 "ten_str = num_to_str( 2.5 * 4 ) \n"
 "\n"
+"spaced_str = '    hello world    ';"
+"print(spaced_str);"
+"stripped_str = str_strip(spaced_str);"
+"print(stripped_str);"
 ;
 
 	// Parser Initialization
@@ -38,6 +42,9 @@ test_func_test1( void )
 	sailr_ptr_table_create_null(&table, (char*)"three_str" );
 	sailr_ptr_table_create_null(&table, (char*)"seven_str" );
 	sailr_ptr_table_create_null(&table, (char*)"ten_str" );
+
+	sailr_ptr_table_create_null(&table, (char*)"spaced_str");
+	sailr_ptr_table_create_null(&table, (char*)"stripped_str");
 
 	// Creating virtual machine codes
 	vm_inst_object* inst_list = sailr_gen_code( ps, table); // VM Code is generated.
@@ -57,6 +64,8 @@ test_func_test1( void )
 	char st_three_str = sailr_ptr_table_get_type(&table, (char*)"three_str");
 	char st_seven_str = sailr_ptr_table_get_type(&table, (char*)"seven_str");
 	char st_ten_str = sailr_ptr_table_get_type(&table, (char*)"ten_str");
+	char st_spaced_str = sailr_ptr_table_get_type(&table, (char*)"spaced_str");
+	char st_stripped_str = sailr_ptr_table_get_type(&table, (char*)"stripped_str");
 
 	CU_ASSERT_EQUAL( st_space_pi , 's');
 	CU_ASSERT_EQUAL( st_pi_str , 's');
@@ -64,6 +73,8 @@ test_func_test1( void )
 	CU_ASSERT_EQUAL( st_three_str , 's');
 	CU_ASSERT_EQUAL( st_seven_str , 's');
 	CU_ASSERT_EQUAL( st_ten_str , 's');
+	CU_ASSERT_EQUAL( st_spaced_str , 's');
+	CU_ASSERT_EQUAL( st_stripped_str , 's');
 
 
 	const char* s_space_pi = sailr_ptr_table_read_string(&table, (char*)"space_pi");
@@ -72,6 +83,8 @@ test_func_test1( void )
 	const char* s_three_str = sailr_ptr_table_read_string(&table, (char*)"three_str");
 	const char* s_seven_str = sailr_ptr_table_read_string(&table, (char*)"seven_str");
 	const char* s_ten_str = sailr_ptr_table_read_string(&table, (char*)"ten_str");
+	const char* s_spaced_str = sailr_ptr_table_read_string(&table, (char*)"spaced_str");
+	const char* s_stripped_str = sailr_ptr_table_read_string(&table, (char*)"stripped_str");
 
 	CU_ASSERT_STRING_EQUAL( s_space_pi , " 3.1415926535");
 	CU_ASSERT_STRING_EQUAL( s_pi_str , "PI is 3.1415926535");
@@ -79,6 +92,8 @@ test_func_test1( void )
 	CU_ASSERT_STRING_EQUAL( s_three_str , "3.33");
 	CU_ASSERT_STRING_EQUAL( s_seven_str , "7777777");
 	CU_ASSERT_STRING_EQUAL( s_ten_str , "10.000000");
+	CU_ASSERT_STRING_EQUAL( s_spaced_str , "    hello world    ");
+	CU_ASSERT_STRING_EQUAL( s_stripped_str , "hello world");
 
 	// Clean up
 	sailr_tree_free(ps);

@@ -44,4 +44,5 @@ call_func( vm_stack* vmstack, char* fname, int num_args, ptr_table** table )
 	}else{
         printf("ERROR: Function, %s , cannot be found. \n", fname );
     }
+//	vm_stack_display_all(vmstack);
 }

@@ -221,7 +221,7 @@ vm_stack_clean_top(vm_stack* vmstack)
 		top_item.boolean = false;
 		break;
 	case PP_IVAL:
-		if(top_item.p_record == NULL ){
+		if( vm_stack_item_is_temp( &top_item )){
 			free(*(top_item.pp_ival));
 			free(top_item.pp_ival);
 			printf("ERROR: This case should not be executed.");
@@ -229,7 +229,7 @@ vm_stack_clean_top(vm_stack* vmstack)
 		top_item.pp_ival = NULL;
 		break;
 	case PP_DVAL:
-		if(top_item.p_record == NULL ){
+		if( vm_stack_item_is_temp( &top_item )){
 			free(*(top_item.pp_dval));
 			free(top_item.pp_dval);
 			printf("ERROR: This case should not be executed.");
@@ -237,14 +237,14 @@ vm_stack_clean_top(vm_stack* vmstack)
 		top_item.pp_dval = NULL;
 		break;
 	case PP_STR:
-		if(top_item.p_record == NULL){ 
+		if( vm_stack_item_is_temp( &top_item )){ 
 			string_free(*(top_item.pp_str));
 			free(top_item.pp_str);
 		}
 		top_item.pp_str = NULL;
 		break;
 	case PP_REXP:
-		if(top_item.p_record == NULL ){
+		if( vm_stack_item_is_temp( &top_item )){
 			simple_re_free(*(top_item.pp_rexp));
 			free(top_item.pp_rexp);
 			printf("ERROR: This case should not be executed.");
@@ -331,10 +331,18 @@ vm_stack_display_item(vm_stack* vmstack, int idx)
 		DEBUG_PRINT("%04d \t%s \t%p \t%lf\n", idx, display_item_type(stack[idx].type), *(stack[idx].pp_dval), **(stack[idx].pp_dval));
 		break;
 	case PP_STR:
-		DEBUG_PRINT("%04d \t%s \t%p (ptr to str) \t%s\n", idx, display_item_type(stack[idx].type), *(stack[idx].pp_str), string_read(*(stack[idx].pp_str)));
+		DEBUG_PRINT("%04d", idx);
+		DEBUG_PRINT("\t%s", display_item_type(stack[idx].type));
+		DEBUG_PRINT("\t%p (address of ptr to str)", (stack[idx].pp_str));
+		DEBUG_PRINT("\t%p (address of str)", *(stack[idx].pp_str));
+		DEBUG_PRINT("\t%s\n", string_read(*(stack[idx].pp_str)));
 		break;
 	case PP_REXP:
-		DEBUG_PRINT("%04d \t%s \t%p (ptr to rexp) \t%s\n", idx, display_item_type(stack[idx].type), *(stack[idx].pp_rexp), simple_re_read_pattern(*(stack[idx].pp_rexp)));
+		DEBUG_PRINT("%04d", idx);
+		DEBUG_PRINT("\t%s", display_item_type(stack[idx].type));
+		DEBUG_PRINT("\t%p (address of ptr to rexp)", (stack[idx].pp_rexp));
+		DEBUG_PRINT("\t%p (address of rexp)", *(stack[idx].pp_rexp));
+		DEBUG_PRINT("\t%s\n", simple_re_read_pattern(*(stack[idx].pp_rexp)));
 		break;
 	case BOOLEAN:
 		DEBUG_PRINT("%04d \t%s \t%d \n", idx, display_item_type(stack[idx].type), stack[idx].boolean );

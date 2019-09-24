@@ -37,9 +37,7 @@ main()
 	test_comment_add_tests(testSuite);
 
 	// Run CUnit
-	/*
-	CU_console_run_tests();  // This is interacitve version  #include <CUnit/Console.h>
-	*/
+//	CU_console_run_tests();  // This is interacitve version  #include <CUnit/Console.h>
 //	CU_automated_run_tests();  // This outputs XML file. #include <CUnit/Automated.h>
 	CU_basic_run_tests();  // This prints out results on console.  #include <CUnit/Basic.h>
 

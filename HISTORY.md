@@ -219,17 +219,26 @@ make build
     + Those counter information for anonymous string and regexp are stored in the 1st element of ptr_table object.
     + The type is defined in ptr_table_info that is stored in the seed element called "_HEAD_OF_UTHASH_"
 
-## Ver 0.66 
+## Ver 0.66 (Sep.23 2019)
 
 * ptr_table now holds information whether null variable (Known but not defined) obtains type definition.
     + ptr_table_info->null_update holds this information. This does not holds which variable became defined.
 
 
+## Ver 0.67 (Sep.24 2019)
+
+* vm/func/c_func.c is updated.
+    + Previous codes created anonymous string on ptr_table every time the function returns new string even within RHS of assignment operator.
+    + The current code jsut creates temporary string on vm stack as return from function.
+    + Minor related fixes.
+
+
 ## Plan 
 
+* UTF8 support?
 * Avoid directly manipulate ptr_table's properties. Provide functions and use them.
 * Matched regular expressions also need to be cleared for every row. Provide such functionalities.
-* Some script language extension. BSD licensed language is best (e.g. Lua, mruby or Gauche??)
+* Consider some script language extension. BSD licensed language is best (e.g. Lua, mruby or Gauche??)
 * Macro to add variables for users to ptr_table.
     + When adding value to ptr_table, missing values should be taken care of.
         + Missing value should be added as nan in double.

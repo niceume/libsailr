@@ -55,6 +55,7 @@ sailr_func_print(vm_stack* vmstack, int num_args)
 	new_str = new_str2;
   }
   printf("%s", string_read(new_str));
+
   arg_list_finalize( vmstack, num_args, arglist ); // Move sp pointer & deallocate arg_list* 
   return 1;
 }
@@ -66,22 +67,28 @@ sailr_func_num_to_str(vm_stack* vmstack, int num_args , ptr_table** table)
   arg_list* arglist = arg_list_initialize( vmstack, num_args );
   arg_item* argitem = arglist; 
 
-  string_object* p_str ; 
+  string_object* p_str ;
   string_object** pp_str = (string_object**) malloc(sizeof(string_object*));
 
   if(arg_item_confirm_int(argitem)){
-    p_str = string_int2str( arg_item_int_value(argitem) );
-    pp_str = &p_str;
+    p_str = (string_object*) string_int2str( arg_item_int_value(argitem) );
+    *pp_str = p_str;  // Never do "pp_str = &p_str;"
   }else if(arg_item_confirm_double(argitem)){
     p_str = string_double2str( arg_item_double_value(argitem) );
-    pp_str = &p_str;
+    *pp_str = p_str;  // Never do "pp_str = &p_str;"
   }else{
     printf("ERROR: For argument, number shouble be specified.\n");
   }
 
-  ptr_record* pr = ptr_table_create_anonym_string(table, pp_str);
   arg_list_finalize( vmstack, num_args, arglist ); // Move sp pointer & deallocate arg_list* 
-  vm_stack_push_pp_str( vmstack , table , pr->key );
+  vm_stack_push_temp_pp_str( vmstack, pp_str);
+
+//  The following is a code previously used. This results in creating new anonymous object for each row.
+//  ptr_record* pr = ptr_table_create_anonym_string(table, pp_str);
+//  arg_list_finalize( vmstack, num_args, arglist ); // Move sp pointer & deallocate arg_list* 
+//  vm_stack_push_pp_str( vmstack , table , pr->key );
+
+  return 1;
 }
 
 int
@@ -97,12 +104,17 @@ sailr_func_str_func_ptr (vm_stack* vmstack, int num_args , ptr_table** table , s
 
   ASSIGN_STRING_PTR( tmp_str, argitem,  "ERROR: For argument, string shouble be specified.\n");
   p_str = (*str_func_ptr)( tmp_str );
-//  string_free(tmp_str); <- This code seems to remove original string??
-  pp_str = &p_str;
 
-  ptr_record* pr = ptr_table_create_anonym_string(table, pp_str);
+
+  *pp_str = p_str;  // Never do "pp_str = &p_str;"
   arg_list_finalize( vmstack, num_args, arglist ); // Move sp pointer & deallocate arg_list* 
-  vm_stack_push_pp_str( vmstack , table , pr->key );
+  vm_stack_push_temp_pp_str( vmstack, pp_str);
+
+//  The following is a code previously used. This results in creating new anonymous object for each row.
+//  ptr_record* pr = ptr_table_create_anonym_string(table, pp_str);
+//  arg_list_finalize( vmstack, num_args, arglist ); // Move sp pointer & deallocate arg_list* 
+//  vm_stack_push_pp_str( vmstack , table , pr->key );
+  return 1;
 }
 
 int
@@ -139,10 +151,10 @@ sailr_func_str_concat( vm_stack* vmstack, int num_args, ptr_table** table )
     ASSIGN_STRING_PTR( tmp_str , argitem , "ERROR: Unsupported types are specified" );
     p_str = string_concat(p_str, tmp_str);
   }
-  pp_str = &p_str;
-  ptr_record* pr = ptr_table_create_anonym_string(table, pp_str);
+  *pp_str = p_str;   // Never do "pp_str = &p_str;"
   arg_list_finalize( vmstack, num_args, arglist ); // Move sp pointer & deallocate arg_list* 
-  vm_stack_push_pp_str( vmstack , table , pr->key );
+  vm_stack_push_temp_pp_str( vmstack, pp_str);
+
   return 1;
 }
 
@@ -166,11 +178,11 @@ int sailr_func_str_repeat( vm_stack* vmstack, int num_args, ptr_table** table )
   ASSIGN_INT_VALUE( repeat_num , argitem , "ERROR: For 2nd argument, int value shouble be specified.\n" ); 
 
   p_str = string_repeat( ori_str , repeat_num );
-  pp_str = &p_str;
-
-  ptr_record* pr = ptr_table_create_anonym_string(table, pp_str);
+  *pp_str = p_str; // Never do "pp_str = &p_str;"
   arg_list_finalize( vmstack, num_args, arglist ); // Move sp pointer & deallocate arg_list* 
-  vm_stack_push_pp_str( vmstack , table , pr->key );
+  vm_stack_push_temp_pp_str( vmstack, pp_str);
+
+  return 1;
 }
 
 
@@ -197,11 +209,11 @@ int sailr_func_str_subset( vm_stack* vmstack, int num_args, ptr_table** table )
   ASSIGN_INT_VALUE( to_idx , argitem , "ERROR: For 3rd argument, int value shouble be specified.\n" ); 
 
   p_str = string_subset( ori_str , from_idx, to_idx );
-  pp_str = &p_str;
-
-  ptr_record* pr = ptr_table_create_anonym_string(table, pp_str);
+  *pp_str = p_str; // Never do "pp_str = &p_str;"
   arg_list_finalize( vmstack, num_args, arglist ); // Move sp pointer & deallocate arg_list* 
-  vm_stack_push_pp_str( vmstack , table , pr->key );
+  vm_stack_push_temp_pp_str( vmstack, pp_str);
+
+  return 1;
 }
 
 
@@ -257,10 +269,10 @@ sailr_func_rexp_matched( vm_stack* vmstack, int num_args , ptr_table** table )
 
   string_object** pp_str = (string_object**) malloc(sizeof(string_object*));
   *pp_str = str_obj;
-
-  ptr_record* pr = ptr_table_create_anonym_string(table, pp_str);
   arg_list_finalize( vmstack, num_args, arglist ); // Move sp pointer & deallocate arg_list* 
-  vm_stack_push_pp_str( vmstack , table , pr->key );
+  vm_stack_push_temp_pp_str( vmstack, pp_str);
+
+  return 1;
 }
 
 int
@@ -376,12 +388,11 @@ int sailr_func_date_format(vm_stack* vmstack, int num_args , ptr_table** table )
   ASSIGN_STRING_PTR( fmt_str , argitem , "ERROR: For 2nd argument, string shouble be specified.\n" );
 
   p_str = string_new( simple_date_format ( unix_date, (char*) string_read(fmt_str)));
-  *pp_str = p_str;
-
-  ptr_record* pr = ptr_table_create_anonym_string(table, pp_str);
+  *pp_str = p_str; // Never do "pp_str = &p_str;"
   arg_list_finalize( vmstack, num_args, arglist ); // Move sp pointer & deallocate arg_list* 
-  vm_stack_push_pp_str( vmstack , table , pr->key );
+  vm_stack_push_temp_pp_str( vmstack, pp_str);
 
+  return 1;
 }
 
 

@@ -232,10 +232,22 @@ make build
     + The current code jsut creates temporary string on vm stack as return from function.
     + Minor related fixes.
 
+## Ver 0.68 (Sep.25 2019)
+
+* vm_stack is now able to hold string encoding information. 
+    + Based on this information, vm stack is going to call appropriate string functions.
+    + Add test case for this functionality.
+* ToDo: UTF8 support in the next version. str_subset() should work for japanese language in test.
+
 
 ## Plan 
 
-* UTF8 support?
+* UTF8 support? MUltilingual support.
+    + dataEncoding, sourceEncoding, onigmoEncoding
+* Report run time error.
+    + Append line number and column number of corresponding codes to AST node.
+    + Paass the information to VM instruction.
+    + Report error with this column and line number.
 * Avoid directly manipulate ptr_table's properties. Provide functions and use them.
 * Matched regular expressions also need to be cleared for every row. Provide such functionalities.
 * Consider some script language extension. BSD licensed language is best (e.g. Lua, mruby or Gauche??)

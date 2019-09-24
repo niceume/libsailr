@@ -6,6 +6,7 @@
 #include "test_double.h" 
 #include "test_arithmetic.h"
 #include "test_string.h" 
+#include "test_encoding.h" 
 #include "test_if.h"
 #include "test_regexp.h"
 #include "test_missing.h"
@@ -27,6 +28,7 @@ main()
 	test_double_add_tests(testSuite);
 //	test_arithmetic_add_tests(testSuite);
 	test_string_add_tests(testSuite);
+	test_encoding_add_tests(testSuite);
 
 	test_if_add_tests(testSuite);
 	test_missing_add_tests(testSuite);

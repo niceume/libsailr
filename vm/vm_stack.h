@@ -8,7 +8,18 @@
 #include "simple_re/simple_re.h"
 #include "string/common_string.h"
 
+#define DEFAULT_VM_ENCODING "UTF8"
+#define MAXSTACKSIZE 1000
+
+#define JUST_A_VALUE  NULL
+#define TEMP_OBJECT  NULL
+#define NOT_ON_PTR_TABLE  NULL
+
 // Stack type and name
+// 
+// NULL_ITEM : The corresponding variable is not defined yet (type of the variable is still unknown.)
+// VOID_ITEM : When the stack item is no longer used, it is marked as VOID_ITEM.
+// INFO_ITEM : The zero-index item holds information of the vm_stack.
 
 #define VM_STACK_ITEM_NAME_TABLE \
 	Y(IVAL, "IVAL") /* The stack is holding an int. */ \
@@ -19,7 +30,8 @@
 	Y(PP_STR, "PP_STR") \
 	Y(PP_REXP, "PP_REXP") \
 	Y(NULL_ITEM, "NULL_ITEM")\
-	Y(VOID_ITEM, "VOID_ITEM")
+	Y(VOID_ITEM, "VOID_ITEM")\
+	Y(INFO_ITEM, "INFO_ITEM")
 
 #define Y(a, b) a,
 enum _ItemType {
@@ -30,6 +42,13 @@ enum _ItemType {
 typedef enum _ItemType ItemType;
 
 char* display_item_type(ItemType type);
+
+// Structure to store VM stack information
+struct _vm_stack_info{
+  const char* characterEncoding;
+  int max_size;
+};
+typedef struct _vm_stack_info vm_stack_info;
 
 // Stack structure for VM
 
@@ -43,17 +62,12 @@ struct _stack_item {
 		double** pp_dval;
 		string_object** pp_str; 
 		simple_re** pp_rexp;
-		void* ptr;
+		vm_stack_info* p_vm_stack_info;
+		void* ptr; // Used by NULL_ITEM
 	};
-    ptr_record* p_record;  /* Pointer to ptr_record. If the object is just temporary, NOT_ON_PTR_TABLE is assigned. */
+    ptr_record* p_record;  /* Pointer to ptr_record. If the object is just temporary, NOT_ON_PTR_TABLE(=NULL) is assigned. */
 };
 typedef struct _stack_item stack_item ;
-
-#define JUST_A_VALUE  NULL
-#define TEMP_OBJECT  NULL
-#define NOT_ON_PTR_TABLE  NULL
-
-#define MAXSTACKSIZE 1000
 
 struct _vm_stack{
 	int sp ; 
@@ -69,6 +83,8 @@ typedef struct _vm_stack vm_stack;
 
 // private
 vm_stack* vm_stack_init();
+int vm_stack_set_encoding(vm_stack* , const char*);
+const char* vm_stack_get_encoding(vm_stack* );
 int vm_stack_push_item( vm_stack* , stack_item* );
 int vm_stack_push_ival( vm_stack* , int );
 int vm_stack_push_dval( vm_stack* , double );
@@ -87,6 +103,7 @@ int vm_stack_fcall( vm_stack* , char* , int , ptr_table** );
 stack_item* vm_stack_pop( vm_stack* );
 int vm_stack_clean_top(vm_stack* vmstack);
 int vm_stack_clean_and_pop( vm_stack* , int n);
+int vm_stack_clean_items_from_zero_to_top( vm_stack* );
 
 bool vm_stack_item_is_temp( stack_item* item );
 void vm_stack_display_item( vm_stack*, int );

@@ -26,11 +26,26 @@ vm_stack_init()
 	stack->sp = 0;
 
 	stack_item* item = (stack_item*)malloc(sizeof(stack_item));
-	item->type = NULL_ITEM;
-	item->ptr = NULL;
+	item->type = INFO_ITEM;
+	item->p_vm_stack_info = (vm_stack_info*)malloc(sizeof(vm_stack_info));
+	item->p_vm_stack_info->characterEncoding = DEFAULT_VM_ENCODING;
+	item->p_vm_stack_info->max_size = MAXSTACKSIZE;
 
 	memcpy( &(stack->stack[stack->sp]), item, sizeof(stack_item));
 	return stack;
+}
+
+int
+vm_stack_set_encoding(vm_stack* vmstack, const char* encoding)
+{	
+    vmstack->stack[0].p_vm_stack_info->characterEncoding = encoding;
+	return 1;
+}
+
+const char*
+vm_stack_get_encoding(vm_stack* vmstack)
+{
+    return (vmstack->stack[0].p_vm_stack_info->characterEncoding);
 }
 
 
@@ -224,7 +239,7 @@ vm_stack_clean_top(vm_stack* vmstack)
 		if( vm_stack_item_is_temp( &top_item )){
 			free(*(top_item.pp_ival));
 			free(top_item.pp_ival);
-			printf("ERROR: This case should not be executed.");
+			printf("ERROR: This case should not be executed. (PP_IVAL)");
 		}
 		top_item.pp_ival = NULL;
 		break;
@@ -232,7 +247,7 @@ vm_stack_clean_top(vm_stack* vmstack)
 		if( vm_stack_item_is_temp( &top_item )){
 			free(*(top_item.pp_dval));
 			free(top_item.pp_dval);
-			printf("ERROR: This case should not be executed.");
+			printf("ERROR: This case should not be executed. (PP_DVAL)\n");
 		}
 		top_item.pp_dval = NULL;
 		break;
@@ -247,16 +262,20 @@ vm_stack_clean_top(vm_stack* vmstack)
 		if( vm_stack_item_is_temp( &top_item )){
 			simple_re_free(*(top_item.pp_rexp));
 			free(top_item.pp_rexp);
-			printf("ERROR: This case should not be executed.");
+			printf("ERROR: This case should not be executed. (PP_REXP)\n");
 		}
 		top_item.pp_rexp = NULL;
 		break;
 	case NULL_ITEM:
-		top_item.p_record == NULL;
+		top_item.p_record = NULL;
 		break;
 	case VOID_ITEM:
 		break;
+	case INFO_ITEM:
+		free(top_item.p_vm_stack_info);
+		break;
 	}
+	top_item.type = VOID_ITEM;
 	top_item.p_record = NULL;
 	DEBUG_PRINT("clean %s\n", display_item_type(top_item.type));
 }
@@ -272,6 +291,17 @@ vm_stack_clean_and_pop( vm_stack* vmstack, int n)
 	for( idx = 0 ; idx < n ; idx++ ){
 		vm_stack_clean_top(vmstack);
 		vm_stack_pop(vmstack);
+	}
+	return 1;
+}
+
+int
+vm_stack_clean_items_from_zero_to_top( vm_stack* vmstack )
+{
+	int idx = vmstack->sp;
+	while(idx >= 0){
+		vm_stack_clean_top( vmstack );
+		idx = idx - 1 ;
 	}
 	return 1;
 }
@@ -350,6 +380,12 @@ vm_stack_display_item(vm_stack* vmstack, int idx)
 	case NULL_ITEM:
 		DEBUG_PRINT("%04d \t%s %p (address on ptr_table) \n", idx, display_item_type(stack[idx].type), ((ptr_record*) stack[idx].p_record)->address );
 		break;
+	case VOID_ITEM:
+		DEBUG_PRINT("%04d This VOID_ITEM should not be displayed. This index should already be out of stack pointer.\n", idx);
+		break;
+	case INFO_ITEM:
+		DEBUG_PRINT("%04d This INFO_ITEM should not be displayed. Only for internal use.\n", idx);
+		break;
 	}
 }
 
@@ -369,6 +405,7 @@ vm_stack_end( vm_stack* vmstack ){
 		DEBUG_PRINT("CAUTION: There are some items left on virtual stack machine.\n");
 		vm_stack_display_all(vmstack);
 	}
+	vm_stack_clean_items_from_zero_to_top(vmstack);
 	vm_stack_free(vmstack);
 	DEBUG_PRINT("Virtual machine is disallocated. \n");
 }
@@ -388,8 +425,11 @@ vm_stack_is_empty( vm_stack* vmstack )
 {
 	if (vmstack->sp == 0 ){
 		return 1; // True
-	} else {
+	} else if (vmstack->sp > 0 ){
 		return 0; // False
+	} else{
+		printf("ERROR: vmstack->sp is negative value.\n");
+		return -1;
 	}
 }
 

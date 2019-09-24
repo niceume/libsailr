@@ -94,6 +94,19 @@ sailr_vm_stack_init()
 	return (vm_stack_object*) vm_stack_init();
 }
 
+int
+sailr_vm_stack_set_encoding(vm_stack_object* vmstack , const char* encoding)
+{
+	return vm_stack_set_encoding( (vm_stack*) vmstack , encoding);
+}
+
+const char*
+sailr_vm_stack_get_encoding(vm_stack_object* vmstack)
+{
+	return vm_stack_get_encoding( (vm_stack*) vmstack);
+}
+
+
 vm_inst_object*
 sailr_vm_inst_list_to_code( vm_inst_object* insts)
 {

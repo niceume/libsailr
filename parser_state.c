@@ -17,6 +17,7 @@ new_parser_state(const char* fname, ptr_table* table)
 	ps->vars = var_hash_init();
 	ps->lhsvars = var_hash_init();
 	ps->rhsvars = var_hash_init();
+	ps->rexp_encoding = SAILR_DEFAULT_REXP_ENCODING;
 	return ps;
 }
 

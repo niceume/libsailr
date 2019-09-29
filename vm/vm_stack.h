@@ -5,10 +5,11 @@
 
 #include "vm_code.h"
 #include "ptr_table.h"
+#include "helper.h"
 #include "simple_re/simple_re.h"
 #include "string/common_string.h"
 
-#define DEFAULT_VM_ENCODING "UTF8"
+#define DEFAULT_VM_CHARACTER_ENCODING  SAILR_DEFAULT_VM_CHARACTER_ENCODING
 #define MAXSTACKSIZE 1000
 
 #define JUST_A_VALUE  NULL

@@ -11,6 +11,7 @@
 typedef struct simple_re_ {
 	OnigRegexType* regexp;
 	char* pattern;
+	const char* encoding;
 	UChar* str;
 	OnigRegion* matched;
 } simple_re ;

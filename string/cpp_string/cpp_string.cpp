@@ -3,71 +3,37 @@
 #include <sstream>
 #include <algorithm>
 #include <cctype>
+#include <cstring>
 #include "stdlib.h"
 #include "cpp_string.hpp"
+#include "cpp_string_utf8.hpp"
+#include "cpp_string_latin1.hpp"
 
 cpp_object*
 cpp_string_new (const char* str)
 {
 	std::string* new_str = new std::string(str);
-	return (void*) new_str;
+	return (cpp_object*) new_str;
 }
 
 cpp_object*
 cpp_string_new_with_len(const char* str, int len)
 {
 	std::string* new_str = new std::string(str, len);
-	return (void*) new_str;
+	return (cpp_object*) new_str;
 }
 
 cpp_object*
-cpp_string_new_unescaped_string( cpp_object* obj )
+cpp_string_new_unescaped_string( cpp_object* obj , const char* encoding)
 {
 	std::string* ori_str = static_cast<std::string*>(obj);
-	std::string* new_str = new std::string();
-	std::cout << (*ori_str) << "(" << ori_str->length() << ")" << std::endl;
-
-	if (ori_str->empty()){
-		std::cout << "LENGTH is zero" << std::endl;
-		return (cpp_object*) new_str;
-	}
-
-	size_t ori_capacity = ori_str->capacity() ;
-	if(new_str->capacity() < (ori_capacity + 1)){
-		new_str->reserve(ori_capacity + 1);
-	}
-	
-	char new_char;
-	for( auto it = ori_str->begin(); it != ori_str->end(); ++it){
-		if( *it == '\\'){
-			++it;
-			if( it == ori_str->end()){
-				printf("ERROR: string litereal should not end with single backslash.");
-				break;
-;			}
-			switch (*it){
-			case 't' : new_char = '\t';
-			break;
-			case 'n' : new_char = '\n';
-			break;
-			case 'r' : new_char = '\r';
-			break;
-			case '\\' : new_char = '\\';
-			break; 
-			case '\'' : new_char = '\'';
-			break;
-			case '"' : new_char = '"';
-			break;
-			case '?' : new_char = '?';
-			break;
-			default : new_char = *it ;
-			break;
-			}
-		}else{
-			new_char = *it;
-		}
-//		std::cout << "---" << new_char << "---" << std::endl;
-		new_str->push_back(new_char) ;
+	std::string* new_str;
+	if( std::strcmp( encoding , "UTF8") == 0){
+		new_str = cpp_string_new_unescaped_string_utf8( ori_str );
+	}else if( std::strcmp( encoding , "LATIN1") == 0){
+		new_str = cpp_string_new_unescaped_string_latin1( ori_str );
+	}else{
+		new_str = cpp_string_new_unescaped_string_utf8( ori_str ); // Default: UTF8
 	}
 	return (cpp_object*) new_str;
 }
@@ -196,22 +162,19 @@ cpp_string_repeat(cpp_object* obj, int rep)
 }
 
 cpp_object*
-cpp_string_subset (cpp_object* obj, size_t from_idx , size_t to_idx )  // index starts from zero.
+cpp_string_subset (cpp_object* obj, size_t from_idx , size_t to_idx , const char* encoding )  // index starts from zero.
 {
-	std::string* cpp_str = static_cast<std::string*>(obj);
-
-	if(from_idx > to_idx ){
-		int temp_idx = to_idx;
-		to_idx = from_idx;
-		from_idx = temp_idx;
+	std::string* ori_str = static_cast<std::string*>(obj);
+	std::string* new_str;
+	if( std::strcmp( encoding , "UTF8") == 0){
+		new_str = cpp_string_subset_utf8( ori_str, from_idx, to_idx );
+	}else if( std::strcmp( encoding , "LATIN1") == 0){
+		new_str = cpp_string_subset_latin1( ori_str, from_idx, to_idx  );
+	}else{
+		new_str = cpp_string_subset_utf8( ori_str, from_idx, to_idx ); // Default: UTF8
 	}
-	if(to_idx >= cpp_str->size()){
-		to_idx = cpp_str->size() - 1;
-	}
-	std::string* new_str = new std::string( cpp_str->substr(from_idx, (to_idx - from_idx + 1 )));
-	return new_str;	
+	return (cpp_object*) new_str;
 }
-
 
 int
 cpp_string_has_char (cpp_object* obj, char c)

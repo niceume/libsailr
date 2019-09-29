@@ -237,13 +237,25 @@ make build
 * vm_stack is now able to hold string encoding information. 
     + Based on this information, vm stack is going to call appropriate string functions.
     + Add test case for this functionality.
-* ToDo: UTF8 support in the next version. str_subset() should work for japanese language in test.
+
+## Ver 0.69 (Sep. 30 2019)
+
+* UTF8 support. The following functions can deal with utf8 strings
+    + cpp_string_subset() calls appropriate functions based on encodings. (Now this fuction requires encoding.)
+        + cpp_string_subset_utf8()
+        + cpp_string_subset_latin1()
+    + cpp_string_new_unescaped_string() calls appropriate functions based on encodings. (Now this fuction requires encoding.)
+        + cpp_string_new_unescaped_string_utf8()
+        + cpp_string_new_unescaped_string_latin1()
+* vm_stack holds information how to deal with strings.
+    + calls appropriate functions.
+* parser_state object now holds source file encoding, which can be used for creating new regular expression object.
+    + regular expression object continues to hold this encoding information.
+    + string objects do not need this information. They just hold byte sequences that come from input data or source file string literals.
 
 
 ## Plan 
 
-* UTF8 support? MUltilingual support.
-    + dataEncoding, sourceEncoding, onigmoEncoding
 * Report run time error.
     + Append line number and column number of corresponding codes to AST node.
     + Paass the information to VM instruction.

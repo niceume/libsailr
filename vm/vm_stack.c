@@ -28,7 +28,7 @@ vm_stack_init()
 	stack_item* item = (stack_item*)malloc(sizeof(stack_item));
 	item->type = INFO_ITEM;
 	item->p_vm_stack_info = (vm_stack_info*)malloc(sizeof(vm_stack_info));
-	item->p_vm_stack_info->characterEncoding = DEFAULT_VM_ENCODING;
+	item->p_vm_stack_info->characterEncoding = DEFAULT_VM_CHARACTER_ENCODING;
 	item->p_vm_stack_info->max_size = MAXSTACKSIZE;
 
 	memcpy( &(stack->stack[stack->sp]), item, sizeof(stack_item));

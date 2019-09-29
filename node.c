@@ -125,10 +125,10 @@ new_node_str( string_object* str , ptr_table* table )
 }
 
 TreeNode*
-new_node_rexp( string_object* pattern , ptr_table* table )
+new_node_rexp( string_object* pattern , ptr_table* table , const char* rexp_encoding)
 {
   NEW_NODE_HEADER
-  ptr_record* record = ptr_table_create_anonym_rexp(&table, string_read(pattern), SAILR_CHAR_ENCODING );
+  ptr_record* record = ptr_table_create_anonym_rexp(&table, string_read(pattern), rexp_encoding );
   TreeNode* nd = (TreeNode*)malloc(sizeof(TreeNode));
   nd->type = NODE_REXP;
   nd->e1.rexp_key = record->key ;

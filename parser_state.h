@@ -16,6 +16,7 @@ typedef struct {
   var_hash* vars;
   var_hash* lhsvars;
   var_hash* rhsvars;
+  const char* rexp_encoding;
 } parser_state;
 
 parser_state* new_parser_state(const char* fname, ptr_table* table);

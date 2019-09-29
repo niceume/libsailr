@@ -239,7 +239,7 @@ WORD {CHAR}{CHNUMP}*
 
 
 <INITIAL,IFSTATE,ELSESTATE>\"([^\\\"]|\\.)*\"	{
-	yylval_param->str = string_new_unescaped_and_delete_ori( string_new_with_len((yytext + 1), yyleng - 2));
+	yylval_param->str = string_new_unescaped_and_delete_ori( string_new_with_len((yytext + 1), yyleng - 2), p->rexp_encoding);
 	// printf("LEXER: LIT_STR %s \n", yytext);
 	LEX_RETURN( LIT_STR );
 };

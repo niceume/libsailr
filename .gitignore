@@ -25,6 +25,10 @@ core
 /dev_env/onigmo_src/*
 /dev_env/onigmo_build/*
 
+# Ignore executable
+
+/dev_env/myparsercpp
+
 
 # Ignore build files of mingw
 

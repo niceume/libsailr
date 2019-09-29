@@ -8,7 +8,7 @@ extern "C" {
 #endif
 	cpp_object* cpp_string_new (const char*);
 	cpp_object* cpp_string_new_with_len (const char* , int);
-	cpp_object* cpp_string_new_unescaped_string(cpp_object* obj);
+	cpp_object* cpp_string_new_unescaped_string(cpp_object* ori_str, const char* encoding);
 	cpp_object* cpp_string_clone( cpp_object* );
 	cpp_object* cpp_string_int2str( int num);
 	cpp_object* cpp_string_double2str( double num);
@@ -19,7 +19,7 @@ extern "C" {
 	cpp_object* cpp_string_concat (cpp_object*, cpp_object*);
 	cpp_object** cpp_string_ptr_concat (cpp_object*, cpp_object*);
 	cpp_object* cpp_string_repeat (cpp_object*, int);
-	cpp_object* cpp_string_subset (cpp_object*, size_t, size_t );
+	cpp_object* cpp_string_subset (cpp_object*, size_t, size_t , const char* encoding);
 	int cpp_string_has_char (cpp_object*, char);
 	int cpp_string_str2int(cpp_object* obj);
 	double cpp_string_str2double(cpp_object* obj);

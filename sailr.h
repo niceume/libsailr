@@ -11,6 +11,8 @@ typedef void parser_state_object;
 
 ptr_table_object*     sailr_ptr_table_init();
 parser_state_object*  sailr_new_parser_state(const char* , ptr_table_object* );
+int                   sailr_parser_state_set_source_encoding(parser_state_object* ps , const char* source_encoding);
+const char*           sailr_parser_state_get_source_encoding(parser_state_object* ps );
 int                   sailr_construct_parser (const char* code , parser_state_object* ps); 
 int                   sailr_parser_state_free(parser_state_object* ps);
 void                  sailr_tree_dump( parser_state_object* ps ); 

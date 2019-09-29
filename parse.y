@@ -126,7 +126,7 @@ primary	: IDENT
 			}
 			| LIT_NUM				{ $$ = $1; }
 			| LIT_STR				{ $$ = new_node_str( $1 , p->ptrtable ); }
-			| LIT_REXP				{ $$ = new_node_rexp( $1 , p->ptrtable ); }
+			| LIT_REXP				{ $$ = new_node_rexp( $1 , p->ptrtable , p->rexp_encoding ); }
 			| '(' expr ')'			{ $$ = $2; }
 			| NA_NUM				{ $$ = $1; }
 

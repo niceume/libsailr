@@ -19,12 +19,14 @@ TARGET = libsailr.a
 
 SRCS=$(filter-out y.tab.c lex.yy.c, $(wildcard *.c)) $(wildcard vm/*.c) 
 OBJS:=$(SRCS:.c=.o) parse.o lex.o
-OBJS_STR:= string/common_string.o string/cpp_string.o
+SRCS_CPP_STR:=$(wildcard string/cpp_string/*.cpp)
+OBJS_CPP_STR:=$(SRCS_CPP_STR:.cpp=.o) 
+OBJS_STR:= string/common_string.o 
 OBJS_RE:= simple_re/simple_re.o
 OBJS_DATE:= simple_date/simple_date.o simple_date/cpp_date.o
 SRCS_CFUNC:= $(wildcard vm/func/c_func/*.c)
 OBJS_CFUNC:=$(SRCS_CFUNC:.c=.o)
-DEPS:=$(OBJS:.o=.d) $(OBJS_STR:.o=.d) $(OBJS_RE:.o=.d) $(OBJS_DATE:.o=.d) $(OBJS_CFUNC:.o=.d)
+DEPS:=$(OBJS:.o=.d) $(OBJS_STR:.o=.d) $(OBJS_RE:.o=.d) $(OBJS_DATE:.o=.d) $(OBJS_CFUNC:.o=.d) $(OBJS_CPP_STR:.o=.d)
 
 # List "objfile depends on source and header"
 -include $(DEPS)
@@ -33,8 +35,8 @@ DEPS:=$(OBJS:.o=.d) $(OBJS_STR:.o=.d) $(OBJS_RE:.o=.d) $(OBJS_DATE:.o=.d) $(OBJS
 
 build : parse.o lex.o  $(TARGET) 
 
-$(TARGET) : $(OBJS)  $(OBJS_STR)  $(OBJS_RE) $(OBJS_DATE) $(OBJS_CFUNC)
-	$(AR) $(TARGET) $(OBJS) $(OBJS_STR) $(OBJS_RE) $(OBJS_DATE) $(OBJS_CFUNC)
+$(TARGET) : $(OBJS) $(OBJS_CPP_STR) $(OBJS_STR)  $(OBJS_RE) $(OBJS_DATE) $(OBJS_CFUNC)
+	$(AR) $(TARGET) $(OBJS) $(OBJS_CPP_STR) $(OBJS_STR) $(OBJS_RE) $(OBJS_DATE) $(OBJS_CFUNC)
 
 # yacc creates y.tab.c. -d => y.tab.h. -v => y.output.
 
@@ -57,7 +59,7 @@ lex.o : lex.l  # lex.yy.c is includgin y.tab.h
 vm/%.o : vm/%.c 
 	$(CC) -c -o $@ $<  $(CFLAGS) -I. -MMD -MP
 
-string/cpp_string.o : string/cpp_string.cpp
+string/cpp_string/%.o : string/cpp_string/%.cpp
 	$(CPPC) -c -o $@ $< $(CPPCFLAGS) -MMD -MP 
 
 string/%.o : string/%.c 
@@ -82,6 +84,7 @@ clean :
 	$(RM) *.o
 	$(RM) vm/*.o
 	$(RM) string/*.o
+	$(RM) string/cpp_string/*.o
 	$(RM) simple_re/*.o
 	$(RM) simple_date/*.o
 	$(RM) vm/func/c_func/*.o
@@ -89,6 +92,7 @@ clean :
 	$(RM) *.d
 	$(RM) vm/*.d
 	$(RM) string/*.d
+	$(RM) string/cpp_string/*.d
 	$(RM) simple_re/*.d
 	$(RM) simple_date/*.d
 	$(RM) vm/func/c_func/*.d
@@ -97,6 +101,7 @@ clean :
 	$(RM) *.so
 	$(RM) vm/*.so
 	$(RM) string/*.so
+	$(RM) string/cpp_string/*.so
 	$(RM) simple_re/*.so
 	$(RM) simple_date/*.so
 	$(RM) vm/func/c_func/*.so
@@ -104,6 +109,7 @@ clean :
 	$(RM) *.a
 	$(RM) vm/*.a
 	$(RM) string/*.a
+	$(RM) string/cpp_string/*.a
 	$(RM) simple_re/*.a
 	$(RM) simple_date/*.a
 	$(RM) vm/func/c_func/*.a
@@ -111,6 +117,7 @@ clean :
 	$(RM) a.out
 	$(RM) vm/a.out
 	$(RM) string/a.out
+	$(RM) string/cpp_string/a.out
 	$(RM) simple_re/a.out
 	$(RM) simple_date/a.out
 	$(RM) vm/func/c_func/a.out
@@ -118,6 +125,7 @@ clean :
 	$(RM) core
 	$(RM) vm/core
 	$(RM) string/core
+	$(RM) string/cpp_string/core
 	$(RM) simple_re/core
 	$(RM) simple_date/core
 	$(RM) vm/func/c_func/core

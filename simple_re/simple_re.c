@@ -37,6 +37,7 @@ simple_re_compile( const char* pattern, const char* enc )
 	strncpy( copy_pattern, pattern, strlen(pattern));
 	copy_pattern[strlen(pattern)] = '\0';
 	new_re->pattern = copy_pattern;
+	new_re->encoding = enc;
 	new_re->str = NULL;
 	new_re->matched = NULL;
 	return new_re;

@@ -208,7 +208,7 @@ int sailr_func_str_subset( vm_stack* vmstack, int num_args, ptr_table** table )
 
   ASSIGN_INT_VALUE( to_idx , argitem , "ERROR: For 3rd argument, int value shouble be specified.\n" ); 
 
-  p_str = string_subset( ori_str , from_idx, to_idx );
+  p_str = string_subset( ori_str , from_idx, to_idx , vm_stack_get_encoding(vmstack));
   *pp_str = p_str; // Never do "pp_str = &p_str;"
   arg_list_finalize( vmstack, num_args, arglist ); // Move sp pointer & deallocate arg_list* 
   vm_stack_push_temp_pp_str( vmstack, pp_str);

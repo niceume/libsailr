@@ -47,6 +47,19 @@ sailr_new_parser_state(const char* fname, ptr_table_object* table)
 }
 
 int
+sailr_parser_state_set_source_encoding(parser_state_object* ps , const char* source_encoding)
+{
+	((parser_state*) ps)->rexp_encoding = source_encoding;
+	return 1;
+}
+
+const char*
+sailr_parser_state_get_source_encoding(parser_state_object* ps )
+{
+	return (((parser_state*) ps)->rexp_encoding);
+}
+
+int
 sailr_construct_parser (const char* code , parser_state_object* ps)
 {
 	/* %option reentrant in lex.l enables reentrant scanner (=tokenizer) */

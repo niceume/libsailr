@@ -35,6 +35,7 @@ test_rexgexp_test1( void )
 	// Parser Initialization
 	ptr_table_object* table = sailr_ptr_table_init() ;
 	parser_state_object* ps = sailr_new_parser_state ("souce from string literal", table);
+	sailr_parser_state_set_source_encoding( ps , "UTF-8"); // Optional
 	sailr_construct_parser( code, ps ); 
 
 

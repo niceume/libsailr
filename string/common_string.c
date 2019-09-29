@@ -15,9 +15,9 @@ string_new_with_len(const c_char* str, int len)
 }
 
 string_object*
-string_new_unescaped_and_delete_ori(string_object* str)
+string_new_unescaped_and_delete_ori(string_object* str, const char* encoding)
 {
-	string_object* new_str = cpp_string_new_unescaped_string( str );
+	string_object* new_str = cpp_string_new_unescaped_string( str , encoding);
 	string_free( str );
 	return new_str;
 }
@@ -90,9 +90,9 @@ string_repeat( string_object* str, int rep )
 }
 
 string_object*
-string_subset( string_object* str, size_t from_idx, size_t to_idx)
+string_subset( string_object* str, size_t from_idx, size_t to_idx, const char* encoding)
 {
-	return cpp_string_subset( str, from_idx, to_idx );
+	return cpp_string_subset( str, from_idx, to_idx, encoding );
 }
 
 

@@ -95,12 +95,14 @@ vm_stack_store_val(vm_stack* vmstack)
 				PTR_TABLE_NULL_UPDATED(left_record);
 				left_record->type = PTR_REXP;
 				if( vm_stack_item_is_temp(rvalue) ){ // If rvalue is temporary, use the object.
+					printf("LVALUE is unknown and rvalue is temp rexp.\n");
 					left_record->address = (simple_re*) *(rvalue->pp_rexp);
 					free(rvalue->pp_rexp);
 					rvalue->pp_rexp = NULL;
 					rvalue->type = VOID_ITEM;
 				}else{  // If rvalue is not tempoary, create a new regular expression object and manage it 
-					left_record->address = (simple_re*) simple_re_compile( (*(rvalue->pp_rexp))->pattern , SAILR_CHAR_ENCODING );
+					// printf("LVALUE is unknown and rvalue is ptr_table rexp.\n");
+					left_record->address = (simple_re*) simple_re_compile( (*(rvalue->pp_rexp))->pattern , (*(rvalue->pp_rexp))->encoding );
 				}
 				left_record->gc = GC_YES;
 			}else{

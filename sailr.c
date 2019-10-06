@@ -152,26 +152,26 @@ sailr_vm_exec_code( vm_inst_object* code , int num_insts , ptr_table_object* tab
 }
 
 ptr_record_object*
-sailr_ptr_table_create_int_from_ptr(ptr_table_object** table, char* key, int** i_pp, double** d_pp)
+sailr_ptr_table_create_int_from_ptr(ptr_table_object** table, const char* key, int** i_pp, double** d_pp)
 {
 	return (ptr_record_object*) ptr_table_create_int_from_ptr((ptr_table**)table, key, i_pp, d_pp);
 }
 
 ptr_record_object*
-sailr_ptr_table_create_double_from_ptr(ptr_table_object** table, char* key, double** d_pp, int** i_pp)
+sailr_ptr_table_create_double_from_ptr(ptr_table_object** table, const char* key, double** d_pp, int** i_pp)
 {
 	return (ptr_record_object*) ptr_table_create_double_from_ptr((ptr_table**)table, key, d_pp, i_pp);
 }
 
 ptr_record_object*
-sailr_ptr_table_create_string_from_ptr(ptr_table_object** table, char* key, string_type_object** pp)
+sailr_ptr_table_create_string_from_ptr(ptr_table_object** table, const char* key, string_type_object** pp)
 {
 	return (ptr_record_object*) ptr_table_create_string_from_ptr((ptr_table**)table, key, (string_object**)pp);
 
 }
 
 ptr_record_object*
-sailr_ptr_table_create_null(ptr_table_object** table, char* key)
+sailr_ptr_table_create_null(ptr_table_object** table, const char* key)
 {
 	return (ptr_record_object*) ptr_table_create_null((ptr_table**)table, key);
 }
@@ -186,7 +186,7 @@ sailr_ptr_table_create_anonym_string(ptr_table_object** table, const char* str)
 
 
 char
-sailr_ptr_table_get_type(ptr_table_object** table, char* key)
+sailr_ptr_table_get_type(ptr_table_object** table, const char* key)
 {
 	ptr_record* record = ptr_table_find((ptr_table**) table, key);
 	switch(record->type){
@@ -212,49 +212,49 @@ sailr_ptr_table_get_type(ptr_table_object** table, char* key)
 	}
 }
 
-int sailr_ptr_record_is_ptr_null(ptr_table_object** table, char* key)
+int sailr_ptr_record_is_ptr_null(ptr_table_object** table, const char* key)
 {
 	return ptr_record_is_ptr_null((ptr_table**) table, key);
 }
 
 void**
-sailr_ptr_table_get_pptr(ptr_table_object** table, char* key)
+sailr_ptr_table_get_pptr(ptr_table_object** table, const char* key)
 {
 	return ptr_table_get_pptr((ptr_table**) table, key);
 }
 
 
 string_type_object*
-sailr_ptr_table_get_pp_string(ptr_table_object** table, char* key){
+sailr_ptr_table_get_pp_string(ptr_table_object** table, const char* key){
   return (string_type_object*) ptr_table_get_pp_string((ptr_table**)table, key);
 }
 
 const char*
-sailr_ptr_table_read_string(ptr_table_object** table, char* key){
+sailr_ptr_table_read_string(ptr_table_object** table, const char* key){
   return  ptr_table_read_string((ptr_table**)table, key);
 }
 
 
 int
-sailr_ptr_table_update_int(ptr_table_object** table, char* key, int ival)
+sailr_ptr_table_update_int(ptr_table_object** table, const char* key, int ival)
 {
 	return ptr_table_update_int((ptr_table**) table, key, ival);
 }
 
 int
-sailr_ptr_table_update_double(ptr_table_object** table, char* key, double dval)
+sailr_ptr_table_update_double(ptr_table_object** table, const char* key, double dval)
 {
 	return ptr_table_update_double((ptr_table**) table, key, dval);
 }
 
 int
-sailr_ptr_table_update_string(ptr_table_object** table, char* key, string_type_object** str)
+sailr_ptr_table_update_string(ptr_table_object** table, const char* key, string_type_object** str)
 {
 	return ptr_table_update_string((ptr_table**) table, key, (string_object**) str);
 }
 
 int
-sailr_ptr_table_del_records_except(ptr_table_object** table, char** keys, int key_num )
+sailr_ptr_table_del_records_except(ptr_table_object** table, const char** keys, int key_num )
 {
 	return ptr_table_del_records_except((ptr_table**)table, keys, key_num );
 }

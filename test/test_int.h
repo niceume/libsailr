@@ -34,11 +34,11 @@ test_int_test1( void )
 
 
 	// Add variables
-	sailr_ptr_table_create_null(&table, (char*)"age" );
-	sailr_ptr_table_create_null(&table, (char*)"bw" );
-	sailr_ptr_table_create_null(&table, (char*)"height" );
-	sailr_ptr_table_create_null(&table, (char*)"bmi" );
-	sailr_ptr_table_create_null(&table, (char*)"obesity" );
+	sailr_ptr_table_create_null(&table, "age" );
+	sailr_ptr_table_create_null(&table, "bw" );
+	sailr_ptr_table_create_null(&table, "height" );
+	sailr_ptr_table_create_null(&table, "bmi" );
+	sailr_ptr_table_create_null(&table, "obesity" );
 
 	// Creating virtual machine codes
 	vm_inst_object* inst_list = sailr_gen_code( ps, table); // VM Code is generated.
@@ -52,11 +52,11 @@ test_int_test1( void )
 	// Assert
 	// sailr_ptr_table_show_all(&table);
 
-	char st_age = sailr_ptr_table_get_type(&table, (char*)"age");
-	char st_bw = sailr_ptr_table_get_type(&table, (char*)"bw");
-	char st_height = sailr_ptr_table_get_type(&table, (char*)"height"); 
-	char st_bmi = sailr_ptr_table_get_type(&table, (char*)"bmi");
-	char st_obesity = sailr_ptr_table_get_type(&table, (char*)"obesity");
+	char st_age = sailr_ptr_table_get_type(&table, "age");
+	char st_bw = sailr_ptr_table_get_type(&table, "bw");
+	char st_height = sailr_ptr_table_get_type(&table, "height"); 
+	char st_bmi = sailr_ptr_table_get_type(&table, "bmi");
+	char st_obesity = sailr_ptr_table_get_type(&table, "obesity");
 
 	CU_ASSERT_EQUAL( st_age , 'i');
 	CU_ASSERT_EQUAL( st_bw , 'i');
@@ -64,11 +64,11 @@ test_int_test1( void )
 	CU_ASSERT_EQUAL( st_bmi , 'd');
 	CU_ASSERT_EQUAL( st_obesity, 'i');
 
-	int s_age = *((int*) *sailr_ptr_table_get_pptr(&table, (char*)"age"));
-	int s_bw = *((int*) *sailr_ptr_table_get_pptr(&table, (char*)"bw"));
-	int s_height = *((int*) *sailr_ptr_table_get_pptr(&table, (char*)"height")); 
-	double s_bmi = *((double*) *sailr_ptr_table_get_pptr(&table, (char*)"bmi"));
-	int s_obesity = *((int*) *sailr_ptr_table_get_pptr(&table, (char*)"obesity"));
+	int s_age = *((int*) *sailr_ptr_table_get_pptr(&table, "age"));
+	int s_bw = *((int*) *sailr_ptr_table_get_pptr(&table, "bw"));
+	int s_height = *((int*) *sailr_ptr_table_get_pptr(&table, "height")); 
+	double s_bmi = *((double*) *sailr_ptr_table_get_pptr(&table, "bmi"));
+	int s_obesity = *((int*) *sailr_ptr_table_get_pptr(&table, "obesity"));
 
 	CU_ASSERT_EQUAL( s_age , 37);
 	CU_ASSERT_EQUAL( s_bw , 90);

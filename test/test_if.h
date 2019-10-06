@@ -38,10 +38,10 @@ test_if_test1( void )
 
 
 	// Add variables
-	sailr_ptr_table_create_null(&table, (char*)"greeting1" );
-	sailr_ptr_table_create_null(&table, (char*)"time" );
-	sailr_ptr_table_create_null(&table, (char*)"country" );
-	sailr_ptr_table_create_null(&table, (char*)"message1" );
+	sailr_ptr_table_create_null(&table, "greeting1" );
+	sailr_ptr_table_create_null(&table, "time" );
+	sailr_ptr_table_create_null(&table, "country" );
+	sailr_ptr_table_create_null(&table, "message1" );
 
 	// Creating virtual machine codes
 	vm_inst_object* inst_list = sailr_gen_code( ps, table); // VM Code is generated.
@@ -55,20 +55,20 @@ test_if_test1( void )
 	// Assert
 	// sailr_ptr_table_show_all(&table);
 
-	char st_greeting1 = sailr_ptr_table_get_type(&table, (char*)"greeting1");
-	char st_time = sailr_ptr_table_get_type(&table, (char*)"time");
-	char st_country = sailr_ptr_table_get_type(&table, (char*)"country");
-	char st_message1 = sailr_ptr_table_get_type(&table, (char*)"message1");
+	char st_greeting1 = sailr_ptr_table_get_type(&table, "greeting1");
+	char st_time = sailr_ptr_table_get_type(&table, "time");
+	char st_country = sailr_ptr_table_get_type(&table, "country");
+	char st_message1 = sailr_ptr_table_get_type(&table, "message1");
 
 	CU_ASSERT_EQUAL( st_greeting1 , 's');
 	CU_ASSERT_EQUAL( st_time , 'i');
 	CU_ASSERT_EQUAL( st_country , 's');
 	CU_ASSERT_EQUAL( st_message1 , 's');
 
-	const char* s_greeting1 = sailr_ptr_table_read_string(&table, (char*)"greeting1");
-	int s_time = *((int*) *sailr_ptr_table_get_pptr(&table, (char*)"time"));
-	const char* s_country = sailr_ptr_table_read_string(&table, (char*)"country"); 
-	const char* s_message1 = sailr_ptr_table_read_string(&table, (char*)"message1"); 
+	const char* s_greeting1 = sailr_ptr_table_read_string(&table, "greeting1");
+	int s_time = *((int*) *sailr_ptr_table_get_pptr(&table, "time"));
+	const char* s_country = sailr_ptr_table_read_string(&table, "country"); 
+	const char* s_message1 = sailr_ptr_table_read_string(&table, "message1"); 
 
 	CU_ASSERT_STRING_EQUAL( s_greeting1 , "Hallo");
 	CU_ASSERT_EQUAL( s_time , 15 );

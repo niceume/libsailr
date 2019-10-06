@@ -28,10 +28,10 @@ test_encoding_test1( void )
 
 
 	// Add variables
-	sailr_ptr_table_create_null(&table, (char*)"hello_world_en" );
-	sailr_ptr_table_create_null(&table, (char*)"hello_world_jp" );
-	sailr_ptr_table_create_null(&table, (char*)"hello_en" );
-	sailr_ptr_table_create_null(&table, (char*)"hello_jp" );
+	sailr_ptr_table_create_null(&table, "hello_world_en" );
+	sailr_ptr_table_create_null(&table, "hello_world_jp" );
+	sailr_ptr_table_create_null(&table, "hello_en" );
+	sailr_ptr_table_create_null(&table, "hello_jp" );
 
 	// Creating virtual machine codes
 	vm_inst_object* inst_list = sailr_gen_code( ps, table); // VM Code is generated.
@@ -53,20 +53,20 @@ test_encoding_test1( void )
 	CU_ASSERT_STRING_EQUAL( ori_encoding , "UTF8");
 	CU_ASSERT_STRING_EQUAL( latin1_encoding , "LATIN1");
 
-	char st_hello_world_en = sailr_ptr_table_get_type(&table, (char*)"hello_world_en");
-	char st_hello_world_jp = sailr_ptr_table_get_type(&table, (char*)"hello_world_jp");
-	char st_hello_en = sailr_ptr_table_get_type(&table, (char*)"hello_en"); 
-	char st_hello_jp = sailr_ptr_table_get_type(&table, (char*)"hello_jp");
+	char st_hello_world_en = sailr_ptr_table_get_type(&table, "hello_world_en");
+	char st_hello_world_jp = sailr_ptr_table_get_type(&table, "hello_world_jp");
+	char st_hello_en = sailr_ptr_table_get_type(&table, "hello_en"); 
+	char st_hello_jp = sailr_ptr_table_get_type(&table, "hello_jp");
 
 	CU_ASSERT_EQUAL( st_hello_world_en , 's');
 	CU_ASSERT_EQUAL( st_hello_world_jp , 's');
 	CU_ASSERT_EQUAL( st_hello_en , 's');
 	CU_ASSERT_EQUAL( st_hello_jp , 's');
 
-	const char* s_hello_world_en = sailr_ptr_table_read_string(&table, (char*)"hello_world_en");
-	const char* s_hello_world_jp = sailr_ptr_table_read_string(&table, (char*)"hello_world_jp");
-	const char* s_hello_en =  sailr_ptr_table_read_string(&table, (char*)"hello_en"); 
-	const char* s_hello_jp =  sailr_ptr_table_read_string(&table, (char*)"hello_jp");
+	const char* s_hello_world_en = sailr_ptr_table_read_string(&table, "hello_world_en");
+	const char* s_hello_world_jp = sailr_ptr_table_read_string(&table, "hello_world_jp");
+	const char* s_hello_en =  sailr_ptr_table_read_string(&table, "hello_en"); 
+	const char* s_hello_jp =  sailr_ptr_table_read_string(&table, "hello_jp");
 
 	CU_ASSERT_STRING_EQUAL( s_hello_world_en , "Hello World");
 	CU_ASSERT_STRING_EQUAL( s_hello_world_jp , "こんにちは世界");

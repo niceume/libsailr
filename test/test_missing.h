@@ -69,15 +69,15 @@ test_missing_test1( void )
 
 
 	// Add variables
-	sailr_ptr_table_create_null(&table, (char*)"us_pop" );
-	sailr_ptr_table_create_null(&table, (char*)"phil_pop" );
-	sailr_ptr_table_create_null(&table, (char*)"mars_pop" );
-	sailr_ptr_table_create_null(&table, (char*)"mars_us_ratio" );
-	sailr_ptr_table_create_null(&table, (char*)"mars_phil_ratio" );
-	sailr_ptr_table_create_null(&table, (char*)"us_mars_ratio" );
-	sailr_ptr_table_create_null(&table, (char*)"message1" );
-	sailr_ptr_table_create_null(&table, (char*)"message2" );
-	sailr_ptr_table_create_null(&table, (char*)"message.us.mars.ratio" );
+	sailr_ptr_table_create_null(&table, "us_pop" );
+	sailr_ptr_table_create_null(&table, "phil_pop" );
+	sailr_ptr_table_create_null(&table, "mars_pop" );
+	sailr_ptr_table_create_null(&table, "mars_us_ratio" );
+	sailr_ptr_table_create_null(&table, "mars_phil_ratio" );
+	sailr_ptr_table_create_null(&table, "us_mars_ratio" );
+	sailr_ptr_table_create_null(&table, "message1" );
+	sailr_ptr_table_create_null(&table, "message2" );
+	sailr_ptr_table_create_null(&table, "message.us.mars.ratio" );
 
 	// Creating virtual machine codes
 	vm_inst_object* inst_list = sailr_gen_code( ps, table); // VM Code is generated.
@@ -91,15 +91,15 @@ test_missing_test1( void )
 	// Assert
 	// sailr_ptr_table_show_all(&table);
 
-	char st_us_pop = sailr_ptr_table_get_type(&table, (char*)"us_pop");
-	char st_phil_pop = sailr_ptr_table_get_type(&table, (char*)"phil_pop");
-	char st_mars_pop = sailr_ptr_table_get_type(&table, (char*)"mars_pop"); 
-	char st_mars_us_ratio = sailr_ptr_table_get_type(&table, (char*)"mars_us_ratio");
-	char st_mars_phil_ratio = sailr_ptr_table_get_type(&table, (char*)"mars_phil_ratio");
-	char st_us_mars_ratio = sailr_ptr_table_get_type(&table, (char*)"us_mars_ratio");
-	char st_message1 = sailr_ptr_table_get_type(&table, (char*)"message1");
-	char st_message2 = sailr_ptr_table_get_type(&table, (char*)"message2");
-	char st_message3 = sailr_ptr_table_get_type(&table, (char*)"message.us.mars.ratio");
+	char st_us_pop = sailr_ptr_table_get_type(&table, "us_pop");
+	char st_phil_pop = sailr_ptr_table_get_type(&table, "phil_pop");
+	char st_mars_pop = sailr_ptr_table_get_type(&table, "mars_pop"); 
+	char st_mars_us_ratio = sailr_ptr_table_get_type(&table, "mars_us_ratio");
+	char st_mars_phil_ratio = sailr_ptr_table_get_type(&table, "mars_phil_ratio");
+	char st_us_mars_ratio = sailr_ptr_table_get_type(&table, "us_mars_ratio");
+	char st_message1 = sailr_ptr_table_get_type(&table, "message1");
+	char st_message2 = sailr_ptr_table_get_type(&table, "message2");
+	char st_message3 = sailr_ptr_table_get_type(&table, "message.us.mars.ratio");
 
 	CU_ASSERT_EQUAL( st_us_pop , 'd');
 	CU_ASSERT_EQUAL( st_phil_pop , 'i');
@@ -111,17 +111,17 @@ test_missing_test1( void )
 	CU_ASSERT_EQUAL( st_message2, 's');
 	CU_ASSERT_EQUAL( st_message3, 's');
 
-	double s_us_pop = *((double*) *sailr_ptr_table_get_pptr(&table, (char*)"us_pop"));
-	int s_phil_pop = *((int*) *sailr_ptr_table_get_pptr(&table, (char*)"phil_pop"));
-	double s_mars_pop = *((double*) *sailr_ptr_table_get_pptr(&table, (char*)"mars_pop")); 
-	double s_mars_us_ratio = *((double*) *sailr_ptr_table_get_pptr(&table, (char*)"mars_us_ratio"));
-	double s_mars_phil_ratio = *((double*) *sailr_ptr_table_get_pptr(&table, (char*)"mars_phil_ratio"));
-	double s_us_mars_ratio = *((double*) *sailr_ptr_table_get_pptr(&table, (char*)"us_mars_ratio"));
-	const char* s_message1 = sailr_ptr_table_read_string(&table, (char*)"message1");
-	const char* s_message2 = sailr_ptr_table_read_string(&table, (char*)"message2");
-	const char* s_message3 = sailr_ptr_table_read_string(&table, (char*)"message.us.mars.ratio"); 
+	double s_us_pop = *((double*) *sailr_ptr_table_get_pptr(&table, "us_pop"));
+	int s_phil_pop = *((int*) *sailr_ptr_table_get_pptr(&table, "phil_pop"));
+	double s_mars_pop = *((double*) *sailr_ptr_table_get_pptr(&table, "mars_pop")); 
+	double s_mars_us_ratio = *((double*) *sailr_ptr_table_get_pptr(&table, "mars_us_ratio"));
+	double s_mars_phil_ratio = *((double*) *sailr_ptr_table_get_pptr(&table, "mars_phil_ratio"));
+	double s_us_mars_ratio = *((double*) *sailr_ptr_table_get_pptr(&table, "us_mars_ratio"));
+	const char* s_message1 = sailr_ptr_table_read_string(&table, "message1");
+	const char* s_message2 = sailr_ptr_table_read_string(&table, "message2");
+	const char* s_message3 = sailr_ptr_table_read_string(&table, "message.us.mars.ratio"); 
 
-	double nan_value = sqrt(-1);
+//	double nan_value = sqrt(-1);
 //	printf("nan value is %f \n", nan_value);
 	CU_ASSERT_DOUBLE_EQUAL( s_us_pop , 3.3, 0.01 );
 	CU_ASSERT_EQUAL( s_phil_pop , 1 );

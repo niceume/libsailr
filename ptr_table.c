@@ -28,7 +28,7 @@ ptr_table_init (){
 
 // type specified should be PTR_INT, PTR_DBL, PTR_STR or PTR_NULL
 ptr_record*
-ptr_table_add (ptr_table** table, char* key, void** address, PtrType type, GCReq gc )
+ptr_table_add (ptr_table** table, const char* key, void** address, PtrType type, GCReq gc )
 {
 	ptr_record * result = NULL;
 	result = ptr_table_find (table, key);
@@ -60,7 +60,7 @@ ptr_table_add (ptr_table** table, char* key, void** address, PtrType type, GCReq
 }
 
 ptr_record*
-ptr_table_create_int(ptr_table** table, char* key, int ival)
+ptr_table_create_int(ptr_table** table, const char* key, int ival)
 {
 	ptr_record* result = NULL;
 	int* new = (int*)malloc(sizeof(int));
@@ -70,7 +70,7 @@ ptr_table_create_int(ptr_table** table, char* key, int ival)
 }
 
 ptr_record*
-ptr_table_create_int_from_ptr(ptr_table** table, char* key, int** iptr, double** dptr)
+ptr_table_create_int_from_ptr(ptr_table** table, const char* key, int** iptr, double** dptr)
 {
 	ptr_record* result = NULL;
 	result = ptr_table_add(table, key, (void**) iptr, PTR_INT, GC_NO);
@@ -79,7 +79,7 @@ ptr_table_create_int_from_ptr(ptr_table** table, char* key, int** iptr, double**
 }
 
 int
-ptr_table_update_int(ptr_table** table, char* key, int ival)
+ptr_table_update_int(ptr_table** table, const char* key, int ival)
 {
 	ptr_record* result = ptr_table_find(table, key);
 	memcpy((int*) result->address , &ival, sizeof(int));
@@ -87,7 +87,7 @@ ptr_table_update_int(ptr_table** table, char* key, int ival)
 }
 
 string_object*
-ptr_table_get_pp_string(ptr_table** table, char* key)
+ptr_table_get_pp_string(ptr_table** table, const char* key)
 {
   ptr_record* result = ptr_table_find(table, key);
   void* ptr_address = result->address;
@@ -95,7 +95,7 @@ ptr_table_get_pp_string(ptr_table** table, char* key)
 }
 
 const char*
-ptr_table_read_string(ptr_table** table, char* key)
+ptr_table_read_string(ptr_table** table, const char* key)
 {
   ptr_record* result = ptr_table_find(table, key);
   void* ptr_address = result->address;
@@ -104,7 +104,7 @@ ptr_table_read_string(ptr_table** table, char* key)
 }
 
 ptr_record*
-ptr_table_create_double(ptr_table** table, char* key, double dval)
+ptr_table_create_double(ptr_table** table, const char* key, double dval)
 {
 	ptr_record* result = NULL;
 	double* new = (double*)malloc(sizeof(double));
@@ -114,7 +114,7 @@ ptr_table_create_double(ptr_table** table, char* key, double dval)
 }
 
 ptr_record*
-ptr_table_create_double_from_ptr(ptr_table** table, char* key, double** dptr, int** iptr)
+ptr_table_create_double_from_ptr(ptr_table** table, const char* key, double** dptr, int** iptr)
 {
 	ptr_record* result = NULL;
 	result = ptr_table_add(table, key, (void**) dptr, PTR_DBL, GC_NO);
@@ -123,7 +123,7 @@ ptr_table_create_double_from_ptr(ptr_table** table, char* key, double** dptr, in
 }
 
 int
-ptr_table_update_double(ptr_table** table, char* key, double dval)
+ptr_table_update_double(ptr_table** table, const char* key, double dval)
 {
 	ptr_record* result = ptr_table_find(table, key);
 	memcpy((double*) result->address , &dval, sizeof(double));
@@ -166,7 +166,7 @@ create_new_str_key(ptr_table** table){
 	char* new_str = (char *)malloc(sizeof(char)*16);
 	ptr_table_info* info = (ptr_table_info*) ((*table)->address) ;
 	info->str_counter = (info->str_counter) + 1;
-    char* prefix = (char*) "STR%012d";
+    const char* prefix = "STR%012d";
 	sprintf(new_str, prefix , info->str_counter);
 	return new_str ; 
 }
@@ -176,7 +176,7 @@ create_new_rexp_key(ptr_table** table){
 	char* new_str = (char *)malloc(sizeof(char)*16);
 	ptr_table_info* info = (ptr_table_info*) ((*table)->address) ;
 	info->rexp_counter = (info->rexp_counter) + 1;
-    char* prefix = (char*) "REXP%011d";
+    const char* prefix = "REXP%011d";
 	sprintf(new_str, prefix , info->rexp_counter);
 	return new_str ; 
 }
@@ -193,7 +193,7 @@ ptr_table_create_anonym_string(ptr_table** table, string_object** strptr)
 }
 
 ptr_record*
-ptr_table_create_string(ptr_table** table, char* key, string_object** strptr)
+ptr_table_create_string(ptr_table** table, const char* key, string_object** strptr)
 {
 	ptr_record* new_ptr_record;
 	new_ptr_record = ptr_table_add(table, key, (void**)strptr, PTR_STR, GC_NO);
@@ -201,14 +201,14 @@ ptr_table_create_string(ptr_table** table, char* key, string_object** strptr)
 }
 
 ptr_record*
-ptr_table_create_string_from_ptr(ptr_table** table, char* key, string_object** strptr)
+ptr_table_create_string_from_ptr(ptr_table** table, const char* key, string_object** strptr)
 {
 	ptr_record* result = ptr_table_create_string(table, key, strptr);
 	return result;
 }
 
 int
-ptr_table_update_string(ptr_table** table, char* key, string_object** strptr)
+ptr_table_update_string(ptr_table** table, const char* key, string_object** strptr)
 {
     ptr_record* to_be_updated = ptr_table_find(table, key);
     if(to_be_updated->type != PTR_STR)
@@ -240,7 +240,7 @@ ptr_table_create_anonym_rexp(ptr_table** table, const char* pattern, const char*
 }
 
 ptr_record*
-ptr_table_create_null(ptr_table** table, char* key)
+ptr_table_create_null(ptr_table** table, const char* key)
 {
 	ptr_record* result = NULL;
     void** ppv = NULL;
@@ -249,7 +249,7 @@ ptr_table_create_null(ptr_table** table, char* key)
 }
 
 int
-ptr_table_del_record(ptr_table** table, char* key)
+ptr_table_del_record(ptr_table** table, const char* key)
 {
 	ptr_record* to_be_deleted = ptr_table_find(table, key);
 	if (to_be_deleted != NULL){
@@ -306,14 +306,14 @@ ptr_record_free(ptr_record* pr)
 }
 
 PtrType
-ptr_table_get_type(ptr_table** table, char* key)
+ptr_table_get_type(ptr_table** table, const char* key)
 {
 	ptr_record* temp = ptr_table_find(table, key);
 	return temp->type;
 }
 
 int
-ptr_record_is_ptr_null(ptr_table** table, char* key)
+ptr_record_is_ptr_null(ptr_table** table, const char* key)
 {
 	PtrType ptrtype = ptr_table_get_type(table, key);
 	if(ptrtype == PTR_NULL){
@@ -324,7 +324,7 @@ ptr_record_is_ptr_null(ptr_table** table, char* key)
 }
 
 void**
-ptr_table_get_pptr(ptr_table** table, char* key)
+ptr_table_get_pptr(ptr_table** table, const char* key)
 {
 	ptr_record* temp = ptr_table_find(table, key);
 	void** temp_pptr = (void**) &(temp->address);
@@ -332,18 +332,18 @@ ptr_table_get_pptr(ptr_table** table, char* key)
 }
 
 int
-ptr_table_del_records_except(ptr_table** table, char** keys, int key_num )
+ptr_table_del_records_except(ptr_table** table, const char** keys, int key_num )
 {
 	/* keys is array of pointers to chars. */
 	ptr_record *current_record;
 	ptr_record *temp_record;
 	char* current_record_key;
-	char* key_name;
+	const char* key_name;
 	int idx;
 	int matched;
 
 	for( idx = 0; idx < key_num ; ++idx ){
-		key_name = (char*) keys[idx];
+		key_name = keys[idx];
 		printf("* %s\n", key_name);
 	}
 
@@ -352,7 +352,7 @@ ptr_table_del_records_except(ptr_table** table, char** keys, int key_num )
 		temp_record = current_record->hh.next;
 		matched = 0;
 		for( idx = 0; idx < key_num ; ++idx ){
-			key_name = (char*) keys[idx];
+			key_name = keys[idx];
 			if(strcmp( current_record_key , key_name ) == 0){ /*matched*/
 				matched = 1;
 			}
@@ -472,7 +472,7 @@ ptr_table_info_get_null_updated(ptr_table** table)
 
 // private
 ptr_record*
-ptr_table_find(ptr_table** table, char* key)
+ptr_table_find(ptr_table** table, const char* key)
 {
 	ptr_record* temp;
 	HASH_FIND_STR(*table, key, temp);

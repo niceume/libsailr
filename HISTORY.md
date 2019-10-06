@@ -253,6 +253,13 @@ make build
     + regular expression object continues to hold this encoding information.
     + string objects do not need this information. They just hold byte sequences that come from input data or source file string literals.
 
+## Ver 0.70 (Oct. 6 2019)
+
+* Avoid (char*) casting
+    + ptr_table functions take const char* as key.
+        + ,though the key string of ptr_record continues to be char[].
+    + simple_date_format()
+
 
 ## Plan 
 
@@ -267,7 +274,6 @@ make build
     + When adding value to ptr_table, missing values should be taken care of.
         + Missing value should be added as nan in double.
 * Refactoring2
-	+ Avoid (char*) casting
     + Functions in ptr_table.c. Pointer to pointer may be used wrongly; possibility for some local pointers are destroyed unintentionally.
 
 

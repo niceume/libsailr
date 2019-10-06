@@ -36,14 +36,14 @@ test_arithmetic_test1( void )
 
 
 	// Add variables
-	sailr_ptr_table_create_null(&table, (char*)"pizza" );
-	sailr_ptr_table_create_null(&table, (char*)"size" );
-	sailr_ptr_table_create_null(&table, (char*)"pieces" );
-	sailr_ptr_table_create_null(&table, (char*)"friends" );
-	sailr_ptr_table_create_null(&table, (char*)"factorial" );
-	sailr_ptr_table_create_null(&table, (char*)"exp" );
-	sailr_ptr_table_create_null(&table, (char*)"exp2" );
-	sailr_ptr_table_create_null(&table, (char*)"exp3" );
+	sailr_ptr_table_create_null(&table, "pizza" );
+	sailr_ptr_table_create_null(&table, "size" );
+	sailr_ptr_table_create_null(&table, "pieces" );
+	sailr_ptr_table_create_null(&table, "friends" );
+	sailr_ptr_table_create_null(&table, "factorial" );
+	sailr_ptr_table_create_null(&table, "exp" );
+	sailr_ptr_table_create_null(&table, "exp2" );
+	sailr_ptr_table_create_null(&table, "exp3" );
 
 	// Creating virtual machine codes
 	vm_inst_object* inst_list = sailr_gen_code( ps, table); // VM Code is generated.
@@ -57,14 +57,14 @@ test_arithmetic_test1( void )
 	// Assert
 	// sailr_ptr_table_show_all(&table);
 
-	char st_pizza = sailr_ptr_table_get_type(&table, (char*)"pizza");
-	char st_size = sailr_ptr_table_get_type(&table, (char*)"size");
-	char st_pieces = sailr_ptr_table_get_type(&table, (char*)"pieces"); 
-	char st_friends = sailr_ptr_table_get_type(&table, (char*)"friends");
-	char st_factorial = sailr_ptr_table_get_type(&table, (char*)"factorial");
-	char st_exp = sailr_ptr_table_get_type(&table, (char*)"exp");
-	char st_exp2 = sailr_ptr_table_get_type(&table, (char*)"exp2");
-	char st_exp3 = sailr_ptr_table_get_type(&table, (char*)"exp3");
+	char st_pizza = sailr_ptr_table_get_type(&table, "pizza");
+	char st_size = sailr_ptr_table_get_type(&table, "size");
+	char st_pieces = sailr_ptr_table_get_type(&table, "pieces"); 
+	char st_friends = sailr_ptr_table_get_type(&table, "friends");
+	char st_factorial = sailr_ptr_table_get_type(&table, "factorial");
+	char st_exp = sailr_ptr_table_get_type(&table, "exp");
+	char st_exp2 = sailr_ptr_table_get_type(&table, "exp2");
+	char st_exp3 = sailr_ptr_table_get_type(&table, "exp3");
 
 	CU_ASSERT_EQUAL( st_pizza , 'i');
 	CU_ASSERT_EQUAL( st_size , 'd');
@@ -75,14 +75,14 @@ test_arithmetic_test1( void )
 	CU_ASSERT_EQUAL( st_exp2, 'i');
 	CU_ASSERT_EQUAL( st_exp3, 'd');
 
-	int s_pizza = *((int*) *sailr_ptr_table_get_pptr(&table, (char*)"pizza"));
-	double s_size = *((double*) *sailr_ptr_table_get_pptr(&table, (char*)"size"));
-	int s_pieces = *((int*) *sailr_ptr_table_get_pptr(&table, (char*)"pieces")); 
-	int s_friends = *((int*) *sailr_ptr_table_get_pptr(&table, (char*)"friends"));
-	int s_factorial = *((int*) *sailr_ptr_table_get_pptr(&table, (char*)"factorial"));
-	int s_exp = *((int*) *sailr_ptr_table_get_pptr(&table, (char*)"exp"));
-	int s_exp2 = *((int*) *sailr_ptr_table_get_pptr(&table, (char*)"exp2"));
-	double s_exp3 = *((double*) *sailr_ptr_table_get_pptr(&table, (char*)"exp3"));
+	int s_pizza = *((int*) *sailr_ptr_table_get_pptr(&table, "pizza"));
+	double s_size = *((double*) *sailr_ptr_table_get_pptr(&table, "size"));
+	int s_pieces = *((int*) *sailr_ptr_table_get_pptr(&table, "pieces")); 
+	int s_friends = *((int*) *sailr_ptr_table_get_pptr(&table, "friends"));
+	int s_factorial = *((int*) *sailr_ptr_table_get_pptr(&table, "factorial"));
+	int s_exp = *((int*) *sailr_ptr_table_get_pptr(&table, "exp"));
+	int s_exp2 = *((int*) *sailr_ptr_table_get_pptr(&table, "exp2"));
+	double s_exp3 = *((double*) *sailr_ptr_table_get_pptr(&table, "exp3"));
 
 	CU_ASSERT_EQUAL( s_pizza , 1);
 	CU_ASSERT_DOUBLE_EQUAL( s_size , 0.25, 0.01);

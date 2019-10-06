@@ -36,15 +36,15 @@ test_func_test1( void )
 
 
 	// Add variables
-	sailr_ptr_table_create_null(&table, (char*)"space_pi" );
-	sailr_ptr_table_create_null(&table, (char*)"pi_str" );
-	sailr_ptr_table_create_null(&table, (char*)"pi_num" );
-	sailr_ptr_table_create_null(&table, (char*)"three_str" );
-	sailr_ptr_table_create_null(&table, (char*)"seven_str" );
-	sailr_ptr_table_create_null(&table, (char*)"ten_str" );
+	sailr_ptr_table_create_null(&table, "space_pi" );
+	sailr_ptr_table_create_null(&table, "pi_str" );
+	sailr_ptr_table_create_null(&table, "pi_num" );
+	sailr_ptr_table_create_null(&table, "three_str" );
+	sailr_ptr_table_create_null(&table, "seven_str" );
+	sailr_ptr_table_create_null(&table, "ten_str" );
 
-	sailr_ptr_table_create_null(&table, (char*)"spaced_str");
-	sailr_ptr_table_create_null(&table, (char*)"stripped_str");
+	sailr_ptr_table_create_null(&table, "spaced_str");
+	sailr_ptr_table_create_null(&table, "stripped_str");
 
 	// Creating virtual machine codes
 	vm_inst_object* inst_list = sailr_gen_code( ps, table); // VM Code is generated.
@@ -58,14 +58,14 @@ test_func_test1( void )
 	// Assert
 	// sailr_ptr_table_show_all(&table);
 
-	char st_space_pi = sailr_ptr_table_get_type(&table, (char*)"space_pi");
-	char st_pi_str = sailr_ptr_table_get_type(&table, (char*)"pi_str");
-	char st_pi_num = sailr_ptr_table_get_type(&table, (char*)"pi_num"); 
-	char st_three_str = sailr_ptr_table_get_type(&table, (char*)"three_str");
-	char st_seven_str = sailr_ptr_table_get_type(&table, (char*)"seven_str");
-	char st_ten_str = sailr_ptr_table_get_type(&table, (char*)"ten_str");
-	char st_spaced_str = sailr_ptr_table_get_type(&table, (char*)"spaced_str");
-	char st_stripped_str = sailr_ptr_table_get_type(&table, (char*)"stripped_str");
+	char st_space_pi = sailr_ptr_table_get_type(&table, "space_pi");
+	char st_pi_str = sailr_ptr_table_get_type(&table, "pi_str");
+	char st_pi_num = sailr_ptr_table_get_type(&table, "pi_num"); 
+	char st_three_str = sailr_ptr_table_get_type(&table, "three_str");
+	char st_seven_str = sailr_ptr_table_get_type(&table, "seven_str");
+	char st_ten_str = sailr_ptr_table_get_type(&table, "ten_str");
+	char st_spaced_str = sailr_ptr_table_get_type(&table, "spaced_str");
+	char st_stripped_str = sailr_ptr_table_get_type(&table, "stripped_str");
 
 	CU_ASSERT_EQUAL( st_space_pi , 's');
 	CU_ASSERT_EQUAL( st_pi_str , 's');
@@ -77,14 +77,14 @@ test_func_test1( void )
 	CU_ASSERT_EQUAL( st_stripped_str , 's');
 
 
-	const char* s_space_pi = sailr_ptr_table_read_string(&table, (char*)"space_pi");
-	const char* s_pi_str = sailr_ptr_table_read_string(&table, (char*)"pi_str");
-	double s_pi_num = *((double*) *sailr_ptr_table_get_pptr(&table, (char*)"pi_num"));
-	const char* s_three_str = sailr_ptr_table_read_string(&table, (char*)"three_str");
-	const char* s_seven_str = sailr_ptr_table_read_string(&table, (char*)"seven_str");
-	const char* s_ten_str = sailr_ptr_table_read_string(&table, (char*)"ten_str");
-	const char* s_spaced_str = sailr_ptr_table_read_string(&table, (char*)"spaced_str");
-	const char* s_stripped_str = sailr_ptr_table_read_string(&table, (char*)"stripped_str");
+	const char* s_space_pi = sailr_ptr_table_read_string(&table, "space_pi");
+	const char* s_pi_str = sailr_ptr_table_read_string(&table, "pi_str");
+	double s_pi_num = *((double*) *sailr_ptr_table_get_pptr(&table, "pi_num"));
+	const char* s_three_str = sailr_ptr_table_read_string(&table, "three_str");
+	const char* s_seven_str = sailr_ptr_table_read_string(&table, "seven_str");
+	const char* s_ten_str = sailr_ptr_table_read_string(&table, "ten_str");
+	const char* s_spaced_str = sailr_ptr_table_read_string(&table, "spaced_str");
+	const char* s_stripped_str = sailr_ptr_table_read_string(&table, "stripped_str");
 
 	CU_ASSERT_STRING_EQUAL( s_space_pi , " 3.1415926535");
 	CU_ASSERT_STRING_EQUAL( s_pi_str , "PI is 3.1415926535");

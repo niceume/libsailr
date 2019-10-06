@@ -33,12 +33,12 @@ test_string_test1( void )
 
 
 	// Add variables
-	sailr_ptr_table_create_null(&table, (char*)"hello" );
-	sailr_ptr_table_create_null(&table, (char*)"firstname" );
-	sailr_ptr_table_create_null(&table, (char*)"lastname" );
-	sailr_ptr_table_create_null(&table, (char*)"fullname" );
-	sailr_ptr_table_create_null(&table, (char*)"greeting" );
-	sailr_ptr_table_create_null(&table, (char*)"greeting2" );
+	sailr_ptr_table_create_null(&table, "hello" );
+	sailr_ptr_table_create_null(&table, "firstname" );
+	sailr_ptr_table_create_null(&table, "lastname" );
+	sailr_ptr_table_create_null(&table, "fullname" );
+	sailr_ptr_table_create_null(&table, "greeting" );
+	sailr_ptr_table_create_null(&table, "greeting2" );
 
 	// Creating virtual machine codes
 	vm_inst_object* inst_list = sailr_gen_code( ps, table); // VM Code is generated.
@@ -52,12 +52,12 @@ test_string_test1( void )
 	// Assert
 	// sailr_ptr_table_show_all(&table);
 
-	char st_hello = sailr_ptr_table_get_type(&table, (char*)"hello");
-	char st_firstname = sailr_ptr_table_get_type(&table, (char*)"firstname");
-	char st_lastname = sailr_ptr_table_get_type(&table, (char*)"lastname"); 
-	char st_fullname = sailr_ptr_table_get_type(&table, (char*)"fullname");
-	char st_greeting = sailr_ptr_table_get_type(&table, (char*)"greeting");
-	char st_greeting2 = sailr_ptr_table_get_type(&table, (char*)"greeting2");
+	char st_hello = sailr_ptr_table_get_type(&table, "hello");
+	char st_firstname = sailr_ptr_table_get_type(&table, "firstname");
+	char st_lastname = sailr_ptr_table_get_type(&table, "lastname"); 
+	char st_fullname = sailr_ptr_table_get_type(&table, "fullname");
+	char st_greeting = sailr_ptr_table_get_type(&table, "greeting");
+	char st_greeting2 = sailr_ptr_table_get_type(&table, "greeting2");
 
 	CU_ASSERT_EQUAL( st_hello , 's');
 	CU_ASSERT_EQUAL( st_firstname , 's');
@@ -66,12 +66,12 @@ test_string_test1( void )
 	CU_ASSERT_EQUAL( st_greeting, 's');
 	CU_ASSERT_EQUAL( st_greeting2, 's');
 
-	const char* s_hello = sailr_ptr_table_read_string(&table, (char*)"hello");
-	const char* s_firstname = sailr_ptr_table_read_string(&table, (char*)"firstname");
-	const char* s_lastname =  sailr_ptr_table_read_string(&table, (char*)"lastname"); 
-	const char* s_fullname =  sailr_ptr_table_read_string(&table, (char*)"fullname");
-	const char* s_greeting =  sailr_ptr_table_read_string(&table, (char*)"greeting");
-	const char* s_greeting2 = sailr_ptr_table_read_string(&table, (char*)"greeting2");
+	const char* s_hello = sailr_ptr_table_read_string(&table, "hello");
+	const char* s_firstname = sailr_ptr_table_read_string(&table, "firstname");
+	const char* s_lastname =  sailr_ptr_table_read_string(&table, "lastname"); 
+	const char* s_fullname =  sailr_ptr_table_read_string(&table, "fullname");
+	const char* s_greeting =  sailr_ptr_table_read_string(&table, "greeting");
+	const char* s_greeting2 = sailr_ptr_table_read_string(&table, "greeting2");
 
 	CU_ASSERT_STRING_EQUAL( s_hello , "Hello");
 	CU_ASSERT_STRING_EQUAL( s_firstname , "Mickey");

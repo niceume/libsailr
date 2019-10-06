@@ -49,15 +49,15 @@ struct _ptr_table_info {
 typedef struct _ptr_table_info ptr_table_info ;
 
 ptr_table*  ptr_table_init();
-ptr_record* ptr_table_add(ptr_table** table, char* key, void** address, PtrType type, GCReq gc);
+ptr_record* ptr_table_add(ptr_table** table, const char* key, void** address, PtrType type, GCReq gc);
 
-ptr_record* ptr_table_create_int(ptr_table** table, char* key, int ival);
-ptr_record* ptr_table_create_int_from_ptr(ptr_table** table, char* key, int** iptr, double** dptr);
-int ptr_table_update_int(ptr_table** table, char* key, int ival);
+ptr_record* ptr_table_create_int(ptr_table** table, const char* key, int ival);
+ptr_record* ptr_table_create_int_from_ptr(ptr_table** table, const char* key, int** iptr, double** dptr);
+int ptr_table_update_int(ptr_table** table, const char* key, int ival);
 
-ptr_record* ptr_table_create_double(ptr_table** table, char* key, double dval);
-ptr_record* ptr_table_create_double_from_ptr(ptr_table** table, char* key, double** dptr, int** iptr);
-int ptr_table_update_double(ptr_table** table, char* key, double dval);
+ptr_record* ptr_table_create_double(ptr_table** table, const char* key, double dval);
+ptr_record* ptr_table_create_double_from_ptr(ptr_table** table, const char* key, double** dptr, int** iptr);
+int ptr_table_update_double(ptr_table** table, const char* key, double dval);
 
 int ptr_record_update_extra_address(ptr_record* pr, void** ptr_ex_addr, PtrType ex_type, GCReq ex_gc );
 int ptr_record_swap_addresses(ptr_record* pr);
@@ -67,19 +67,19 @@ ptr_record* ptr_table_create_anonym_struct_string(ptr_table** table, struct_stri
 */
 
 ptr_record* ptr_table_create_anonym_string(ptr_table** table, string_object** strptr);
-ptr_record* ptr_table_create_string(ptr_table** table, char* key, string_object** strptr);
-ptr_record* ptr_table_create_string_from_ptr(ptr_table** table, char* key, string_object** strptr);
+ptr_record* ptr_table_create_string(ptr_table** table, const char* key, string_object** strptr);
+ptr_record* ptr_table_create_string_from_ptr(ptr_table** table, const char* key, string_object** strptr);
 
-string_object* ptr_table_get_pp_string(ptr_table** table, char* key);
-const char* ptr_table_read_string(ptr_table** table, char* key);
-int ptr_table_update_string(ptr_table** , char* , string_object** );
+string_object* ptr_table_get_pp_string(ptr_table** table, const char* key);
+const char* ptr_table_read_string(ptr_table** table, const char* key);
+int ptr_table_update_string(ptr_table** , const char* key, string_object** );
 int ptr_record_update_string(ptr_record* pr , string_object** pp_str, GCReq gc);
 
 ptr_record* ptr_table_create_anonym_rexp(ptr_table** table, const char* pattern, const char* enc);
 
-ptr_record* ptr_table_create_null(ptr_table** table, char* key);
-int ptr_table_del_record(ptr_table** table, char* key);
-int ptr_table_del_records_except(ptr_table** table, char** keys, int key_num );
+ptr_record* ptr_table_create_null(ptr_table** table, const char* key);
+int ptr_table_del_record(ptr_table** table, const char* key);
+int ptr_table_del_records_except(ptr_table** table, const char** keys, int key_num );
 int ptr_table_del_all(ptr_table** table);
 
 void ptr_table_show_all(ptr_table** table);
@@ -88,14 +88,14 @@ ptr_table* ptr_record_obtain_table(ptr_record* pr);
 int ptr_table_info_set_null_updated(ptr_table** table, int updated_value);
 int ptr_table_info_get_null_updated(ptr_table** table);
 
-PtrType ptr_table_get_type(ptr_table** table, char* key);
-int ptr_record_is_ptr_null(ptr_table** table, char* key);
-void** ptr_table_get_pptr(ptr_table** table, char* key);
+PtrType ptr_table_get_type(ptr_table** table, const char* key);
+int ptr_record_is_ptr_null(ptr_table** table, const char* key);
+void** ptr_table_get_pptr(ptr_table** table, const char* key);
 
 int ptr_record_free_gc_required_memory(ptr_record*);
 
 // private
-ptr_record* ptr_table_find(ptr_table** table, char* key);
+ptr_record* ptr_table_find(ptr_table** table, const char* key);
 ptr_record* ptr_table_insert(ptr_table** table, ptr_record* pr);
 int ptr_record_update(ptr_record* pr, void* address, PtrType type, GCReq gc);
 int ptr_record_free(ptr_record* );

@@ -211,9 +211,9 @@ WORD {CHAR}{CHNUMP}*
 
 	/* Identifier such as variable names, and function names */
 <INITIAL,IFSTATE,ELSESTATE>{WORD}		{
-	size_t ident_len = strlen( (char*) yytext);
+	size_t ident_len = strlen(yytext);
 	char* new_str = (char*) malloc(sizeof(char) * (ident_len + 1));
-	strncpy(new_str, (char*)yytext, ident_len);
+	strncpy(new_str, yytext, ident_len);
 	new_str[ident_len] = '\0';
 	yylval_param->id = new_str ;
 	LEX_RETURN( IDENT );

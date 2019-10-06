@@ -30,12 +30,12 @@ test_date_test1( void )
 
 
 	// Add variables
-	sailr_ptr_table_create_null(&table, (char*)"epoch_date" );
-	sailr_ptr_table_create_null(&table, (char*)"today" );
-	sailr_ptr_table_create_null(&table, (char*)"birthday" );
-	sailr_ptr_table_create_null(&table, (char*)"age" );
-	sailr_ptr_table_create_null(&table, (char*)"future" );
-	sailr_ptr_table_create_null(&table, (char*)"future_str" );
+	sailr_ptr_table_create_null(&table, "epoch_date" );
+	sailr_ptr_table_create_null(&table, "today" );
+	sailr_ptr_table_create_null(&table, "birthday" );
+	sailr_ptr_table_create_null(&table, "age" );
+	sailr_ptr_table_create_null(&table, "future" );
+	sailr_ptr_table_create_null(&table, "future_str" );
 
 	// Creating virtual machine codes
 	vm_inst_object* inst_list = sailr_gen_code( ps, table); // VM Code is generated.
@@ -49,12 +49,12 @@ test_date_test1( void )
 	// Assert
 	// sailr_ptr_table_show_all(&table);
 
-	char st_epoch_date = sailr_ptr_table_get_type(&table, (char*)"epoch_date");
-	char st_today = sailr_ptr_table_get_type(&table, (char*)"today");
-	char st_birthday = sailr_ptr_table_get_type(&table, (char*)"birthday");
-	char st_age = sailr_ptr_table_get_type(&table, (char*)"age"); 
-	char st_future = sailr_ptr_table_get_type(&table, (char*)"future");
-	char st_future_str = sailr_ptr_table_get_type(&table, (char*)"future_str");
+	char st_epoch_date = sailr_ptr_table_get_type(&table, "epoch_date");
+	char st_today = sailr_ptr_table_get_type(&table, "today");
+	char st_birthday = sailr_ptr_table_get_type(&table, "birthday");
+	char st_age = sailr_ptr_table_get_type(&table, "age"); 
+	char st_future = sailr_ptr_table_get_type(&table, "future");
+	char st_future_str = sailr_ptr_table_get_type(&table, "future_str");
 
 	CU_ASSERT_EQUAL( st_epoch_date , 'i');
 	CU_ASSERT_EQUAL( st_today , 'i');
@@ -63,12 +63,12 @@ test_date_test1( void )
 	CU_ASSERT_EQUAL( st_future , 'i');
 	CU_ASSERT_EQUAL( st_future_str , 's');
 
-	int s_epoch_date = *((int*) *sailr_ptr_table_get_pptr(&table, (char*)"epoch_date"));
-//	int s_today = *((int*) *sailr_ptr_table_get_pptr(&table, (char*)"today"));
-//	int s_birthday = *((int*) *sailr_ptr_table_get_pptr(&table, (char*)"birthday"));
-	double s_age = *((double*) *sailr_ptr_table_get_pptr(&table, (char*)"age"));
-//	int s_future = *((int*) *sailr_ptr_table_get_pptr(&table, (char*)"future"));
-	const char* s_future_str = sailr_ptr_table_read_string(&table, (char*)"future_str");
+	int s_epoch_date = *((int*) *sailr_ptr_table_get_pptr(&table, "epoch_date"));
+//	int s_today = *((int*) *sailr_ptr_table_get_pptr(&table, "today"));
+//	int s_birthday = *((int*) *sailr_ptr_table_get_pptr(&table, "birthday"));
+	double s_age = *((double*) *sailr_ptr_table_get_pptr(&table, "age"));
+//	int s_future = *((int*) *sailr_ptr_table_get_pptr(&table, "future"));
+	const char* s_future_str = sailr_ptr_table_read_string(&table, "future_str");
 
 	CU_ASSERT_EQUAL( s_epoch_date , 0 );
 	CU_ASSERT_DOUBLE_EQUAL( s_age , 19.4, 0.1 );

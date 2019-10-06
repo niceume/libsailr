@@ -101,7 +101,7 @@ convert_unix_date_to_sys_days(int unix_date)
 // Public functions
 
 const char*
-cpp_date_format ( int unix_date, char* fmt  )
+cpp_date_format ( int unix_date, const char* fmt  )
 {
   date::sys_days base_day = obtain_unix_epoch_sys_days();
   date::sys_days new_day = base_day + date::days{unix_date};

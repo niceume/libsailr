@@ -34,13 +34,13 @@ test_double_test1( void )
 
 
 	// Add variables
-	sailr_ptr_table_create_null(&table, (char*)"pi2" );
-	sailr_ptr_table_create_null(&table, (char*)"pi10" );
-	sailr_ptr_table_create_null(&table, (char*)"e" );
-	sailr_ptr_table_create_null(&table, (char*)"radius" );
-	sailr_ptr_table_create_null(&table, (char*)"area" );
-	sailr_ptr_table_create_null(&table, (char*)"volume" );
-	sailr_ptr_table_create_null(&table, (char*)"big" );
+	sailr_ptr_table_create_null(&table, "pi2" );
+	sailr_ptr_table_create_null(&table, "pi10" );
+	sailr_ptr_table_create_null(&table, "e" );
+	sailr_ptr_table_create_null(&table, "radius" );
+	sailr_ptr_table_create_null(&table, "area" );
+	sailr_ptr_table_create_null(&table, "volume" );
+	sailr_ptr_table_create_null(&table, "big" );
 
 	// Creating virtual machine codes
 	vm_inst_object* inst_list = sailr_gen_code( ps, table); // VM Code is generated.
@@ -54,13 +54,13 @@ test_double_test1( void )
 	// Assert
 	// sailr_ptr_table_show_all(&table);
 
-	char st_pi2 = sailr_ptr_table_get_type(&table, (char*)"pi2");
-	char st_pi10 = sailr_ptr_table_get_type(&table, (char*)"pi10");
-	char st_e = sailr_ptr_table_get_type(&table, (char*)"e"); 
-	char st_radius = sailr_ptr_table_get_type(&table, (char*)"radius");
-	char st_area = sailr_ptr_table_get_type(&table, (char*)"area");
-	char st_volume = sailr_ptr_table_get_type(&table, (char*)"volume");
-	char st_big = sailr_ptr_table_get_type(&table, (char*)"big");
+	char st_pi2 = sailr_ptr_table_get_type(&table, "pi2");
+	char st_pi10 = sailr_ptr_table_get_type(&table, "pi10");
+	char st_e = sailr_ptr_table_get_type(&table, "e"); 
+	char st_radius = sailr_ptr_table_get_type(&table, "radius");
+	char st_area = sailr_ptr_table_get_type(&table, "area");
+	char st_volume = sailr_ptr_table_get_type(&table, "volume");
+	char st_big = sailr_ptr_table_get_type(&table, "big");
 
 	CU_ASSERT_EQUAL( st_pi2 , 'd');
 	CU_ASSERT_EQUAL( st_pi10 , 'd');
@@ -70,13 +70,13 @@ test_double_test1( void )
 	CU_ASSERT_EQUAL( st_volume, 'd');
 	CU_ASSERT_EQUAL( st_big, 'i');
 
-	double s_pi2 = *((double*) *sailr_ptr_table_get_pptr(&table, (char*)"pi2"));
-	double s_pi10 = *((double*) *sailr_ptr_table_get_pptr(&table, (char*)"pi10"));
-	double s_e = *((double*) *sailr_ptr_table_get_pptr(&table, (char*)"e")); 
-	double s_radius = *((double*) *sailr_ptr_table_get_pptr(&table, (char*)"radius"));
-	double s_area = *((double*) *sailr_ptr_table_get_pptr(&table, (char*)"area"));
-	double s_volume = *((double*) *sailr_ptr_table_get_pptr(&table, (char*)"volume"));
-	int s_big = *((int*) *sailr_ptr_table_get_pptr(&table, (char*)"big"));
+	double s_pi2 = *((double*) *sailr_ptr_table_get_pptr(&table, "pi2"));
+	double s_pi10 = *((double*) *sailr_ptr_table_get_pptr(&table, "pi10"));
+	double s_e = *((double*) *sailr_ptr_table_get_pptr(&table, "e")); 
+	double s_radius = *((double*) *sailr_ptr_table_get_pptr(&table, "radius"));
+	double s_area = *((double*) *sailr_ptr_table_get_pptr(&table, "area"));
+	double s_volume = *((double*) *sailr_ptr_table_get_pptr(&table, "volume"));
+	int s_big = *((int*) *sailr_ptr_table_get_pptr(&table, "big"));
 
 	CU_ASSERT_EQUAL( s_pi2 , 3.14);
 	CU_ASSERT_EQUAL( s_pi10 , 3.1415926535);

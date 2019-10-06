@@ -40,14 +40,14 @@ test_rexgexp_test1( void )
 
 
 	// Add variables
-	sailr_ptr_table_create_null(&table, (char*)"greeting" );
-	sailr_ptr_table_create_null(&table, (char*)"greeting_rexp" );
-	sailr_ptr_table_create_null(&table, (char*)"hello" );
-	sailr_ptr_table_create_null(&table, (char*)"email_tom" );
-	sailr_ptr_table_create_null(&table, (char*)"email_rexp" );
-	sailr_ptr_table_create_null(&table, (char*)"email_full" );
-	sailr_ptr_table_create_null(&table, (char*)"email_local" );
-	sailr_ptr_table_create_null(&table, (char*)"email_domain" );
+	sailr_ptr_table_create_null(&table, "greeting" );
+	sailr_ptr_table_create_null(&table, "greeting_rexp" );
+	sailr_ptr_table_create_null(&table, "hello" );
+	sailr_ptr_table_create_null(&table, "email_tom" );
+	sailr_ptr_table_create_null(&table, "email_rexp" );
+	sailr_ptr_table_create_null(&table, "email_full" );
+	sailr_ptr_table_create_null(&table, "email_local" );
+	sailr_ptr_table_create_null(&table, "email_domain" );
 
 	// Creating virtual machine codes
 	vm_inst_object* inst_list = sailr_gen_code( ps, table); // VM Code is generated.
@@ -61,14 +61,14 @@ test_rexgexp_test1( void )
 	// Assert
 	// sailr_ptr_table_show_all(&table);
 
-	char st_greeting = sailr_ptr_table_get_type(&table, (char*)"greeting");
-	char st_greeting_rexp = sailr_ptr_table_get_type(&table, (char*)"greeting_rexp");
-	char st_hello = sailr_ptr_table_get_type(&table, (char*)"hello"); 
-	char st_email_tom = sailr_ptr_table_get_type(&table, (char*)"email_tom");
-	char st_email_rexp = sailr_ptr_table_get_type(&table, (char*)"email_rexp");
-	char st_email_full = sailr_ptr_table_get_type(&table, (char*)"email_full");
-	char st_email_local = sailr_ptr_table_get_type(&table, (char*)"email_local");
-	char st_email_domain = sailr_ptr_table_get_type(&table, (char*)"email_domain");
+	char st_greeting = sailr_ptr_table_get_type(&table, "greeting");
+	char st_greeting_rexp = sailr_ptr_table_get_type(&table, "greeting_rexp");
+	char st_hello = sailr_ptr_table_get_type(&table, "hello"); 
+	char st_email_tom = sailr_ptr_table_get_type(&table, "email_tom");
+	char st_email_rexp = sailr_ptr_table_get_type(&table, "email_rexp");
+	char st_email_full = sailr_ptr_table_get_type(&table, "email_full");
+	char st_email_local = sailr_ptr_table_get_type(&table, "email_local");
+	char st_email_domain = sailr_ptr_table_get_type(&table, "email_domain");
 
 	CU_ASSERT_EQUAL( st_greeting , 's');
 	CU_ASSERT_EQUAL( st_greeting_rexp , 'r');
@@ -79,14 +79,14 @@ test_rexgexp_test1( void )
 	CU_ASSERT_EQUAL( st_email_local, 's');
 	CU_ASSERT_EQUAL( st_email_domain, 's');
 
-	const char* s_greeting = sailr_ptr_table_read_string(&table, (char*)"greeting");
-//	const char* s_greeting_rexp = sailr_ptr_table_read_string(&table, (char*)"greeting_rexp");
-	const char* s_hello =  sailr_ptr_table_read_string(&table, (char*)"hello"); 
-	const char* s_email_tom =  sailr_ptr_table_read_string(&table, (char*)"email_tom");
-//	const char* s_email_rexp =  sailr_ptr_table_read_string(&table, (char*)"email_rexp");
-	const char* s_email_full = sailr_ptr_table_read_string(&table, (char*)"email_full");
-	const char* s_email_local = sailr_ptr_table_read_string(&table, (char*)"email_local");
-	const char* s_email_domain = sailr_ptr_table_read_string(&table, (char*)"email_domain");
+	const char* s_greeting = sailr_ptr_table_read_string(&table, "greeting");
+//	const char* s_greeting_rexp = sailr_ptr_table_read_string(&table, "greeting_rexp");
+	const char* s_hello =  sailr_ptr_table_read_string(&table, "hello"); 
+	const char* s_email_tom =  sailr_ptr_table_read_string(&table, "email_tom");
+//	const char* s_email_rexp =  sailr_ptr_table_read_string(&table, "email_rexp");
+	const char* s_email_full = sailr_ptr_table_read_string(&table, "email_full");
+	const char* s_email_local = sailr_ptr_table_read_string(&table, "email_local");
+	const char* s_email_domain = sailr_ptr_table_read_string(&table, "email_domain");
 
 	CU_ASSERT_STRING_EQUAL( s_greeting , "Hello World");
 	CU_ASSERT_STRING_EQUAL( s_hello , "Hello");

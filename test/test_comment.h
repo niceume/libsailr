@@ -44,10 +44,10 @@ test_comment_test1( void )
 
 
 	// Add variables
-	sailr_ptr_table_create_null(&table, (char*)"old_asian" );
-	sailr_ptr_table_create_null(&table, (char*)"age" );
-	sailr_ptr_table_create_null(&table, (char*)"race" );
-	sailr_ptr_table_create_null(&table, (char*)"race_id" );
+	sailr_ptr_table_create_null(&table, "old_asian" );
+	sailr_ptr_table_create_null(&table, "age" );
+	sailr_ptr_table_create_null(&table, "race" );
+	sailr_ptr_table_create_null(&table, "race_id" );
 
 	// Creating virtual machine codes
 	vm_inst_object* inst_list = sailr_gen_code( ps, table); // VM Code is generated.
@@ -61,20 +61,20 @@ test_comment_test1( void )
 	// Assert
 	// sailr_ptr_table_show_all(&table);
 
-	char st_old_asian = sailr_ptr_table_get_type(&table, (char*)"old_asian");
-	char st_age = sailr_ptr_table_get_type(&table, (char*)"age");
-	char st_race = sailr_ptr_table_get_type(&table, (char*)"race");
-	char st_race_id = sailr_ptr_table_get_type(&table, (char*)"race_id");
+	char st_old_asian = sailr_ptr_table_get_type(&table, "old_asian");
+	char st_age = sailr_ptr_table_get_type(&table, "age");
+	char st_race = sailr_ptr_table_get_type(&table, "race");
+	char st_race_id = sailr_ptr_table_get_type(&table, "race_id");
 
 	CU_ASSERT_EQUAL( st_old_asian , 'i');
 	CU_ASSERT_EQUAL( st_age , 'i');
 	CU_ASSERT_EQUAL( st_race , 's');
 	CU_ASSERT_EQUAL( st_race_id , 'i');
 
-	int s_old_asian = *((int*) *sailr_ptr_table_get_pptr(&table, (char*)"old_asian"));
-	int s_age = *((int*) *sailr_ptr_table_get_pptr(&table, (char*)"age"));
-	const char* s_race = sailr_ptr_table_read_string(&table, (char*)"race"); 
-	int s_race_id = *((int*) *sailr_ptr_table_get_pptr(&table, (char*)"race_id")); 
+	int s_old_asian = *((int*) *sailr_ptr_table_get_pptr(&table, "old_asian"));
+	int s_age = *((int*) *sailr_ptr_table_get_pptr(&table, "age"));
+	const char* s_race = sailr_ptr_table_read_string(&table, "race"); 
+	int s_race_id = *((int*) *sailr_ptr_table_get_pptr(&table, "race_id")); 
 
 	CU_ASSERT_EQUAL( s_old_asian , 1 );
 	CU_ASSERT_EQUAL( s_age , 65 );

@@ -227,6 +227,12 @@ main(int argc, char** argv)
 	sailr_ptr_table_create_null(&table, "email_local" );
 	sailr_ptr_table_create_null(&table, "email_domain" );
 
+	sailr_ptr_table_create_null(&table, "carname" );
+	sailr_ptr_table_create_null(&table, "hp" );
+	sailr_ptr_table_create_null(&table, "power" );
+	sailr_ptr_table_create_null(&table, "country" );
+	sailr_ptr_table_create_null(&table, "type" );
+
 	VERBOSE( std::cout << "----- Showing pointer table (BEFORE CALCULATION) -----" << std::endl; )
 	VERBOSE( std::cout << "At this point, annonym strings should be already added."  << std::endl; )
     VERBOSE( printf("table's pointer is %p \n", table); )
@@ -239,7 +245,7 @@ main(int argc, char** argv)
 	VERBOSE( std::cout << "VM instructions are generated with parser state and pointer table " << std::endl; )
 	vm_inst_object* inst_list = sailr_gen_code( ps, table); // VM Code is generated.
 	VERBOSE( std::cout << "Generated. Showing..." << std::endl; )
-	VERBOSE( sailr_vm_inst_list_show ( inst_list );)
+	VERBOSE( sailr_vm_inst_list_show_all ( inst_list );)
 
 	VERBOSE( std::cout << "----- Converting VM instructions -----" << std::endl; ) 
 	VERBOSE( std::cout << "Converting VM instruction list(linked list format) into VM instruction code (array format)" << std::endl; )

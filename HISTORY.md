@@ -261,6 +261,21 @@ make build
     + simple_date_format()
 
 
+## Ver 0.71 (Oct. 25 2019)
+
+* Minor fixes for codes showing VM instructions. (vm_inst_list_show_all() uses printf(), not DEBUG_PRINT(). )
+* Minor fixes for codes dumping parser tree. (tree_dump() uses printf(), not DEBUG_PRINT(). )
+* Minor fixes for lexer. The following if-else is now allowed.
+    + Previoulsy, line beginning directly with "else" was not allowed. Only "} else" was allowed.
+
+```
+if ( carname =~ re/(^Merc)/ ) { country = "Germany" ; type = rexp_matched(1) }
+else if( carname =~ re/(^Cadillac|^Ford)/ ) { country = "USA" ; type = rexp_matched(1); }
+else if( carname =~ re/(^Honda|^Toyota)/ ) { country = "Japan" ; type = rexp_matched(1); } 
+else { carname = "other country" }
+```
+
+
 ## Plan 
 
 * Report run time error.

@@ -1,0 +1,19 @@
+carname = "Volvo 396"
+hp = 200
+
+if( hp > 145 ){
+  power = "high"
+}else if( 145 >= hp && hp > 0){
+  power = "low"
+}else{
+  print("hp variable has missing value")
+}
+
+if ( carname =~ re/(^Merc|^Porsche|^Volvo)/ ) { country = "Germany" ; type = rexp_matched(1) }
+else if( carname =~ re/(^Hornet|^Cadillac|^Lincoln|^Chrysler|^Dodge|^AMC|^Camaro|^Chevrolet|^Pontiac|^Ford)/ ) { country = "USA"  ; type = rexp_matched(1); }
+else if( carname =~ re/(^Mazda|^Datsun|^Honda|^Toyota)/ ) { country = "Japan"  ; type = rexp_matched(1); } 
+else { carname = "other country" }
+
+// germany = re/(^Merc|^Porsche|^Volvo)/
+// usa = re/(^Hornet|^Cadillac|^Lincoln|^Chrysler|^Dodge|^AMC|^Camaro|^Chevrolet|^Pontiac|^Ford)/
+// japan = re/(^Mazda|^Datsun|^Honda|^Toyota)/

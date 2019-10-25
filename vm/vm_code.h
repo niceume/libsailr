@@ -21,7 +21,7 @@ struct _vm_inst{
 };
 typedef struct _vm_inst vm_inst;
 
-void vm_inst_display( vm_inst* );
+void vm_inst_show( vm_inst* );
 int vm_inst_free( vm_inst* );
 
 // vm_code
@@ -29,7 +29,5 @@ typedef vm_inst vm_code[];
 
 int vm_code_jmp(vm_code code, int idx, char* label, int max_line);
 // fjmp code is implemented at vm.c level.
-
-void vm_code_display_all( vm_code* );
 
 #endif

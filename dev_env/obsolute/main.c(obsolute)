@@ -79,7 +79,7 @@ int main(int argc, char** argv){
 
 	vm_inst* inst = inst_list;
 	do{
-		vm_inst_display(inst);		
+		vm_inst_show(inst);		
 		inst = inst->next;
 	}while(inst != NULL);
 

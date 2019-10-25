@@ -22,7 +22,7 @@ vm_inst* vm_inst_list_reach_last( vm_inst_list* );
 vm_inst* vm_inst_list_get(vm_inst_list* , int );
 int vm_inst_list_size(vm_inst_list* );
 vm_inst_list* vm_inst_list_cat( vm_inst_list* , vm_inst_list*  );
-void vm_inst_list_display_all( vm_inst_list* );
+void vm_inst_list_show_all( vm_inst_list* );
 // vm_inst_list* vm_inst_list_insert( vm_inst_list*, int, vm_inst_list* );
 int vm_inst_list_free( vm_inst_list* );
 

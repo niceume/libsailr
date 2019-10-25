@@ -167,7 +167,7 @@ vm_inst_list_cat( vm_inst_list* list1, vm_inst_list* list2 )
 }
 
 void
-vm_inst_list_display_all( vm_inst_list* list )
+vm_inst_list_show_all( vm_inst_list* list )
 {
 	char* curr_cmd;
 	vm_inst* curr_inst;
@@ -176,7 +176,7 @@ vm_inst_list_display_all( vm_inst_list* list )
     DEBUG_PRINT("For values, VM instructions holds values themselves.\n");
 
 	do{
-		vm_inst_display( curr_inst );
+		vm_inst_show( curr_inst );
 		curr_inst = curr_inst->next;
 	}while(curr_inst != NULL);
 }

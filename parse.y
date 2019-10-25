@@ -152,10 +152,12 @@ condition	: '(' expr ')' opt_termin		{ $$ = $2 ; }
 
 then_stmts	: stmt TERMIN					{ $$ = $1; }
 			| '{' prgm '}'		{ $$ = $2; }
+			| '{' prgm '}' opt_termin		{ $$ = $2; }
 
 opt_else	: { $$ = NULL; }
 			| KEY_ELSE stmt			{ $$ = $2; }
 			| KEY_ELSE '{' prgm '}'	{ $$ = $3; }
+			| TERMIN KEY_ELSE '{' prgm '}' { $$ = $4; }
 
 assign_stmt	: lvar ASSIGN expr	{ $$ = new_node_let($1, $3); }
 
@@ -166,14 +168,14 @@ lvar			: IDENT
 					var_hash_add_name( &(p->lhsvars) , $1 );
 					}
 
-termins		: TERMIN termins
-				| TERMIN
-
 opt_termin		: /* empty */
 				| TERMIN
 
 opt_termins	: /* empty */
 				| termins
+
+termins		: TERMIN termins
+				| TERMIN
 
 
 %%

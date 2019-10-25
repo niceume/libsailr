@@ -401,7 +401,7 @@ ptr_record_show(ptr_record* pr)
 			pr->key, pr->address, pr->type, pr->gc, *((double*)(pr->address)),
 			pr->ex_addr, pr->ex_type, pr->ex_gc, *((int*)(pr->ex_addr)));
 		}else if(pr->type == PTR_STR){
-        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%s\t (EXTR_ADR:%p --Extra space is not used for string--)\n", 
+        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%s\t (EXTR_ADR:%p (Not used for string))\n", 
 			pr->key, pr->address, pr->type, pr->gc, string_read((string_object*)(pr->address)),
 			pr->ex_addr );
 		}else if(pr->type == PTR_REXP){

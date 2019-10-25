@@ -6,40 +6,40 @@
 #include "helper.h"
 
 void
-vm_inst_display( vm_inst* inst )
+vm_inst_show( vm_inst* inst )
 {
 	char* cmd_str = vm_cmd_to_string(inst->cmd);
 	switch(inst->cmd){
 	case VM_PUSH_IVAL:
-		DEBUG_PRINT("CMD:%s\t ARG:.ival=%d\n", cmd_str, inst->ival);
+		printf("CMD:%s\t ARG:.ival=%d\n", cmd_str, inst->ival);
 		break;
 	case VM_PUSH_DVAL:
-		DEBUG_PRINT("CMD:%s\t ARG:.dval=%f\n", cmd_str, inst->dval);
+		printf("CMD:%s\t ARG:.dval=%f\n", cmd_str, inst->dval);
 		break;
 	case VM_PUSH_PP_IVAL:
 	case VM_PUSH_PP_DVAL:
 	case VM_PUSH_PP_STR:
 	case VM_PUSH_PP_REXP:
-		DEBUG_PRINT("CMD:%s\t ARG:.ptr_key=%s\n", cmd_str, inst->ptr_key);
+		printf("CMD:%s\t ARG:.ptr_key=%s\n", cmd_str, inst->ptr_key);
 		break;
     case VM_PUSH_PP_NUM:
-		DEBUG_PRINT("CMD:%s\t ARG:.ptr_key=%s\n", cmd_str, inst->ptr_key);
+		printf("CMD:%s\t ARG:.ptr_key=%s\n", cmd_str, inst->ptr_key);
 		break;
     case VM_PUSH_NULL:
-		DEBUG_PRINT("CMD:%s\t ARG:.ptr_key=%s\n", cmd_str, inst->ptr_key);
+		printf("CMD:%s\t ARG:.ptr_key=%s\n", cmd_str, inst->ptr_key);
 		break;
 	case VM_LABEL:
-		DEBUG_PRINT("CMD:%s\t ARG:.label=%s\n", cmd_str, inst->label);
+		printf("CMD:%s\t ARG:.label=%s\n", cmd_str, inst->label);
 		break;
 	case VM_JMP:
 	case VM_FJMP:
-		DEBUG_PRINT("CMD:%s\t ARG:.label=%s\n", cmd_str, inst->label);
+		printf("CMD:%s\t ARG:.label=%s\n", cmd_str, inst->label);
 		break;
 	case VM_FCALL:
-		DEBUG_PRINT("CMD:%s\t ARG:.fname=%s  .num_arg=%d\n", cmd_str, inst->fname, inst->num_arg);
+		printf("CMD:%s\t ARG:.fname=%s  .num_arg=%d\n", cmd_str, inst->fname, inst->num_arg);
 		break;
 	default:
-		DEBUG_PRINT("CMD:%s\n", cmd_str);
+		printf("CMD:%s\n", cmd_str);
 		break;
 	}
 }
@@ -69,8 +69,6 @@ vm_code_jmp(vm_code code, int idx, char* label, int max_line)
 
 // fjmp code is implemented at vm.c level.
 
-void
-vm_code_display_all( vm_code* code )
-{
-
-}
+//Not implemented: 
+//void
+//vm_code_display_all( vm_code* code ){}

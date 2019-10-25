@@ -20,7 +20,7 @@ int                   sailr_tree_free( parser_state_object* ps );
 vm_inst_object*       sailr_gen_code( parser_state_object* ps , ptr_table_object*); // VM Code is generated.
 vm_inst_object*       sailr_vm_inst_list_to_code( vm_inst_object* );
 int                   sailr_vm_inst_list_size( vm_inst_object* );
-void                  sailr_vm_inst_list_show( vm_inst_object* );
+void                  sailr_vm_inst_list_show_all( vm_inst_object* );
 vm_stack_object*      sailr_vm_stack_init();
 int                   sailr_vm_stack_set_encoding(vm_stack_object* , const char*);
 const char*           sailr_vm_stack_get_encoding(vm_stack_object* );

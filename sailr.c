@@ -134,13 +134,13 @@ sailr_vm_inst_list_size( vm_inst_object* insts)
 }
 
 void
-sailr_vm_inst_list_show( vm_inst_object* insts )
+sailr_vm_inst_list_show_all( vm_inst_object* insts )
 {
 	vm_inst* inst = (vm_inst*) insts;
-    vm_inst_list_display_all( inst );
+    vm_inst_list_show_all( inst );
     
 //	do{
-//		vm_inst_display(inst);		
+//		vm_inst_show(inst);		
 //		inst = inst->next;
 //	}while(inst != NULL);
 }

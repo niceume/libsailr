@@ -15,7 +15,7 @@ int vm_stack_assign_copy_str_to_record(ptr_record* left_record, stack_item* rval
 // Needed?
 int vm_stack_convert_str_item_into_void(ptr_record* left_record, stack_item* rvalue);
 
-#define PTR_TABLE_NULL_UPDATED( ptr_to_ptr_record ) ({ ptr_table* table = ptr_record_obtain_table( ptr_to_ptr_record ); ptr_table_info_set_null_updated(&table, 1); })
+#define PTR_TABLE_NULL_UPDATED( ptr_to_ptr_record , ptr_type ) ({ ptr_table* table = ptr_record_obtain_table( ptr_to_ptr_record ); ptr_table_info_change_null_updated_by_type(&table, ptr_type ); })
 
 
 int
@@ -49,7 +49,7 @@ vm_stack_store_val(vm_stack* vmstack)
 			if(rvalue->type == IVAL){ // Undefined varialbes become defined ones.
 				DEBUG_PRINT("Thin lvalue is an unknown and undefined variable, which becomes PTR_INT.\n");
 				// change type from PTR_NULL to PTR_INT on ptr_table.
-				PTR_TABLE_NULL_UPDATED(left_record);
+				PTR_TABLE_NULL_UPDATED(left_record, PTR_INT);
 				left_record->type = PTR_INT;
 				left_record->address = malloc(sizeof(int));
 				left_record->gc = GC_YES;
@@ -63,7 +63,7 @@ vm_stack_store_val(vm_stack* vmstack)
 			}else if( rvalue->type == DVAL){
 				DEBUG_PRINT("Thin lvalue is an unknown and undefined variable, which becomes PTR_DBL.\n");
 				// change type from PTR_NULL to PTR_DBL on ptr_table.
-				PTR_TABLE_NULL_UPDATED(left_record);
+				PTR_TABLE_NULL_UPDATED(left_record, PTR_DBL);
 				left_record->type = PTR_DBL;
 				left_record->address = malloc(sizeof(double));
 				left_record->gc = GC_YES;
@@ -77,7 +77,7 @@ vm_stack_store_val(vm_stack* vmstack)
 			}else if( rvalue->type == PP_STR){
 				DEBUG_PRINT("Thin lvalue is an unknown and undefined variable, which becomes PTR_STR.\n");
 				// change type from PTR_NULL to PTR_STR on ptr_table.
-				PTR_TABLE_NULL_UPDATED(left_record);
+				PTR_TABLE_NULL_UPDATED(left_record, PTR_STR);
 				left_record->type = PTR_STR;
 				if( vm_stack_item_is_temp(rvalue) ){ // If rvalue is temporary, use the object.
 					left_record->address = (string_object*) *(rvalue->pp_str);
@@ -92,7 +92,7 @@ vm_stack_store_val(vm_stack* vmstack)
 			}else if( rvalue->type == PP_REXP){
 				DEBUG_PRINT("Thin lvalue is an unknown and undefined variable, which becomes PTR_REXP.\n");
 				// change type from PTR_NULL to PTR_STR on ptr_table.
-				PTR_TABLE_NULL_UPDATED(left_record);
+				PTR_TABLE_NULL_UPDATED(left_record, PTR_REXP);
 				left_record->type = PTR_REXP;
 				if( vm_stack_item_is_temp(rvalue) ){ // If rvalue is temporary, use the object.
 					printf("LVALUE is unknown and rvalue is temp rexp.\n");

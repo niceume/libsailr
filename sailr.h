@@ -52,6 +52,7 @@ int sailr_ptr_table_del_all(ptr_table_object** table);
 // Utility
 void sailr_ptr_table_show_all(ptr_table_object** table);
 int sailr_ptr_table_info_get_null_updated( ptr_table_object** table);
+int sailr_ptr_table_info_reset_null_updated( ptr_table_object** table);
 
 string_type_object* sailr_new_string(const char* str);
 

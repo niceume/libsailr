@@ -15,7 +15,7 @@ ptr_table_init (){
 	new_ptr_table_info = (ptr_table_info *) malloc(sizeof(ptr_table_info));
 	new_ptr_table_info->str_counter = 0;
 	new_ptr_table_info->rexp_counter = 0;
-	new_ptr_table_info->null_updated = 0;
+	new_ptr_table_info->null_updated = 0b0000 ;
 	new_ptr_record->address = new_ptr_table_info;
 	new_ptr_record->type = PTR_INFO;
 	new_ptr_record->gc = GC_YES;
@@ -456,6 +456,29 @@ ptr_table_info_set_null_updated(ptr_table** table, int updated_value)
 }
 
 int
+ptr_table_info_change_null_updated_by_type(ptr_table** table, PtrType type)
+{
+	ptr_record* pr;
+	int current_null_updated;
+    int bitmask;
+	if(ptr_table_points_to_header(table)){
+		pr = (ptr_record*) *table;
+		current_null_updated = ((ptr_table_info*) (pr->address))->null_updated ;
+		
+		if( PTR_INT <= type && type <= PTR_REXP ){
+			bitmask = ( 0b0001 << ((int)type));
+		}else{
+			printf("ERROR: Null may be converted to unintentional type on ptr_table." );
+		}
+		((ptr_table_info*) (pr->address))->null_updated = current_null_updated | bitmask ;
+		return 1;
+	}else{
+		printf("ERROR: The pointer passed is not pointing to valid ptr_table.");
+		return 0;
+	}
+}
+
+int
 ptr_table_info_get_null_updated(ptr_table** table)
 {
 	ptr_record* pr;
@@ -466,6 +489,20 @@ ptr_table_info_get_null_updated(ptr_table** table)
 	}else{
 		printf("ERROR: The pointer passed is not pointing to valid ptr_table. This branch works, but should never executed. ");
 		return 0; 
+	}
+}
+
+int
+ptr_table_info_reset_null_updated(ptr_table** table)
+{
+	ptr_record* pr;
+	if(ptr_table_points_to_header(table)){
+		pr = (ptr_record*) *table;
+		((ptr_table_info*) (pr->address))->null_updated = 0b0000 ;
+		return 1;
+	}else{
+		printf("ERROR: The pointer passed is not pointing to valid ptr_table.");
+		return 0;
 	}
 }
 

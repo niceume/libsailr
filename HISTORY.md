@@ -276,6 +276,18 @@ else { carname = "other country" }
 ```
 
 
+## Ver 0.72 (Oct. 26 2019)
+
+* From Ver 0.66, ptr_table holds information whether null variable was updated. 
+    + Now it holds which type is newly created, PTR_INT, PTR_DBL, PTR_STR or PTR_REXP
+    + The default value of null_update is set to 0b0000.
+        + From right, the 1st bit represents PTR_INT, the 2nd bit PTR_DBL, the 3rd bit PTR_STR and the 4th PTR_REXP. The rest of bits are not used.
+        + If a bit is set to 1, the corresponding type is newly created.
+* ptr_table_info_reset_null_update() is added.
+    + This function is available through sailr.h
+
+
+
 ## Plan 
 
 * Report run time error.

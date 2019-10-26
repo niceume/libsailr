@@ -11,12 +11,12 @@
 #define MAX_KEY_LEN 511
 
 enum _PtrType{
-	PTR_INT,
-	PTR_DBL,
-	PTR_STR,
-	PTR_REXP,
-	PTR_NULL,
-	PTR_INFO
+	PTR_INT = 0,
+	PTR_DBL = 1,
+	PTR_STR = 2,
+	PTR_REXP = 3,
+	PTR_NULL = 4,
+	PTR_INFO = 5
 };
 typedef enum _PtrType PtrType ;
 
@@ -86,7 +86,9 @@ void ptr_table_show_all(ptr_table** table);
 void ptr_record_show(ptr_record* pr);
 ptr_table* ptr_record_obtain_table(ptr_record* pr);
 int ptr_table_info_set_null_updated(ptr_table** table, int updated_value);
+int ptr_table_info_change_null_updated_by_type(ptr_table** table, PtrType type);
 int ptr_table_info_get_null_updated(ptr_table** table);
+int ptr_table_info_reset_null_updated(ptr_table** table);
 
 PtrType ptr_table_get_type(ptr_table** table, const char* key);
 int ptr_record_is_ptr_null(ptr_table** table, const char* key);

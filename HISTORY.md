@@ -287,6 +287,13 @@ else { carname = "other country" }
     + This function is available through sailr.h
 
 
+## Ver 0.72b 
+
+* Minor fix. Additional fix for Ver 0.71.
+    + Resolved reduce/reduce conflicts.
+
+
+
 
 ## Plan 
 

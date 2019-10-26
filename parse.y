@@ -143,21 +143,25 @@ args		: /* empty */  		{ $$ = new_node_null(); }
 					$$ = pushback_node_farg($1, new_node_farg($3));
 					}
 
-if_stmt	: KEY_IF condition then_stmts opt_else
+//if_stmt	: KEY_IF condition then_stmts opt_else
+//					{
+//					$$ = new_node_if( $2, $3, $4 );
+//					}
+if_stmt	: KEY_IF condition then_stmts opt_termin opt_else
 					{
-					$$ = new_node_if( $2, $3, $4 );
+					$$ = new_node_if( $2, $3, $5 );
 					}
 
 condition	: '(' expr ')' opt_termin		{ $$ = $2 ; }
 
 then_stmts	: stmt TERMIN					{ $$ = $1; }
 			| '{' prgm '}'		{ $$ = $2; }
-			| '{' prgm '}' opt_termin		{ $$ = $2; }
+//			| '{' prgm '}' opt_termin		{ $$ = $2; }
 
 opt_else	: { $$ = NULL; }
 			| KEY_ELSE stmt			{ $$ = $2; }
 			| KEY_ELSE '{' prgm '}'	{ $$ = $3; }
-			| TERMIN KEY_ELSE '{' prgm '}' { $$ = $4; }
+//			| TERMIN KEY_ELSE '{' prgm '}' { $$ = $4; }
 
 assign_stmt	: lvar ASSIGN expr	{ $$ = new_node_let($1, $3); }
 

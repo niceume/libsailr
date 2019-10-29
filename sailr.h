@@ -29,16 +29,19 @@ void                  sailr_vm_exec_code(vm_inst_object*, int, ptr_table_object*
 // Create
 ptr_record_object* sailr_ptr_table_create_int_from_ptr(ptr_table_object** table, const char* key, int** i_pp, double** d_pp);
 ptr_record_object* sailr_ptr_table_create_double_from_ptr(ptr_table_object** table, const char* key, double** d_pp, int** i_pp);
-ptr_record_object* sailr_ptr_table_create_string_from_ptr(ptr_table_object** table, const char* key, string_type_object** pp);
 ptr_record_object* sailr_ptr_table_create_anonym_string(ptr_table_object** table, const char* str);
+ptr_record_object* sailr_ptr_table_create_string_from_cstring(ptr_table_object** table, const char* key, const char* str);
 ptr_record_object* sailr_ptr_table_create_null(ptr_table_object** table, const char* key);
+
+// (Deprecated) ptr_record_object* sailr_ptr_table_create_string_from_ptr(ptr_table_object** table, const char* key, string_type_object** pp); 
 
 // Read
 char sailr_ptr_table_get_type(ptr_table_object** table, const char* key);
 int sailr_ptr_record_is_ptr_null(ptr_table_object** table, const char* key);
 void** sailr_ptr_table_get_pptr(ptr_table_object** table, const char* key);
-string_type_object* sailr_ptr_table_get_pp_string(ptr_table_object** table, const char* key);
 const char* sailr_ptr_table_read_string(ptr_table_object** table, const char* key);
+
+// (Deprecated) string_type_object* sailr_ptr_table_get_ptr_string(ptr_table_object** table, const char* key);
 
 // Update
 int sailr_ptr_table_update_int(ptr_table_object** table, const char* key, int ival);

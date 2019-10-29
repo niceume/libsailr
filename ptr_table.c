@@ -87,7 +87,7 @@ ptr_table_update_int(ptr_table** table, const char* key, int ival)
 }
 
 string_object*
-ptr_table_get_pp_string(ptr_table** table, const char* key)
+ptr_table_get_ptr_string(ptr_table** table, const char* key)
 {
   ptr_record* result = ptr_table_find(table, key);
   void* ptr_address = result->address;
@@ -200,12 +200,14 @@ ptr_table_create_string(ptr_table** table, const char* key, string_object** strp
 	return new_ptr_record ;
 }
 
-ptr_record*
-ptr_table_create_string_from_ptr(ptr_table** table, const char* key, string_object** strptr)
-{
-	ptr_record* result = ptr_table_create_string(table, key, strptr);
-	return result;
-}
+// (Deprecated)
+//ptr_record*
+//ptr_table_create_string_from_ptr(ptr_table** table, const char* key, string_object** strptr)
+//{
+//	ptr_record* result = ptr_table_create_string(table, key, strptr);
+//	return result;
+//}
+//
 
 int
 ptr_table_update_string(ptr_table** table, const char* key, string_object** strptr)

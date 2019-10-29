@@ -293,10 +293,31 @@ else { carname = "other country" }
     + Resolved reduce/reduce conflicts.
 
 
+## Ver 0.73 (Oct. 29 2019)
+
+* libsailr interface for adding string onto ptr_table is changed.
+    + sailr_ptr_table_create_string_from_ptr is deprecated. 
+    + Instead, sailr_ptr_table_create_string_from_cstring is introduced. 
+        + Reasons for this change. 
+        + Strings need to be tracked adn freed at an appropriate timing. At current implementation, the mechanism is not implemented enough.
+        + To make this software available in public as soon as possible, stability should be preferred to performance. It should never happen to break user data.
+
+
+* Current rules when using libsair
+    1. For int and double, pass int or double pointer to libsailr. The value the pointer points to will be updated. 
+        + You can obtain the calculation result by dereferencing the pointers. 
+        + sailr_ptr_table_create_int_from_ptr() and sailr_ptr_table_
+    2. For string, pass the initial value as cstring (constant char*). Meaning the original string objects are never modified or destroyed during libsailr calculation.
+        + sailr_ptr_table_create_string_from_cstring() pass the initial string value.
+        + const char* sailr_ptr_table_get_cstring() to obtain the result. 
+
+
 
 
 ## Plan 
 
+* The notion of lifetime attribute is to be added to ptr_table.
+* This works with GCReq attribute.
 * Report run time error.
     + Append line number and column number of corresponding codes to AST node.
     + Paass the information to VM instruction.

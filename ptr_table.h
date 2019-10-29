@@ -68,9 +68,9 @@ ptr_record* ptr_table_create_anonym_struct_string(ptr_table** table, struct_stri
 
 ptr_record* ptr_table_create_anonym_string(ptr_table** table, string_object** strptr);
 ptr_record* ptr_table_create_string(ptr_table** table, const char* key, string_object** strptr);
-ptr_record* ptr_table_create_string_from_ptr(ptr_table** table, const char* key, string_object** strptr);
+// (DEPRECATED) ptr_record* ptr_table_create_string_from_ptr(ptr_table** table, const char* key, string_object** strptr);
 
-string_object* ptr_table_get_pp_string(ptr_table** table, const char* key);
+string_object* ptr_table_get_ptr_string(ptr_table** table, const char* key);
 const char* ptr_table_read_string(ptr_table** table, const char* key);
 int ptr_table_update_string(ptr_table** , const char* key, string_object** );
 int ptr_record_update_string(ptr_record* pr , string_object** pp_str, GCReq gc);

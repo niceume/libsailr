@@ -164,13 +164,6 @@ sailr_ptr_table_create_double_from_ptr(ptr_table_object** table, const char* key
 }
 
 ptr_record_object*
-sailr_ptr_table_create_string_from_ptr(ptr_table_object** table, const char* key, string_type_object** pp)
-{
-	return (ptr_record_object*) ptr_table_create_string_from_ptr((ptr_table**)table, key, (string_object**)pp);
-
-}
-
-ptr_record_object*
 sailr_ptr_table_create_null(ptr_table_object** table, const char* key)
 {
 	return (ptr_record_object*) ptr_table_create_null((ptr_table**)table, key);
@@ -181,9 +174,25 @@ sailr_ptr_table_create_anonym_string(ptr_table_object** table, const char* str)
 {
 	string_object* new_str = string_new(str);
 	return (ptr_record_object*) ptr_table_create_anonym_string((ptr_table**)table, &new_str);
-
 }
 
+
+ptr_record_object*
+sailr_ptr_table_create_string_from_cstring(ptr_table_object** table, const char* key, const char* str)
+{
+	string_object* new_str = string_new(str);
+	return (ptr_record_object*) ptr_table_create_string((ptr_table**)table, key, &new_str);
+}
+
+
+// Deprecated: hard to mange string object.
+// ptr_record_object*
+// sailr_ptr_table_create_string_from_ptr(ptr_table_object** table, const char* key, string_type_object** pp)
+// {
+// 	return (ptr_record_object*) ptr_table_create_string_from_ptr((ptr_table**)table, key, (string_object**)pp);
+// 
+// }
+//
 
 char
 sailr_ptr_table_get_type(ptr_table_object** table, const char* key)
@@ -223,11 +232,11 @@ sailr_ptr_table_get_pptr(ptr_table_object** table, const char* key)
 	return ptr_table_get_pptr((ptr_table**) table, key);
 }
 
-
-string_type_object*
-sailr_ptr_table_get_pp_string(ptr_table_object** table, const char* key){
-  return (string_type_object*) ptr_table_get_pp_string((ptr_table**)table, key);
-}
+// (Deprecated) This string object may be deleted without notifying user. Not recommended to use this function.
+//string_type_object*
+//sailr_ptr_table_get_ptr_string(ptr_table_object** table, const char* key){
+//  return (string_type_object*) ptr_table_get_ptr_string((ptr_table**)table, key);
+//}
 
 const char*
 sailr_ptr_table_read_string(ptr_table_object** table, const char* key){

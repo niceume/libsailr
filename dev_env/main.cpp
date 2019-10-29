@@ -144,31 +144,23 @@ main(int argc, char** argv)
 	*address_for_ow = 10;
 	sailr_ptr_table_create_int_from_ptr(&table, "overweight" , &address_for_ow, &address_for_d_ow);
 
-	string_type_object* judgement = sailr_new_string("weight?");
-	sailr_ptr_table_create_string_from_ptr( &table, "judgement" , &judgement);
+	sailr_ptr_table_create_string_from_cstring( &table, "judgement" , "weight?" );
 
-	string_type_object* greeting = sailr_new_string("Hello World");
-	sailr_ptr_table_create_string_from_ptr( &table, "greeting" , &greeting);
+	sailr_ptr_table_create_string_from_cstring( &table, "greeting" , "Hello World");
 
 	sailr_ptr_table_create_null(&table, "greeting2" );
 
-	string_type_object* hello = sailr_new_string("Hello World");
-	sailr_ptr_table_create_string_from_ptr( &table, "hello" , &hello);
+	sailr_ptr_table_create_string_from_cstring( &table, "hello" , "Hello World");
 
-	string_type_object* univ = sailr_new_string("U");
-	sailr_ptr_table_create_string_from_ptr( &table, "univ" , &univ);
+	sailr_ptr_table_create_string_from_cstring( &table, "univ" , "U");
 
-	string_type_object* dot = sailr_new_string("D");
-	sailr_ptr_table_create_string_from_ptr( &table, "dot" , &dot);
+	sailr_ptr_table_create_string_from_cstring( &table, "dot" , "D");
 
-	string_type_object* name = sailr_new_string("N");
-	sailr_ptr_table_create_string_from_ptr( &table, "name" , &name);
+	sailr_ptr_table_create_string_from_cstring( &table, "name" , "N");
 
-	string_type_object* result = sailr_new_string("R");
-	sailr_ptr_table_create_string_from_ptr( &table, "result" , &result);
+	sailr_ptr_table_create_string_from_cstring( &table, "result" , "R");
 
-	string_type_object* race = sailr_new_string("Asian-Pac-Islander");
-	sailr_ptr_table_create_string_from_ptr( &table, "race" , &race);
+	sailr_ptr_table_create_string_from_cstring( &table, "race" , "Asian-Pac-Islander");
 
 	int* address_for_oa = (int *)malloc(sizeof(int));
 	double* address_for_d_oa = (double *)malloc(sizeof(double));

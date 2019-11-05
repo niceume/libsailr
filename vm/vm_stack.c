@@ -30,8 +30,15 @@ vm_stack_init()
 	item->p_vm_stack_info = (vm_stack_info*)malloc(sizeof(vm_stack_info));
 	item->p_vm_stack_info->characterEncoding = DEFAULT_VM_CHARACTER_ENCODING;
 	item->p_vm_stack_info->max_size = MAXSTACKSIZE;
+	item->p_vm_stack_info->last_rexp = NULL;
 
 	memcpy( &(stack->stack[stack->sp]), item, sizeof(stack_item));
+
+#ifdef DEBUG
+	printf("Initializing vm_stack: Address to Pointer to last_rexp field is %p \n", &(item->p_vm_stack_info->last_rexp));
+	printf("Initializing vm_stack: Address to last_rexp is %p \n", item->p_vm_stack_info->last_rexp);
+#endif
+
 	return stack;
 }
 
@@ -48,6 +55,25 @@ vm_stack_get_encoding(vm_stack* vmstack)
     return (vmstack->stack[0].p_vm_stack_info->characterEncoding);
 }
 
+simple_re**
+vm_stack_get_ptr_last_rexp_field(vm_stack* vmstack)
+{
+    return &(vmstack->stack[0].p_vm_stack_info->last_rexp);
+}
+
+/*
+void
+vm_stack_set_last_rexp(vm_stack* vmstack, simple_re* re)
+{
+    vmstack->stack[0].p_vm_stack_info->last_rexp = re;
+}
+*/
+
+void
+vm_stack_clear_last_rexp_hisotry(vm_stack* vmstack)
+{
+    vmstack->stack[0].p_vm_stack_info->last_rexp = NULL;
+}
 
 int
 vm_stack_push_item( vm_stack* stack, stack_item* item )

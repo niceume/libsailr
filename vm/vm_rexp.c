@@ -34,7 +34,26 @@ vm_rexp_match(vm_stack* vmstack)
 
 	str_obj = *(str_item->pp_str);
 	rexp_obj = *(rexp_item->pp_rexp);
-	matched_pos = simple_re_match( rexp_obj , string_read(str_obj));
+	simple_re** ptr_last_rexp_field = vm_stack_get_ptr_last_rexp_field(vmstack); // The last regular expression executed is tracked as a vm_stack information.
+
+#ifdef DEBUG
+	simple_re*  ptr_last_rexp_obj = *ptr_last_rexp_field;
+	printf("Just before simple_re_match on vm_stack: Address to last_rexp field of vm_stack info %p\n", &(vmstack->stack[0].p_vm_stack_info->last_rexp));
+	printf("Just before simple_re_match on vm_stack: Address to last_rexp field obtained through vm_stack_get_ptr_last_rexp_field(vmstack) %p\n",  ptr_last_rexp_field);
+	printf("Just before simple_re_match on vm_stack: Address to last_rexp object %p\n", vmstack->stack[0].p_vm_stack_info->last_rexp);
+	printf("Just before simple_re_match on vm_stack: Address to last_rexp object obtained through vm_stack_get_ptr_last_rexp_field(vmstack) %p\n",  ptr_last_rexp_obj);
+#endif
+
+	matched_pos = simple_re_match( rexp_obj , string_read(str_obj), ptr_last_rexp_field);
+
+#ifdef DEBUG
+	ptr_last_rexp_field = vm_stack_get_ptr_last_rexp_field(vmstack); 
+	ptr_last_rexp_obj = *ptr_last_rexp_field;
+	printf("Just before simple_re_match on vm_stack: Address to last_rexp field of vm_stack info %p\n", &(vmstack->stack[0].p_vm_stack_info->last_rexp));
+	printf("Just before simple_re_match on vm_stack: Address to last_rexp field obtained through vm_stack_get_ptr_last_rexp_field(vmstack) %p\n",  ptr_last_rexp_field);
+	printf("Just before simple_re_match on vm_stack: Address to last_rexp object %p\n", vmstack->stack[0].p_vm_stack_info->last_rexp);
+	printf("Just before simple_re_match on vm_stack: Address to last_rexp object obtained through vm_stack_get_ptr_last_rexp_field(vmstack) %p\n",  ptr_last_rexp_obj);
+#endif
 
 	if(matched_pos > 0 ){
 		result_bool = true;

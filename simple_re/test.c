@@ -10,7 +10,8 @@ int main(int argc, char** argv){
 
 //	const char* string = "こんにちは World";
 	const char* string = "Hello World";
-	int result = simple_re_match( re , string );
+	simple_re* ptr_to_store;
+	int result = simple_re_match( re , string , &ptr_to_store);
 	printf("Matching finished. \n");
 
 	int num;
@@ -20,9 +21,9 @@ int main(int argc, char** argv){
 		printf("success match found. \n");
 		printf("Showing ... \n");
 		
-		num = simple_re_matched_group_num(re);
+		num = simple_re_matched_group_num(ptr_to_store);
 		for(idx = 0; idx < num ; ++idx){
-			str = simple_re_matched_str( re , idx );
+			str = simple_re_matched_str( ptr_to_store , idx );
 			if(idx == 0){
 				printf("Whole Matched : %s \n", str );
 			} else {

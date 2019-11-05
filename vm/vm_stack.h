@@ -48,6 +48,7 @@ char* display_item_type(ItemType type);
 struct _vm_stack_info{
   const char* characterEncoding;
   int max_size;
+  simple_re* last_rexp; // Pointer to hold the last executed regular expression.
 };
 typedef struct _vm_stack_info vm_stack_info;
 
@@ -82,10 +83,14 @@ typedef struct _vm_stack vm_stack;
 // public
 // int run_vm ( vm_stack* , vm_code* , ptr_table* ); Deprecated
 
-// private
+// private: manipulate stack information
 vm_stack* vm_stack_init();
 int vm_stack_set_encoding(vm_stack* , const char*);
 const char* vm_stack_get_encoding(vm_stack* );
+simple_re** vm_stack_get_ptr_last_rexp_field(vm_stack* vmstack);
+void vm_stack_clear_last_rexp_hisotry(vm_stack* vmstack);
+
+// private: manipulate stack
 int vm_stack_push_item( vm_stack* , stack_item* );
 int vm_stack_push_ival( vm_stack* , int );
 int vm_stack_push_dval( vm_stack* , double );

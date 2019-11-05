@@ -212,6 +212,8 @@ make build
 ## Ver 0.64 (Sep. 10 2019)
 
 * Parser (bison/flex) is now reentrant.
+* (Note) Under simple_re directory, global variable still exists to store the regular expression that was last executed.
+    + In Ver 0.74, this point is updated.
 
 ## Ver 0.65 (Sep.11 2019)
 
@@ -310,6 +312,14 @@ else { carname = "other country" }
     2. For string, pass the initial value as cstring (constant char*). Meaning the original string objects are never modified or destroyed during libsailr calculation.
         + sailr_ptr_table_create_string_from_cstring() pass the initial string value.
         + const char* sailr_ptr_table_get_cstring() to obtain the result. 
+
+
+## Ver 0.74 (Nov. 5 2019)
+
+* The global variable was found that should have been deleted in Ver.0.64. 
+    * simple_re* re_last_matched in simple_re.h is removed.
+    * Instead, vm_stack now holds the last executed regular expression as vmstack->stack[0].p_vm_stack_info->last_rexp.
+    * Related functions in simple_re.c/.h, vm_rexp.c, vm_stack.c, vm/func/c_func/c_func.c are updated.
 
 
 

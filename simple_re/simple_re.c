@@ -4,7 +4,6 @@
 #include <string.h>
 #include "helper.h"
 
-simple_re* re_last_matched = NULL;
 
 simple_re*
 simple_re_new()
@@ -62,7 +61,7 @@ simple_re_set_matched_region( simple_re* re, OnigRegion* region)
 }
 
 int
-simple_re_match ( simple_re* re , const char* str)
+simple_re_match ( simple_re* re , const char* str , simple_re** pptr_for_last_rexp)
 {
 	DEBUG_PRINT ("onig_search is going to be executed. REGEXP: %s, STRING: %s\n", simple_re_read_pattern(re), str );
 
@@ -81,7 +80,7 @@ simple_re_match ( simple_re* re , const char* str)
 	// printf("onig_search is executed: %d \n", (int)return_value);
 
 	// This is important for back reference.
-	re_last_matched = re;
+	*pptr_for_last_rexp = re ;
 
 	if( return_value == ONIG_MISMATCH){
 		DEBUG_PRINT("Regular expression is unmatched\n");
@@ -151,12 +150,6 @@ simple_re_reset( simple_re* re )
 		re->matched = NULL;
 	}
 	return 1;
-}
-
-int
-simple_re_clear_last_matched()
-{
-	re_last_matched = NULL;
 }
 
 

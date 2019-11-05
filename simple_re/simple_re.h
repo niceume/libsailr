@@ -16,12 +16,9 @@ typedef struct simple_re_ {
 	OnigRegion* matched;
 } simple_re ;
 
-// Global variable
-simple_re* re_last_matched ;
-
 // Function Prototypes
 simple_re* simple_re_compile( const char* pattern, const char* enc );
-int simple_re_match ( simple_re* re, const char* str );
+int simple_re_match ( simple_re* re, const char* str, simple_re** ptr_for_last_rexp);
 int simple_re_reset( simple_re* re);
 int simple_re_free( simple_re* re);
 int simple_re_matched_group_num( simple_re* re);

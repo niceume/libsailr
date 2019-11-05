@@ -259,11 +259,18 @@ sailr_func_rexp_matched( vm_stack* vmstack, int num_args , ptr_table** table )
   arg_list* arglist = arg_list_initialize( vmstack, num_args );
   arg_item* argitem = arglist; 
 
+  simple_re** ptr_rexp_last_matched = vm_stack_get_ptr_last_rexp_field( vmstack );
+
+#ifdef DEBUG
+  simple_re* ptr_last_rexp_obj = *ptr_rexp_last_matched;
+  printf("Just before back referencing the last regexp match information: Address to last_rexp object %p\n",  ptr_last_rexp_obj);
+#endif
+
   int matched_group_index;
 
   ASSIGN_INT_VALUE( matched_group_index , argitem , "ERROR: For the argument, int value shouble be specified.\n" ); 
 
-  char* matched_str = simple_re_matched_str( re_last_matched , matched_group_index );
+  char* matched_str = simple_re_matched_str( *ptr_rexp_last_matched , matched_group_index );
   string_object* str_obj = string_new(matched_str);
   free(matched_str);
 

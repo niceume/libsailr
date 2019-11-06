@@ -198,6 +198,14 @@ char
 sailr_ptr_table_get_type(ptr_table_object** table, const char* key)
 {
 	ptr_record* record = ptr_table_find((ptr_table**) table, key);
+	return sailr_ptr_record_get_type(record);
+}
+
+
+char
+sailr_ptr_record_get_type(ptr_record_object* pr)
+{
+	ptr_record* record = (ptr_record*) pr;
 	switch(record->type){
 		case PTR_INT:
 			return 'i';
@@ -214,8 +222,11 @@ sailr_ptr_table_get_type(ptr_table_object** table, const char* key)
 		case PTR_NULL:
 			return 'n';
 		break;
+		case PTR_INFO:
+			return 'f';
+		break;
 		default:
-			printf("This branch should not be executed.");
+			printf("ERROR: Unintended type of ptr_record. %c \n", record->type);
 			return 'x';
 		break;
 	}
@@ -243,6 +254,19 @@ sailr_ptr_table_read_string(ptr_table_object** table, const char* key){
   return  ptr_table_read_string((ptr_table**)table, key);
 }
 
+ptr_record_object*
+sailr_ptr_table_first_record(ptr_table_object** table)
+{
+	return (ptr_record_object*) ptr_table_first_record((ptr_table**)table);
+}
+
+// If this is the last ptr_record, this function returns NULL.
+ptr_record_object*
+sailr_ptr_record_next(ptr_record_object* pr )
+{
+	ptr_record* pr_next = ptr_record_next((ptr_record*) pr);
+	return (ptr_record_object*) pr_next ; 
+}
 
 int
 sailr_ptr_table_update_int(ptr_table_object** table, const char* key, int ival)
@@ -260,6 +284,12 @@ int
 sailr_ptr_table_update_string(ptr_table_object** table, const char* key, string_type_object** str)
 {
 	return ptr_table_update_string((ptr_table**) table, key, (string_object**) str);
+}
+
+int
+sailr_ptr_record_reset_rexp(ptr_record_object* pr)
+{
+	return ptr_record_reset_rexp((ptr_record*) pr);
 }
 
 int

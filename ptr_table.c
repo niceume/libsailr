@@ -3,6 +3,7 @@
 #include <string.h>
 #include "common_string.h"
 #include "simple_re.h"
+#include "helper.h"
 
 
 ptr_table*
@@ -192,6 +193,19 @@ ptr_table_create_anonym_string(ptr_table** table, string_object** strptr)
 	return new_ptr_record ;
 }
 
+int
+ptr_record_reset_rexp(ptr_record* pr)
+{
+	if(pr->type == PTR_REXP){
+		simple_re* rexp = (simple_re*) pr->address; 
+		simple_re_reset( rexp );
+		return 0;
+	}else{
+		DEBUG_PRINT( "This record is not regular expression ptr_record.\n");
+		return -1;
+	}
+}
+
 ptr_record*
 ptr_table_create_string(ptr_table** table, const char* key, string_object** strptr)
 {
@@ -331,6 +345,19 @@ ptr_table_get_pptr(ptr_table** table, const char* key)
 	ptr_record* temp = ptr_table_find(table, key);
 	void** temp_pptr = (void**) &(temp->address);
 	return temp_pptr;
+}
+
+ptr_record*
+ptr_table_first_record(ptr_table** table)
+{
+    ptr_record *pr;
+    pr = *table;
+	return pr;
+}
+
+ptr_record*
+ptr_record_next(ptr_record* pr){
+	return pr->hh.next;
 }
 
 int

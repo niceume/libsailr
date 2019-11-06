@@ -321,7 +321,15 @@ else { carname = "other country" }
     * Instead, vm_stack now holds the last executed regular expression as vmstack->stack[0].p_vm_stack_info->last_rexp.
     * Related functions in simple_re.c/.h, vm_rexp.c, vm_stack.c, vm/func/c_func/c_func.c are updated.
 
+## Ver 0.75 (Nov. 6 2019)
 
+* Regular expressions should be reset every time calculation finishes from library user.
+* To enable this, functions to extract specific type of records (in this case PTR_REXP) and reset regular expressions are implemented. 
+    * ptr_record_get_type()
+    * ptr_record_next()
+    * ptr_table_first_record()
+    * ptr_record_reset_rexp()
+* Also corresponding sailr functions are implemented.
 
 
 ## Plan 

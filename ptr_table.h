@@ -76,6 +76,7 @@ int ptr_table_update_string(ptr_table** , const char* key, string_object** );
 int ptr_record_update_string(ptr_record* pr , string_object** pp_str, GCReq gc);
 
 ptr_record* ptr_table_create_anonym_rexp(ptr_table** table, const char* pattern, const char* enc);
+int ptr_record_reset_rexp(ptr_record* pr);
 
 ptr_record* ptr_table_create_null(ptr_table** table, const char* key);
 int ptr_table_del_record(ptr_table** table, const char* key);
@@ -93,6 +94,9 @@ int ptr_table_info_reset_null_updated(ptr_table** table);
 PtrType ptr_table_get_type(ptr_table** table, const char* key);
 int ptr_record_is_ptr_null(ptr_table** table, const char* key);
 void** ptr_table_get_pptr(ptr_table** table, const char* key);
+
+ptr_record* ptr_table_first_record(ptr_table** table);
+ptr_record* ptr_record_next(ptr_record* pr);
 
 int ptr_record_free_gc_required_memory(ptr_record*);
 

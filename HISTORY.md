@@ -332,16 +332,44 @@ else { carname = "other country" }
 * Also corresponding sailr functions are implemented.
 
 
+## Ver 0.76 (Nov. 9 2019)
+
+* Fix parsing of if_stmt
+    + lex.l and parse.y are updated.
+    + Since the Ver 0.71 update, "if statement" is defined to take optional TERMIN (=opt_termin) between then_stmts and opt_else.
+        + This resulted in if-statement-without-else not working. When opt_else is empty, opt_termin matches the end of if(){} statement, and TERMIN is lost between the current if-statemnt and next statement.   
+    + This is resolved by removing opt_termin from if_statement in parse.y. Instead, in lex.l, else token is redefined to be [\t \n]*else[\t \n]* as follows.
+
+
+* Excerpted from the output of "git diff HEAD"
+
+```
+// Main change in lex.l
+-<INITIAL,IFSTATE,ELSESTATE>else
++<INITIAL,IFSTATE,ELSESTATE>[\t \n]*else[\t \n]*
+
+// Main change in parse.y
+-if_stmt        : KEY_IF condition then_stmts opt_termin opt_else
++if_stmt        : KEY_IF condition then_stmts opt_else
+```
+
+* Now the following code works.
+
+```
+if(condition){then_statement} TERMIN
+next_normal_statment
+```
+
+
+
+
 ## Plan 
 
-* The notion of lifetime attribute is to be added to ptr_table.
-* This works with GCReq attribute.
 * Report run time error.
     + Append line number and column number of corresponding codes to AST node.
     + Paass the information to VM instruction.
     + Report error with this column and line number.
 * Avoid directly manipulate ptr_table's properties. Provide functions and use them.
-* Matched regular expressions also need to be cleared for every row. Provide such functionalities.
 * Consider some script language extension. BSD licensed language is best (e.g. Lua, mruby or Gauche??)
 * Macro to add variables for users to ptr_table.
     + When adding value to ptr_table, missing values should be taken care of.
@@ -349,6 +377,11 @@ else { carname = "other country" }
 * Refactoring2
     + Functions in ptr_table.c. Pointer to pointer may be used wrongly; possibility for some local pointers are destroyed unintentionally.
 
+
+## Under consieration
+
+* The notion of lifetime attribute is to be added to ptr_table.
+* This works with GCReq attribute.
 
 ## Abondoned Ideas
 

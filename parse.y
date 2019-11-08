@@ -147,9 +147,9 @@ args		: /* empty */  		{ $$ = new_node_null(); }
 //					{
 //					$$ = new_node_if( $2, $3, $4 );
 //					}
-if_stmt	: KEY_IF condition then_stmts opt_termin opt_else
+if_stmt	: KEY_IF condition then_stmts opt_else
 					{
-					$$ = new_node_if( $2, $3, $5 );
+					$$ = new_node_if( $2, $3, $4 );
 					}
 
 condition	: '(' expr ')' opt_termin		{ $$ = $2 ; }

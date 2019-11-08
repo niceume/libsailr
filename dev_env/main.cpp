@@ -221,6 +221,7 @@ main(int argc, char** argv)
 
 	sailr_ptr_table_create_null(&table, "carname" );
 	sailr_ptr_table_create_null(&table, "hp" );
+	sailr_ptr_table_create_null(&table, "cyl" );
 	sailr_ptr_table_create_null(&table, "power" );
 	sailr_ptr_table_create_null(&table, "country" );
 	sailr_ptr_table_create_null(&table, "type" );

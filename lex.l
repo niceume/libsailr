@@ -141,7 +141,7 @@ WORD {CHAR}{CHNUMP}*
 				yy_push_state(IFSTATE, yyscanner);
 				/* printf("IF STATE! %d\n", YY_START); */
 				LEX_RETURN( KEY_IF );};
-<INITIAL,IFSTATE,ELSESTATE>else	{
+<INITIAL,IFSTATE,ELSESTATE>[\t \n]*else[\t \n]*	{
 				yy_push_state(ELSESTATE, yyscanner);
 				/* printf("ELSE STATE! %d\n", YY_START); */
 				LEX_RETURN( KEY_ELSE );};

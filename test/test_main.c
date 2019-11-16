@@ -24,19 +24,19 @@ main()
 
 	// Suit > Test (> Assert within test functions)
 	// Add tests to the suite
-/*	test_int_add_tests(testSuite);
-	test_double_add_tests(testSuite); */
+	test_int_add_tests(testSuite);
+	test_double_add_tests(testSuite);
 //	test_arithmetic_add_tests(testSuite);
-/*	test_string_add_tests(testSuite);
+	test_string_add_tests(testSuite);
 	test_encoding_add_tests(testSuite);
 
 	test_if_add_tests(testSuite);
-	test_missing_add_tests(testSuite); */
+	test_missing_add_tests(testSuite);
 	test_regexp_add_tests(testSuite);
-/*	test_func_add_tests(testSuite);
+	test_func_add_tests(testSuite);
 	test_date_add_tests(testSuite);
 
-	test_comment_add_tests(testSuite); */
+	test_comment_add_tests(testSuite); 
 
 	// Run CUnit
 //	CU_console_run_tests();  // This is interacitve version  #include <CUnit/Console.h>

@@ -71,6 +71,22 @@ cpp_string_double2str(double num)
 	return (cpp_object*) p_str;
 }
 
+const char*
+cpp_string_int2cstr(int num)
+{
+	std::string str;
+	str = std::to_string(num);
+	return str.c_str();
+}
+
+const char*
+cpp_string_double2cstr(double num)
+{
+	std::string str;
+	str = std::to_string(num);
+	return str.c_str();
+}
+
 cpp_object*
 cpp_string_lstrip(cpp_object* obj)
 {
@@ -141,6 +157,21 @@ cpp_string_ptr_concat (cpp_object* obj1 , cpp_object* obj2 )
 	std::string** new_pp_str = new std::string*();
 	(*new_pp_str) = new_p_str;
 	return (void**) new_pp_str;
+}
+
+void
+cpp_string_append_string(cpp_object* obj1 , cpp_object* obj2)
+{
+	std::string* str1 = static_cast<std::string*>(obj1);
+	std::string* str2 = static_cast<std::string*>(obj2);
+	str1->append(*str2);
+}
+
+void
+cpp_string_append_cstring(cpp_object* obj1, const char* cstr)
+{
+	std::string* str1 = static_cast<std::string*>(obj1);
+	str1->append(cstr);
 }
 
 cpp_object*

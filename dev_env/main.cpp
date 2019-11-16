@@ -232,7 +232,7 @@ main(int argc, char** argv)
 	VERBOSE( sailr_ptr_table_show_all(&table); )
 
 	VERBOSE( std::cout << "----- Showing parser tree -----"  << std::endl; )
-	sailr_tree_dump( ps );
+	VERBOSE( sailr_tree_dump( ps ); )
 
 	VERBOSE( std::cout << "----- Generating VM instructions -----" << std::endl; ) 
 	VERBOSE( std::cout << "VM instructions are generated with parser state and pointer table " << std::endl; )

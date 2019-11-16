@@ -41,6 +41,18 @@ string_double2str(double num)
 	return cpp_string_double2str(num);
 }
 
+const c_char*
+string_int2cstr(int num)
+{
+	return cpp_string_int2cstr(num);
+}
+
+const c_char*
+string_double2cstr(double num)
+{
+	return cpp_string_double2cstr(num);
+}
+
 string_object*
 string_strip( string_object* str)
 {
@@ -82,6 +94,17 @@ string_ptr_concat( string_object* str1, string_object* str2 )
 	return str_obj;
 }
 
+void
+string_append_string(string_object* str1, string_object* str2)
+{
+	cpp_string_append_string( (cpp_object*)str1, (cpp_object*)str2 );
+}
+
+void
+string_append_cstring(string_object* str1, const char* cstr)
+{
+	cpp_string_append_cstring( (cpp_object*)str1, cstr );
+}
 
 string_object*
 string_repeat( string_object* str, int rep )

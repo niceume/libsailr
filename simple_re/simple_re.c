@@ -176,7 +176,7 @@ simple_re_free( simple_re* re )
 	return 1;
 }
 
-char*
+const char*
 simple_re_read_pattern( simple_re* re )
 {
 	return re->pattern;

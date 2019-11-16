@@ -26,9 +26,6 @@ test_rexgexp_test1( void )
 "email_full = rexp_matched(0) \n"
 "email_local =  rexp_matched(1) \n"
 "email_domain = rexp_matched(2) + '.' + rexp_matched(3) \n"
-"print(email_full) \n"
-"print(email_local) \n"
-"print(email_domain) \n"
 "\n"
 ;
 

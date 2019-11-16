@@ -20,10 +20,8 @@ test_string_test1( void )
 "lastname = 'Mouse' \n"
 "fullname = firstname + ' ' + lastname \n"
 "greeting = hello + ', ' + fullname \n"
-"print(greeting) \n"
 "greeting2 = greeting \n"
 "greeting = 'Good bye, ' + fullname \n" 
-"print(greeting) \n"
 ;
 
 	// Parser Initialization

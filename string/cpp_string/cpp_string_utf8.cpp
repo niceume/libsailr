@@ -81,6 +81,7 @@ cpp_string_subset_utf8(std::string* ori_str, int from_idx, int to_idx)
 
 		if(curr_idx == to_idx + 1){
 			to_iter = curr_iter;
+			break;
 		}
 	}
 

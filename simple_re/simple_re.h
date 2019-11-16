@@ -24,7 +24,7 @@ int simple_re_free( simple_re* re);
 int simple_re_matched_group_num( simple_re* re);
 char* simple_re_matched_str( simple_re* re , int idx );
 
-char* simple_re_read_pattern( simple_re* re);
+const char* simple_re_read_pattern( simple_re* re);
 
 // Utility function
 OnigEncoding simple_re_obtain_onig_encoding( const char* );

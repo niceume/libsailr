@@ -17,8 +17,8 @@ test_encoding_test1( void )
 	const char* code = " "
 "hello_world_en = 'Hello World' \n"
 "hello_world_jp = 'こんにちは世界' \n"
-"hello_en=str_subset(hello_world_en, 0, 4) \n"
-"hello_jp=str_subset(hello_world_jp, 0, 4) \n"
+"hello_en=str_subset(hello_world_en, 1, 5) \n"
+"hello_jp=str_subset(hello_world_jp, 1, 5) \n"
 ;
 
 	// Parser Initialization

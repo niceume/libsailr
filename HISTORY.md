@@ -360,6 +360,13 @@ if(condition){then_statement} TERMIN
 next_normal_statment
 ```
 
+## Ver 0.77 (Nov. 16 2019)
+
+* str_subset()'s arguments are now one-indexed.
+    + (e.g.) str_subset("Hello World", 1, 5) returns "Hello"
+* print() function can now take not only string but numbers (integer + double).
+    + Some new functions are added to common_string and cpp_string.
+
 
 
 

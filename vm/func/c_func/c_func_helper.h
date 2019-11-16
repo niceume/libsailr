@@ -36,9 +36,11 @@ bool arg_item_confirm_type( arg_item* arg, ItemType type );
 bool arg_item_confirm_int( arg_item* arg);
 bool arg_item_confirm_double( arg_item* arg);
 bool arg_item_confirm_string( arg_item* arg);
+char arg_item_interpret_type( arg_item* arg);
 int arg_item_int_value( arg_item* arg );
 double arg_item_double_value( arg_item* arg );
 string_object* arg_item_string_obj( arg_item* arg);
+simple_re* arg_item_rexp_obj(arg_item* arg);
 const char* arg_item_string_char( arg_item* arg );
 bool arg_item_bool_value( arg_item* arg );
 int arg_list_free( arg_list* head);
@@ -196,6 +198,25 @@ arg_item_confirm_string( arg_item* arg)
   return arg_item_confirm_type( arg, PP_STR);
 }
 
+// return type using char
+char
+arg_item_interpret_type( arg_item* arg)
+{
+  if(arg_item_confirm_int(arg)){
+    return 'i';
+  }else if(arg_item_confirm_double(arg)){
+    return 'd';
+  }else if(arg_item_confirm_string(arg)){
+    return 's';
+  }else if(arg_item_confirm_type(arg, BOOLEAN)){
+    return 'b';
+  }else if(arg_item_confirm_type(arg, NULL_ITEM)){
+    return 'n';
+  }else{
+    return 'x';
+  }
+}
+
 // Obtain int 
 int
 arg_item_int_value( arg_item* arg )
@@ -237,7 +258,7 @@ arg_item_string_obj( arg_item* arg)
     pp_obj = (arg->item)->pp_str;
     temp_obj = *pp_obj;
   }else{
-    printf("ERROR: the stack item does not hold double value. \n");
+    printf("ERROR: the stack item does not hold string value. \n");
   }
   return (string_object*) temp_obj;
 }
@@ -251,7 +272,7 @@ arg_item_string_char( arg_item* arg )
   if(arg_item_confirm_type(arg, PP_STR) ){
     str = string_read( (string_object*) *( arg->item->pp_str)) ;
   }else{
-    printf("ERROR: the stack item does not hold double value. \n");
+    printf("ERROR: the stack item does not hold string value. \n");
   }
   return str;
 }
@@ -264,11 +285,26 @@ arg_item_bool_value( arg_item* arg )
   if(arg_item_confirm_type(arg, BOOLEAN) ){
     result = arg->item->boolean;
   }else{
-    printf("ERROR: the stack item does not hold double value. \n");
+    printf("ERROR: the stack item does not hold boolean value. \n");
   }
   return result;
-
 }
+
+// Obtain regular expression
+simple_re*
+arg_item_rexp_obj( arg_item* arg)
+{
+  simple_re* temp_obj = NULL;
+  simple_re** pp_obj;
+  if(arg_item_confirm_type(arg, PP_REXP) ){
+    pp_obj = (arg->item)->pp_rexp;
+    temp_obj = *pp_obj;
+  }else{
+    printf("ERROR: the stack item does not hold rexp value. \n");
+  }
+  return (simple_re*) temp_obj;
+}
+
 
 // Free
 int

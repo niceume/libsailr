@@ -226,6 +226,12 @@ main(int argc, char** argv)
 	sailr_ptr_table_create_null(&table, "country" );
 	sailr_ptr_table_create_null(&table, "type" );
 
+	sailr_ptr_table_create_null(&table, "a" );
+	sailr_ptr_table_create_null(&table, "b" );
+	sailr_ptr_table_create_null(&table, "c" );
+	sailr_ptr_table_create_null(&table, "d" );
+	sailr_ptr_table_create_null(&table, "e" );
+
 	VERBOSE( std::cout << "----- Showing pointer table (BEFORE CALCULATION) -----" << std::endl; )
 	VERBOSE( std::cout << "At this point, annonym strings should be already added."  << std::endl; )
     VERBOSE( printf("table's pointer is %p \n", table); )

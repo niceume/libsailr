@@ -368,6 +368,10 @@ next_normal_statment
     + Some new functions are added to common_string and cpp_string.
 
 
+## Ver 0.78 (Nov. 17 2019)
+
+* Division calculation is updated. It now always returns double.
+    + Generating Inf from division is now properly handeled.
 
 
 ## Plan 
@@ -385,10 +389,12 @@ next_normal_statment
     + Functions in ptr_table.c. Pointer to pointer may be used wrongly; possibility for some local pointers are destroyed unintentionally.
 
 
+
 ## Under consieration
 
 * The notion of lifetime attribute is to be added to ptr_table.
 * This works with GCReq attribute.
+
 
 ## Abondoned Ideas
 

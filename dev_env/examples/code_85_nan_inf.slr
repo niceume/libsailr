@@ -1,0 +1,36 @@
+x = 10
+y = 0
+z = -10
+
+a = x / y // INF
+b = z / y // -INF
+c = (-1) ** (-1/2) // sqrt(-1) => nan
+
+print("a is ", a , "\n")
+print("b is ", b , "\n")
+print("c is ", c , "\n")
+
+if( a >= 0 ){
+  print("a is zero or more than zero. \n")
+}else if( a < 0){
+  print("a is less than zero. \n")
+}else{
+  print("a is not a number. \n")
+}
+
+if( b >= 0 ){
+  print("b is zero or more than zero. \n")
+}else if( b < 0){
+  print("b is less than zero. \n")
+}else{
+  print("b is not a number. \n")
+}
+
+if( c >= 0 ){
+  print("c is zero or more than zero. \n")
+}else if(c < 0){
+  print("c is less than zero. \n")
+}else if(c == .){
+  print("c is not a number. \n")
+}
+

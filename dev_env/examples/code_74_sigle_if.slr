@@ -12,7 +12,7 @@ if( hp > 145 ){
 
 if ( carname =~ re/(^Merc|^Porsche|^Volvo)/ ) { country = "Germany" ; type = rexp_matched(1) }
 
-power = hp * cyl
+print( hp * cyl , "\n");
 
 // germany = re/(^Merc|^Porsche|^Volvo)/
 // usa = re/(^Hornet|^Cadillac|^Lincoln|^Chrysler|^Dodge|^AMC|^Camaro|^Chevrolet|^Pontiac|^Ford)/

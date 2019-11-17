@@ -1,0 +1,6 @@
+hp = 120
+cyl = 7
+type = hp / cyl
+print( hp, "\t", cyl, "\t", type , "\n")
+
+

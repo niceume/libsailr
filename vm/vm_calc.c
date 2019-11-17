@@ -91,21 +91,21 @@ dbl_mod( double x, double y)
 	return  result;
 }
 
+// div operator is going to produce double type.
+/*
 int
 divisible_int_div( int x, int y )
 {
 	int result = x / y;
 	return result;
 }
+*/
 
 double
 int_div( int x, int y )
 {
 	double result;
-//	printf("x: %lf\n", (double) x );
-//	printf("y: %lf\n", (double) y );
 	result = ((double) x) / ((double) y);
-//	printf("%lf\n",result);
 	return result;
 }
 
@@ -317,22 +317,23 @@ vm_calc_divx(vm_stack* vmstack)
 
 	int result_ival;
 	double result_dval;
-	// Add calcuation
 	// For ivals
 	if((top_item->type == IVAL) && (sec_item->type == IVAL)){
-		if( sec_item->ival % top_item->ival == 0 ){
-			result_ival = divisible_int_div( sec_item->ival , top_item->ival) ;
-			vmstack->sp = vmstack->sp - 1; 
-			sec_item->type = IVAL;
-			sec_item->ival = result_ival;
-		}else{
-			DEBUG_PRINT("calculation dividing int by int is not divisable. %d / %d \n", sec_item->ival, top_item->ival );
+
+// Previously, division returned int as much as possible. This caused unintentional errors, and now division always returns double.
+//		if( sec_item->ival % top_item->ival == 0 ){
+//			result_ival = divisible_int_div( sec_item->ival , top_item->ival) ;
+//			vmstack->sp = vmstack->sp - 1; 
+//			sec_item->type = IVAL;
+//			sec_item->ival = result_ival;
+//		}else{
+//			DEBUG_PRINT("calculation dividing int by int is not divisable. %d / %d \n", sec_item->ival, top_item->ival );
 
 			result_dval = int_div( sec_item->ival, top_item->ival ) ;
 			vmstack->sp = vmstack->sp - 1; 
 			sec_item->type = DVAL;
 			sec_item->dval = result_dval;
-		}
+//		}
 	} else {
 		// For dvals
 		if((top_item->type == IVAL) && (sec_item->type == DVAL)){

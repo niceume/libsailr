@@ -373,6 +373,20 @@ next_normal_statment
 * Division calculation is updated. It now always returns double.
     + Generating Inf from division is now properly handeled.
 
+## Ver 0.79 (Jan. 5 2020)
+
+* Assignment operator did not work when the stack item correspoding to RHS of assignment, i.e. top item on stack , is still PP_INT or PP_DBL. 
+
+```
+# e.g.
+# Suppose age variable already exists on ptr_table as PTR_INT
+# The following code did not work, because age on stack is still PP_INT
+age2 = age
+```
+
+* To solve this, vm/vm_assign.c is updated to convert PP_IVAL/PP_DVAL to IVAL/DVAL for the top item of stack.
+	+ Now, stack_item_pp2value(rvalue) is called every time assignment operation is conducted, which converts PP_IVAL/PP_DVAL to IVAL/DVAL for rvalue on stack.
+
 
 ## Plan 
 

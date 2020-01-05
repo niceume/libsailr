@@ -1,0 +1,7 @@
+age = age
+age_null = age
+age_null2 = age_null
+
+print(age , "\n")
+print(age_null , "\n")
+print(age_null2 , "\n")

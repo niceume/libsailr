@@ -174,8 +174,11 @@ main(int argc, char** argv)
 
 	int* address_for_age = (int *)malloc(sizeof(int));
 	double* address_for_d_age = (double *)malloc(sizeof(double));
-	*address_for_age  = 0;
+	*address_for_age  = 20;
 	sailr_ptr_table_create_int_from_ptr(&table, "age" , &address_for_age, &address_for_d_age);
+
+	sailr_ptr_table_create_null(&table, "age_null");
+	sailr_ptr_table_create_null(&table, "age_null2");
 
 	double* address_for_cre = (double *)malloc(sizeof(double));
 	int* address_for_i_cre = (int *)malloc(sizeof(int));

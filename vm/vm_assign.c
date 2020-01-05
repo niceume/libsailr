@@ -3,6 +3,7 @@
 #include "common_string.h"
 #include "vm_stack.h"
 #include "vm_assign.h"
+#include "vm_item_pp2val.h"
 #include "ptr_table.h"
 #include "simple_re.h"
 #include "helper.h"
@@ -23,6 +24,7 @@ vm_stack_store_val(vm_stack* vmstack)
 {
 	stack_item* lvalue = vm_stack_second(vmstack);
 	stack_item* rvalue = vm_stack_top(vmstack);
+	stack_item_pp2value(rvalue);
 	
 	// lvalue should point to heap memory to store objects or values, b/c they should be returned to library user.
 	// If they are not stored on heap, there are possibilities that they are automatically destroyed.

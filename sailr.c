@@ -60,7 +60,7 @@ sailr_parser_state_get_source_encoding(parser_state_object* ps )
 }
 
 int
-sailr_construct_parser (const char* code , parser_state_object* ps)
+sailr_run_parser (const char* code , parser_state_object* ps)
 {
 	/* %option reentrant in lex.l enables reentrant scanner (=tokenizer) */
 	/* We need to track the tokenizer object, and pass it to parser appropriately.*/

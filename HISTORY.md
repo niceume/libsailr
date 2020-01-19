@@ -388,6 +388,12 @@ age2 = age
 	+ Now, stack_item_pp2value(rvalue) is called every time assignment operation is conducted, which converts PP_IVAL/PP_DVAL to IVAL/DVAL for rvalue on stack.
 
 
+## Ver 0.80 (Jan. 19 2020)
+
+* API function name is renamed. Files using this function are updated.
+    + sailr_construct_parser() => sailr_run_parser() 
+
+
 ## Plan 
 
 * Report run time error.

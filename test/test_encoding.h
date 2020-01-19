@@ -24,7 +24,7 @@ test_encoding_test1( void )
 	// Parser Initialization
 	ptr_table_object* table = sailr_ptr_table_init() ;
 	parser_state_object* ps = sailr_new_parser_state ("souce from string literal", table);
-	sailr_construct_parser( code, ps ); 
+	sailr_run_parser( code, ps ); 
 
 
 	// Add variables

@@ -67,9 +67,9 @@ main(int argc, char** argv)
 
 
 	// Initializing parser_state, which stores TreeNode*.
-	VERBOSE( std::cout << "----- Constructing parser -----"  << std::endl ; )
+	VERBOSE( std::cout << "----- Running parser -----"  << std::endl ; )
 	parser_state_object* ps = sailr_new_parser_state (source_name, table);
-	sailr_construct_parser( code.c_str(), ps );  // Now ps holds tree and table!!
+	sailr_run_parser( code.c_str(), ps );  // Now ps holds tree and table!!
 
 	VERBOSE( std::cout << "----- Show variables -----" << std::endl; )
 	VERBOSE( std::cout << "All the Variables (LHS or RHS detected at parse.y)" << std::endl; )

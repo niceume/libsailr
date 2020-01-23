@@ -1,4 +1,8 @@
-All the files under this libsailr source tree follow the license, modified BSD license (i.e. 3 clause BSD license) as described in COPYING.txt, except the following third party libraries.
+libsailr - virtual machine library for arithmetic calculation and string manipulation in C and C++
+
+Copyright 2018-2020 Toshi Umehara (toshi@niceume.com)
+
+All the files under this libsailr source tree are copyrighted by the author above, except the following third party libraries.
 
 
 ## Third party libraries

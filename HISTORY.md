@@ -392,6 +392,18 @@ age2 = age
 
 * API function name is renamed. Files using this function are updated.
     + sailr_construct_parser() => sailr_run_parser() 
+* Copyright files are updated (Jan. 23 2020)
+
+
+## Ver 0.81 (Feb. 4 2020)
+
+* Makefile is updated 
+    + Step to generate C file from lex file is seperated.
+    + "lex.o: lex.y.c y.tab.h" , y.tab.h is added as prerequisite for lex.o target.
+    + "lex.yy.c : lex.l" rule is added.
+        + Even when only parse.y is updated (which triggers $(YACC) commnd and generates y.tab.h and y.tab.c), and as a result lex.o is regenerated. lex.yy.c uses y.tab.h, so when y.tab.h is updated, lex should be run.
+    + With this update, source codes can be distributed for machines without bison and flex.
+        + Run "make y.tab.c" and "make lex.yy.c" before disribution.
 
 
 ## Plan 

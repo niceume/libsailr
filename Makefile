@@ -1,4 +1,4 @@
-YACC = bison -y -d
+YACC = bison -y
 LEX = flex
 CC = gcc
 CPPC = g++
@@ -31,27 +31,25 @@ DEPS:=$(OBJS:.o=.d) $(OBJS_STR:.o=.d) $(OBJS_RE:.o=.d) $(OBJS_DATE:.o=.d) $(OBJS
 # List "objfile depends on source and header"
 -include $(DEPS)
 
-.PHONY: build test
+.PHONY: build test clean distclean
 
 build : parse.o lex.o  $(TARGET) 
 
 $(TARGET) : $(OBJS) $(OBJS_CPP_STR) $(OBJS_STR)  $(OBJS_RE) $(OBJS_DATE) $(OBJS_CFUNC)
 	$(AR) $(TARGET) $(OBJS) $(OBJS_CPP_STR) $(OBJS_STR) $(OBJS_RE) $(OBJS_DATE) $(OBJS_CFUNC)
 
-# yacc creates y.tab.c. -d => y.tab.h. -v => y.output.
-
 parse.o : y.tab.c
 	$(CC) -o parse.o -c y.tab.c $(CFLAGS) -MMD -MP 
 
 y.tab.c : parse.y
-	yacc -d -v --verbose --debug parse.y
+	$(YACC) -d -v --verbose --debug parse.y
+    # yacc creates y.tab.c. -d => y.tab.h. -v => y.output
 
-# yacc creates y.tab.c. -d option Creates y.tab.h. -v option creates y.output.
-# --debug 
-
-lex.o : lex.l  # lex.yy.c is includgin y.tab.h
-	$(LEX) -olex.yy.c lex.l
+lex.o : lex.yy.c y.tab.h
 	$(CC) -o lex.o -c lex.yy.c $(CFLAGS)  # This file requires y.tab.h
+
+lex.yy.c : lex.l
+	$(LEX) -olex.yy.c lex.l
 
 %.o : %.c 
 	$(CC) -c -o $@ $<  $(CFLAGS) -MMD -MP
@@ -80,7 +78,7 @@ test :
 	$(CC) test/test_main.c $(TARGET) -o test/a.out -Wall -I. -lstdc++ -lm -L/usr/local/lib -lcunit -Ldev_env/onigmo_build/lib -lonigmo
 	test/a.out
 
-clean :
+distclean :
 	$(RM) *.o
 	$(RM) vm/*.o
 	$(RM) string/*.o
@@ -130,9 +128,12 @@ clean :
 	$(RM) simple_date/core
 	$(RM) vm/func/c_func/core
 	$(RM) test/core
-	$(RM) y.tab.c y.tab.h y.output
-	$(RM) lex.yy.c
 	$(RM) test/*.xml
 	$(RM) $(TARGET)
+
+clean: distclean
+	$(RM) y.tab.c y.tab.h y.output
+	$(RM) lex.yy.c
+
 
 

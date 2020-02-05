@@ -33,7 +33,7 @@ simple_re_compile( const char* pattern, const char* enc )
 	simple_re* new_re = simple_re_new();
 	new_re->regexp = regexp;
 	char* copy_pattern = (char*) malloc(strlen(pattern) * sizeof(char) + 1 );
-	strncpy( copy_pattern, pattern, strlen(pattern));
+	memcpy( copy_pattern, pattern, strlen(pattern));
 	copy_pattern[strlen(pattern)] = '\0';
 	new_re->pattern = copy_pattern;
 	new_re->encoding = enc;
@@ -129,7 +129,7 @@ simple_re_matched_str( simple_re* re , int idx )
 //		printf("Length: %d \n", length);
 //		printf("from:%ld to:%ld length:%d \n", matched->beg[idx], matched->end[idx], length );
 		new_str = (char*) malloc( (length + 1) * sizeof(char)) ;
-		strncpy( new_str , re->str + matched->beg[idx] , length );
+		memcpy( new_str , re->str + matched->beg[idx] , length );
 		new_str[length] = '\0';
 		matched_str = new_str;
 		// printf("Matched String: %s \n", new_str);

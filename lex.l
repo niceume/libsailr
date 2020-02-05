@@ -213,7 +213,7 @@ WORD {CHAR}{CHNUMP}*
 <INITIAL,IFSTATE,ELSESTATE>{WORD}		{
 	size_t ident_len = strlen(yytext);
 	char* new_str = (char*) malloc(sizeof(char) * (ident_len + 1));
-	strncpy(new_str, yytext, ident_len);
+	memcpy(new_str, yytext, ident_len);
 	new_str[ident_len] = '\0';
 	yylval_param->id = new_str ;
 	LEX_RETURN( IDENT );

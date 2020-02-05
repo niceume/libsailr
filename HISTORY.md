@@ -395,15 +395,21 @@ age2 = age
 * Copyright files are updated (Jan. 23 2020)
 
 
-## Ver 0.81 (Feb. 4 2020)
+## Ver 0.81 
 
-* Makefile is updated 
+* Resolving warnings, and improving for portability.
+* Makefile is updated (Feb. 4 2020) 
     + Step to generate C file from lex file is seperated.
     + "lex.o: lex.y.c y.tab.h" , y.tab.h is added as prerequisite for lex.o target.
     + "lex.yy.c : lex.l" rule is added.
         + Even when only parse.y is updated (which triggers $(YACC) commnd and generates y.tab.h and y.tab.c), and as a result lex.o is regenerated. lex.yy.c uses y.tab.h, so when y.tab.h is updated, lex should be run.
     + With this update, source codes can be distributed for machines without bison and flex.
         + Run "make y.tab.c" and "make lex.yy.c" before disribution.
+* Binary files are removed from git source tree. (Feb. 5 2020)
+* Strncpy is changed to memcpy  (Feb. 5 2020)
+    + strncpy is changed to memcpy in lex.l. Dynamically the length of the original string is obtained, and allocate exact memory for the length + 1. (+1 if for null terminator.) In this case, strncpy and memcpy works the same, and memcpy is faster.
+    + strncpy is chnaged to memcpy also in simple_re/simple_re.c.
+    + strncpy is chnaged to memcpy also in gen_code.c. This is copying string into array that has enough size.
 
 
 ## Plan 

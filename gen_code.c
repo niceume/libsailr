@@ -168,7 +168,7 @@ gen_code_fcall( char* fname, int num_arg, vm_inst* farg_code)
     fcall_inst = new_vm_inst_command(VM_FCALL);
     int fname_len = strlen(fname);
     if( fname_len < MAX_FUNC_NAME_LEN){
-        strncpy( fcall_inst->fname, fname, fname_len + 1 );
+        memcpy( fcall_inst->fname, fname, fname_len + 1 );
     } else { 
         printf("ERROR: function name is too long. over %d.", MAX_FUNC_NAME_LEN);
     }  

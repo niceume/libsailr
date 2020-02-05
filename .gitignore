@@ -28,6 +28,8 @@ core
 # Ignore executable
 
 /dev_env/myparsercpp
+/simple_re/test_run
+/string/obsolute_codes/cpp_string_test
 
 
 # Ignore build files of mingw

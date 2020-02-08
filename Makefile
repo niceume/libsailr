@@ -8,10 +8,12 @@ CPPCFLAGS := $(CPPFLAGS) -std=c++11 -g  -fPIC -O3 -Ivm -Istring $(CPPC_USER_DEFI
 RM = rm -f
 
 UNAME := $(shell uname)
-ifneq (,$(findstring MINGW,$(UNAME)))
-    # MINGW found => mingw system
+$(info $(UNAME))
+
+ifneq (,$(findstring MINGW,$(UNAME))$(findstring MSYS,$(UNAME))$(findstring NT,$(UNAME)))
+    # MINGW/MSYS/NT found => mingw system
 else
-    CFLAGS := $(CFLAGS) -fstack-protector-strong
+    CFLAGS := $(CFLAGS) -fstack-protector-strong 
     CPPCFLAGS := $(CPPCFLAGS) -fstack-protector-strong 
 endif
 

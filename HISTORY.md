@@ -410,6 +410,7 @@ age2 = age
     + strncpy is changed to memcpy in lex.l. Dynamically the length of the original string is obtained, and allocate exact memory for the length + 1. (+1 if for null terminator.) In this case, strncpy and memcpy works the same, and memcpy is faster.
     + strncpy is chnaged to memcpy also in simple_re/simple_re.c.
     + strncpy is chnaged to memcpy also in gen_code.c. This is copying string into array that has enough size.
+* Makefile is updated for compilation on CRAN. (Feb. 8 2020) 
 
 
 ## Plan 

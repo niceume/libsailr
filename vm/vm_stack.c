@@ -93,7 +93,7 @@ vm_stack_push_ival( vm_stack* stack , int num)
 {
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	memcpy(new_stack_item,
-		&(stack_item const){ IVAL, {.ival = num} , JUST_A_VALUE },
+		(&(stack_item const){ IVAL, {.ival = num} , JUST_A_VALUE }),
 		sizeof(stack_item));
 	vm_stack_push_item(stack, new_stack_item);
 	return 1;
@@ -104,7 +104,7 @@ vm_stack_push_dval( vm_stack* stack , double num)
 {
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	memcpy(new_stack_item,
-		&(stack_item const){ DVAL, {.dval = num} , JUST_A_VALUE },
+		(&(stack_item const){ DVAL, {.dval = num} , JUST_A_VALUE }),
 		sizeof(stack_item));
 	vm_stack_push_item(stack, new_stack_item);
 	return 1;
@@ -119,7 +119,7 @@ vm_stack_push_pp_ival( vm_stack* stack , ptr_table** table, char* ptr_key)
 
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	memcpy(new_stack_item,
-		&(stack_item const){ PP_IVAL, {.pp_ival = pp_ival}, record },
+		(&(stack_item const){ PP_IVAL, {.pp_ival = pp_ival}, record }),
 		sizeof(stack_item));
 	DEBUG_PRINT("push new_stack_item: pointer to pointer to %d \n", **(new_stack_item->pp_ival) );
 	vm_stack_push_item(stack, new_stack_item);
@@ -132,7 +132,7 @@ vm_stack_push_pp_dval( vm_stack* stack , ptr_table** table, char* ptr_key)
 	double** pp_dval = (double**) &(record->address);
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	memcpy(new_stack_item,
-		&(stack_item const){ PP_DVAL, {.pp_dval = pp_dval}, record },
+		(&(stack_item const){ PP_DVAL, {.pp_dval = pp_dval}, record }),
 		sizeof(stack_item));
 	DEBUG_PRINT("push new_stack_item: pointer to pointer to %f \n", **(new_stack_item->pp_dval) );
 	vm_stack_push_item(stack, new_stack_item);
@@ -158,7 +158,7 @@ vm_stack_push_pp_str( vm_stack* stack , ptr_table** table, char* ptr_key)
 	string_object** pp_str = (string_object**) &(record->address);
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	memcpy(new_stack_item,
-		&(stack_item const){ PP_STR, {.pp_str = pp_str}, record },
+		(&(stack_item const){ PP_STR, {.pp_str = pp_str}, record }),
 		sizeof(stack_item));
 	vm_stack_push_item(stack, new_stack_item);
 }
@@ -168,7 +168,7 @@ vm_stack_push_temp_pp_str( vm_stack* stack , string_object** pp_str)
 {
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	memcpy(new_stack_item,
-		&(stack_item const){ PP_STR, {.pp_str = pp_str}, TEMP_OBJECT },
+		(&(stack_item const){ PP_STR, {.pp_str = pp_str}, TEMP_OBJECT }),
 		sizeof(stack_item));
 	vm_stack_push_item(stack, new_stack_item);
 }
@@ -180,7 +180,7 @@ vm_stack_push_pp_rexp( vm_stack* stack , ptr_table** table, char* ptr_key)
 	simple_re** pp_rexp = (simple_re**) &(record->address);
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	memcpy(new_stack_item,
-		&(stack_item const){ PP_REXP, {.pp_rexp = pp_rexp}, record },
+		(&(stack_item const){ PP_REXP, {.pp_rexp = pp_rexp}, record }),
 		sizeof(stack_item));
 	vm_stack_push_item(stack, new_stack_item);
 }
@@ -191,7 +191,7 @@ vm_stack_push_null( vm_stack* stack , ptr_table** table, char* ptr_key)
 	ptr_record* record = ptr_table_find(table, ptr_key);
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	memcpy(new_stack_item,
-		&(stack_item const){ NULL_ITEM, {.ptr = NULL}, record },
+		(&(stack_item const){ NULL_ITEM, {.ptr = NULL}, record }),
 		sizeof(stack_item));
 	vm_stack_push_item(stack, new_stack_item);
 }
@@ -221,7 +221,7 @@ vm_stack_push_boolean( vm_stack* stack, bool boolean)
 {
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	memcpy(new_stack_item,
-		&(stack_item const){ BOOLEAN, {.boolean = boolean} , NOT_ON_PTR_TABLE },
+		(&(stack_item const){ BOOLEAN, {.boolean = boolean} , NOT_ON_PTR_TABLE }),
 		sizeof(stack_item));
 	vm_stack_push_item(stack, new_stack_item);
 	return 1;

@@ -411,6 +411,7 @@ age2 = age
     + strncpy is chnaged to memcpy also in simple_re/simple_re.c.
     + strncpy is chnaged to memcpy also in gen_code.c. This is copying string into array that has enough size.
 * Makefile is updated for compilation on CRAN. (Feb. 8 2020) 
+* Some systems use macro function for memcpy definition. In vm_stack.c, compound literal was passed for the second argument, and macro function wrongly seperate those compound literals b/c they include comma within them. I put () parentheses for the second argument. (Feb. 9 2020)
 
 
 ## Plan 

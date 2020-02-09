@@ -10,8 +10,9 @@ RM = rm -f
 UNAME := $(shell uname)
 $(info $(UNAME))
 
-ifneq (,$(findstring MINGW,$(UNAME))$(findstring MSYS,$(UNAME))$(findstring NT,$(UNAME)))
+ifneq (,$(findstring MINGW,$(UNAME))$(findstring MSYS,$(UNAME))$(findstring NT,$(UNAME))$(findstring Darwin,$(UNAME)))
     # MINGW/MSYS/NT found => mingw system
+    # Darwin 
 else
     CFLAGS := $(CFLAGS) -fstack-protector-strong 
     CPPCFLAGS := $(CPPCFLAGS) -fstack-protector-strong 

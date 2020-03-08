@@ -4,7 +4,7 @@ CC = gcc
 CPPC = g++
 AR = ar rvs
 CFLAGS := $(CFLAGS) -std=c99 -g -fPIC -O3 -I. -Ivm -Istring -Isimple_re -Isimple_date -I$(ONIG_INCLUDE_DIR) $(CC_USER_DEFINES)
-CPPCFLAGS := $(CPPFLAGS) -std=c++11 -g  -fPIC -O3 -Ivm -Istring $(CPPC_USER_DEFINES)
+CPPCFLAGS := $(CPPFLAGS) -std=c++11 -g  -fPIC -O3 -Ivm -Istring $(CPPC_USER_DEFINES) -D_GLIBCXX_USE_CXX11_ABI=0
 RM = rm -f
 
 UNAME := $(shell uname)

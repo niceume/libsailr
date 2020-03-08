@@ -412,6 +412,8 @@ age2 = age
     + strncpy is chnaged to memcpy also in gen_code.c. This is copying string into array that has enough size.
 * Makefile is updated for compilation on CRAN. (Feb. 8 2020) 
 * Some systems use macro function for memcpy definition. In vm_stack.c, compound literal was passed for the second argument, and macro function wrongly seperate those compound literals b/c they include comma within them. I put () parentheses for the second argument. (Feb. 9 2020)
+* For g++, -D_GLIBCXX_USE_CXX11_ABI=0 option is added in Makefile to avoid errors in some environment (Mar. 8 2020)
+    + About -D_GLIBCXX_USE_CXX11_ABI=0 option, see https://stackoverflow.com/questions/33394934/converting-std-cxx11string-to-stdstring
 
 
 ## Plan 

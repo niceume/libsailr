@@ -416,6 +416,15 @@ age2 = age
     + About -D_GLIBCXX_USE_CXX11_ABI=0 option, see https://stackoverflow.com/questions/33394934/converting-std-cxx11string-to-stdstring
 
 
+## Ver 0.8.2 (Mar. 13 2020)
+
+* Makefile updated to detect operating system. (gcc -dumpmachine is used)
+* The following declarations are added to prevent implicit declaration warnings.
+    + parse.y: yylex() and yyerror() are explicitly declared.
+    + lex.l: fileno(FILE *stream) is explicitly declared.
+    + sialr.c: yylex_init(), yy_scan_string(), and yylex_destroy() are explicitly declared.
+
+
 ## Plan 
 
 * Report run time error.

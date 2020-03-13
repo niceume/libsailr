@@ -44,6 +44,9 @@ lex_return(parser_state *p, yyscan_t scanner, int c)
 /* But here you need prototypes to use in rules appropriately. */
 extern void lexerror( parser_state* , yyscan_t,  char);
 
+/* Prevent implicit declaration of fileno() warning*/
+// (ref) https://stackoverflow.com/questions/46213840/get-rid-of-warning-implicit-declaration-of-function-fileno-in-flex
+int fileno(FILE *stream);
 %}
 
 /* IF YOU CANNOT LINKs FUNCTIONS WHEN CREATING REENTRANT PARSER, MAKE SURE CORRESPONDING OPTIONS ARE ENEABLED. */

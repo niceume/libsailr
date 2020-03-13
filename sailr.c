@@ -34,6 +34,12 @@
 #include "vm.h"
 #include "y.tab.h"
 
+// To prevent implicit declaration warnings
+int yylex_init(void*);
+void* yy_scan_string(const char*, void*);
+int yylex_destroy(void*);
+
+
 ptr_table_object*
 sailr_ptr_table_init()
 {

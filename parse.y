@@ -5,10 +5,11 @@
 #include "common_string.h"
 
 int yydebug = 0; /* 0 : no debug, 1: debug */
+
 %}
 
 /* Define how each pseudo-variable returns values */
-/* For */
+/* This part defines YYSTYPE */
 %union {
   TreeNode* nd;
   string_object* str;
@@ -33,6 +34,14 @@ int yydebug = 0; /* 0 : no debug, 1: debug */
 /* This results in adding "parser_state* " argument to yylex() */
 /* About %parse-param and %lex-param, */
 /* See this ref. https://stackoverflow.com/questions/34418381/how-to-reference-lex-or-parse-parameters-in-flex-rules */
+
+%{
+// Prevent undefined reference warnings
+// (ref) https://stackoverflow.com/questions/23717039/generating-a-compiler-from-lex-and-yacc-grammar
+// (ref) https://stackoverflow.com/questions/28643114/how-to-use-flex-with-my-own-parser
+int yylex (YYSTYPE* yylval, parser_state* p, void* scanner);
+void yyerror (parser_state* p, void* scanner, char const *);
+%}
 
 
 /* ***************************** */
@@ -184,7 +193,7 @@ termins		: TERMIN termins
 
 %%
 
-int yyerror(parser_state* p, void* scanner, char* s)
+void yyerror(parser_state* p, void* scanner, char const* s)
 {
   p->yynerrs++;
   fprintf(stderr, "%d: %s\n", p->lineno, s);

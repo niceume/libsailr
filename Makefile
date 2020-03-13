@@ -3,20 +3,29 @@ LEX = flex
 CC = gcc
 CPPC = g++
 AR = ar rvs
-CFLAGS := $(CFLAGS) -std=c99 -g -fPIC -O3 -I. -Ivm -Istring -Isimple_re -Isimple_date -I$(ONIG_INCLUDE_DIR) $(CC_USER_DEFINES)
-CPPCFLAGS := $(CPPFLAGS) -std=c++11 -g  -fPIC -O3 -Ivm -Istring $(CPPC_USER_DEFINES) -D_GLIBCXX_USE_CXX11_ABI=0
+CFLAGS := $(CFLAGS) -std=c99 -g -O3 -I. -Ivm -Istring -Isimple_re -Isimple_date -I$(ONIG_INCLUDE_DIR) $(CC_USER_DEFINES)
+CPPCFLAGS := $(CPPFLAGS) -std=c++11 -g -O3 -Ivm -Istring $(CPPC_USER_DEFINES) -D_GLIBCXX_USE_CXX11_ABI=0
 RM = rm -f
 
-UNAME := $(shell uname)
-$(info $(UNAME))
+ARCH_TRIPLE := $(subst -, ,$(shell $(CC) -dumpmachine))
 
-ifneq (,$(findstring MINGW,$(UNAME))$(findstring MSYS,$(UNAME))$(findstring NT,$(UNAME))$(findstring Darwin,$(UNAME)))
-    # MINGW/MSYS/NT found => mingw system
-    # Darwin 
+ifneq (,$(findstring mingw,$(ARCH_TRIPLE)))
+# mingw
 else
-    CFLAGS := $(CFLAGS) -fstack-protector-strong 
-    CPPCFLAGS := $(CPPCFLAGS) -fstack-protector-strong 
+    ifneq (,$(findstring linux,$(ARCH_TRIPLE)))
+		# linux
+        CFLAGS := $(CFLAGS) -fstack-protector-strong -fPIC
+        CPPCFLAGS := $(CPPCFLAGS) -fstack-protector-strong -fPIC 
+    else
+		# e.g. daarwin
+        CFLAGS := $(CFLAGS) -fPIC
+        CPPCFLAGS := $(CPPCFLAGS) -fPIC 
+    endif
 endif
+$(info SHOW ARCH_TRIPLE)
+$(info $(ARCH_TRIPLE))
+$(info SHOW CFLAGS)
+$(info $(CFLAGS))
 
 TARGET = libsailr.a
 

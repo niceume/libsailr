@@ -3,9 +3,10 @@ LEX = flex
 CC = gcc
 CPPC = g++
 AR = ar rvs
-CFLAGS := $(CFLAGS) -std=c99 -g -O3 -I. -Ivm -Istring -Isimple_re -Isimple_date -I$(ONIG_INCLUDE_DIR) $(CC_USER_DEFINES)
-CPPCFLAGS := $(CPPFLAGS) -std=c++11 -g -O3 -Ivm -Istring $(CPPC_USER_DEFINES) -D_GLIBCXX_USE_CXX11_ABI=0
 RM = rm -f
+
+CFLAGS := $(CFLAGS) -std=c11 -g -O3 -I. -Ivm -Istring -Isimple_re -Isimple_date -I$(ONIG_INCLUDE_DIR) $(CC_USER_DEFINES)
+CPPCFLAGS := $(CPPFLAGS) -std=c++11 -g -O3 -Ivm -Istring $(CPPC_USER_DEFINES) 
 
 ARCH_TRIPLE := $(subst -, ,$(shell $(CC) -dumpmachine))
 

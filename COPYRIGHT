@@ -14,15 +14,25 @@ Copyright (c) 2005-2018, Troy D. Hanson  http://troydhanson.github.com/uthash/
 All rights reserved.
 
 
-* onigmo
+* date.h
 
-Copyright (c) 2002-2018  K.Kosako  <kkosako0@gmail.com>
-Copyright (c) 2011-2019  K.Takata  <kentkt AT csc DOT jp>
-All rights reserved.
+Copyright (c) 2015, 2016, 2017 Howard Hinnant
+Copyright (c) 2016 Adrian Colomitchi
+Copyright (c) 2017 Florian Dang
+Copyright (c) 2017 Paul Thompson
+Copyright (c) 2018 Tomasz Kamiński
+All rights reserved
+
+
+* utfcpp
+
+Copyright 2006 Nemanja Trifunovic
+All rights reserved
 
 
 * getopt_port
 
 Copyright (c) 2012-2017, Kim Grasman <kim.grasman@gmail.com>
 All rights reserved.
+
 

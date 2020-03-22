@@ -414,15 +414,19 @@ age2 = age
 * Some systems use macro function for memcpy definition. In vm_stack.c, compound literal was passed for the second argument, and macro function wrongly seperate those compound literals b/c they include comma within them. I put () parentheses for the second argument. (Feb. 9 2020)
 * For g++, -D_GLIBCXX_USE_CXX11_ABI=0 option is added in Makefile to avoid errors in some environment (Mar. 8 2020)
     + About -D_GLIBCXX_USE_CXX11_ABI=0 option, see https://stackoverflow.com/questions/33394934/converting-std-cxx11string-to-stdstring
+    + This option is discarded later. Instead use -std=c11 option to C compiler. (Mar. 22 2020)
 
 
-## Ver 0.8.2 (Mar. 13 2020)
+## Ver 0.8.2
 
-* Makefile updated to detect operating system. (gcc -dumpmachine is used)
-* The following declarations are added to prevent implicit declaration warnings.
+* Makefile updated to detect operating system. (gcc -dumpmachine is used) (Mar. 13 2020)
+* The following declarations are added to prevent implicit declaration warnings. (Mar. 13 2020)
     + parse.y: yylex() and yyerror() are explicitly declared.
     + lex.l: fileno(FILE *stream) is explicitly declared.
     + sialr.c: yylex_init(), yy_scan_string(), and yylex_destroy() are explicitly declared.
+* Use -std=c11 for C, as well as -std=c++11 for C++ (Mar. 22 2020)
+    + Instead, discard -D_GLIBCXX_USE_CXX11_ABI=0 option.
+* COPYRIGHT is updated. (Mar. 22 2020)
 
 
 ## Plan 
@@ -441,13 +445,13 @@ age2 = age
 
 
 
-## Under consieration
+## Under consideration
 
 * The notion of lifetime attribute is to be added to ptr_table.
 * This works with GCReq attribute.
 
 
-## Abondoned Ideas
+## Abandoned Ideas
 
 * Ways to deal with general objects.
     + At ptr_table level?? Only at function call level?? => Implement only at function call level.

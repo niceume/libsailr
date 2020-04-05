@@ -186,8 +186,7 @@ sailr_ptr_table_create_anonym_string(ptr_table_object** table, const char* str)
 ptr_record_object*
 sailr_ptr_table_create_string_from_cstring(ptr_table_object** table, const char* key, const char* str)
 {
-	string_object* new_str = string_new(str);
-	return (ptr_record_object*) ptr_table_create_string((ptr_table**)table, key, &new_str);
+	return (ptr_record_object*) ptr_table_create_string_from_cstring((ptr_table**)table, key, str);
 }
 
 

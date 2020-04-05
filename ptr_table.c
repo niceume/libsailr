@@ -206,11 +206,19 @@ ptr_record_reset_rexp(ptr_record* pr)
 }
 
 ptr_record*
-ptr_table_create_string(ptr_table** table, const char* key, string_object** strptr)
+ptr_table_create_string_from_cstring(ptr_table** table, const char* key, const char* str)
 {
 	ptr_record* new_ptr_record;
-	new_ptr_record = ptr_table_add(table, key, (void**)strptr, PTR_STR, GC_NO);
+	string_object* p_str = string_new(str);
+	new_ptr_record = ptr_table_add(table, key, (void**) &p_str, PTR_STR, GC_YES);
 	return new_ptr_record ;
+
+//	ptr_record* new_ptr_record;
+//	string_object** pp_str = malloc(sizeof(string_object*));
+//	pp_str* = string_new(str);
+//	new_ptr_record = ptr_table_add(table, key, (void**) pp_str, PTR_STR, GC_YES);
+//   free(pp_str);
+//	return new_ptr_record ;
 }
 
 // (Deprecated)

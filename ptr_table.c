@@ -31,31 +31,30 @@ ptr_table_init (){
 ptr_record*
 ptr_table_add (ptr_table** table, const char* key, void** address, PtrType type, GCReq gc )
 {
-	ptr_record * result = NULL;
-	result = ptr_table_find (table, key);
-	if(result == NULL){
-		// Create new key/value.
-		ptr_record* new_ptr_record;
-		new_ptr_record = (ptr_record *)malloc(sizeof(ptr_record));
-		strncpy( new_ptr_record->key , key, MAX_KEY_LEN ) ;
+    ptr_record * result = NULL;
+    result = ptr_table_find (table, key);
+    if(result == NULL){
+        // Create new key/value.
+        ptr_record* new_ptr_record;
+        new_ptr_record = (ptr_record *)malloc(sizeof(ptr_record));
+        strncpy( new_ptr_record->key , key, MAX_KEY_LEN ) ;
         if(type != PTR_NULL){
-    		new_ptr_record->address = *address;
+            new_ptr_record->address = *address;
         }else{
             new_ptr_record->address = NULL;
         }
-		new_ptr_record->type = type;
-		new_ptr_record->gc = gc ; 
-		// printf("%s\t %p\t \n", new_ptr_record->key, new_ptr_record->address);
-		ptr_table_insert( table, new_ptr_record );
-		// printf("%s\t %p\t \n", table->key, table->address);
-		result = new_ptr_record;
-	} else {
-        if(type != PTR_NULL){
-    		ptr_record_update( result, *address, type, gc );
-        }else{
-    		ptr_record_update( result, NULL, type, gc );
-        }
-
+        new_ptr_record->type = type;
+        new_ptr_record->gc = gc ;
+        // If necessary, extra address and its related information should be updated.
+        new_ptr_record->ex_addr = NULL;
+        new_ptr_record->ex_type = PTR_NULL;
+        new_ptr_record->ex_gc = GC_NO ; 
+        // Insert new ptr_record on ptr_table
+        ptr_table_insert( table, new_ptr_record );
+        result = new_ptr_record;
+    } else {
+        printf("ERROR: The key name of ptr_record that try being added already exists on ptr_table.");
+        result = NULL;
 	}
 	return result;
 }
@@ -305,6 +304,29 @@ ptr_record_free_gc_required_memory(ptr_record* pr)
 				break;
 		}
 		pr->address = NULL;
+	}	
+	if(pr->ex_gc == GC_YES){
+		switch( pr->ex_type ){	
+			case PTR_INT:
+			case PTR_DBL:
+				free(pr->ex_addr);
+				break;
+			case PTR_STR:
+				string_free((string_object*)pr->ex_addr);
+				break;
+			case PTR_REXP:
+				simple_re_free((simple_re*)pr->ex_addr);
+				break;
+			case PTR_NULL:
+				break;
+			case PTR_INFO:
+				free((ptr_table_info*)pr->ex_addr);
+				break;
+			default:
+				free(pr->ex_addr);
+				break;
+		}
+		pr->ex_addr = NULL;
 	}
 }
 

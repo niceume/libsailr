@@ -270,6 +270,10 @@ main(int argc, char** argv)
 //	sailr_ptr_table_del_records_except(&table, record_list, sizeof(record_list) / sizeof(record_list[0]));
 //	sailr_ptr_table_show_all(&table);
 
+	/* Free memory for instructions */
+	sailr_vm_inst_list_free( inst_list );
+	sailr_vm_inst_code_free( vmcode );
+
     /* Free memory */
 	VERBOSE( std::cout << "----- Memory areas are going to be freed -----" << std::endl; )
 	VERBOSE( std::cout << "Going to free parser tree \n" << std::endl; )

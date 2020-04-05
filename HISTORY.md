@@ -429,6 +429,11 @@ age2 = age
 * COPYRIGHT is updated. (Mar. 22 2020)
 
 
+## Ver 0.8.3
+
+* Fix memory leaks (Apr. 5 2020)
+
+
 ## Plan 
 
 * Report run time error.

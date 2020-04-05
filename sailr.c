@@ -152,6 +152,18 @@ sailr_vm_inst_list_show_all( vm_inst_object* insts )
 }
 
 void
+sailr_vm_inst_list_free( vm_inst_object* inst_list )
+{
+  vm_inst_list_free( (vm_inst_list*) inst_list ); 
+}
+
+void
+sailr_vm_inst_code_free( vm_inst_object* vmcode )
+{
+  free( (vm_inst*) vmcode );
+}
+
+void
 sailr_vm_exec_code( vm_inst_object* code , int num_insts , ptr_table_object* table , vm_stack_object* vmstack)
 {
 	vm_exec_code((vm_inst*)code, num_insts, (ptr_table*)table, (vm_stack*)vmstack);

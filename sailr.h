@@ -21,6 +21,8 @@ vm_inst_object*       sailr_gen_code( parser_state_object* ps , ptr_table_object
 vm_inst_object*       sailr_vm_inst_list_to_code( vm_inst_object* );
 int                   sailr_vm_inst_list_size( vm_inst_object* );
 void                  sailr_vm_inst_list_show_all( vm_inst_object* );
+void                  sailr_vm_inst_list_free( vm_inst_object* inst_list );
+void                  sailr_vm_inst_code_free( vm_inst_object* vmcode );
 vm_stack_object*      sailr_vm_stack_init();
 int                   sailr_vm_stack_set_encoding(vm_stack_object* , const char*);
 const char*           sailr_vm_stack_get_encoding(vm_stack_object* );

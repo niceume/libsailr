@@ -99,6 +99,12 @@ main(int argc, char** argv)
 	} 
 	std::cout << std::endl; )
 
+	// Free temporarily used cstring variable names
+	// In the future, it is better to provide iteration for var name access, then no need to free.
+	sailr_varnames_free(vars, var_num);
+	sailr_varnames_free(lhs_vars, lhs_var_num);
+	sailr_varnames_free(rhs_vars, rhs_var_num);
+
 
 	// Assinging pointers onto table
 

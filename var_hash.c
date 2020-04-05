@@ -88,6 +88,17 @@ var_hash_names(var_hash** hash)
 }
 
 void
+var_hash_names_free( char** hash_names, int size )
+{
+  int idx;
+  char* name;
+  for(idx = 0 ; idx < size ; ++idx){
+    name = hash_names[idx];
+    free(name);
+  }
+}
+
+void
 var_hash_print_names(var_hash** hash)
 {
 	printf("printing names in hash....\n");

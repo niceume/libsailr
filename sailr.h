@@ -72,6 +72,7 @@ char** sailr_lhs_varnames(parser_state_object* );
 int sailr_varnames_num(parser_state_object* psobj);
 int sailr_rhs_varnames_num(parser_state_object* psobj);
 int sailr_lhs_varnames_num(parser_state_object* psobj);
+void sailr_varnames_free( char** varnames , int num);
 
 #endif
 

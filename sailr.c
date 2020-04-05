@@ -395,4 +395,9 @@ sailr_lhs_varnames_num(parser_state_object* psobj)
 	return var_hash_size(&(ps->lhsvars));
 }
 
+void
+sailr_varnames_free( char** varnames , int size)
+{
+	var_hash_names_free( varnames, size );
+}
 

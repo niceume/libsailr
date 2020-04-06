@@ -105,6 +105,8 @@ sailr_func_print(vm_stack* vmstack, int num_args)
 
   printf("%s", string_read(new_str));
 
+  string_free(new_str);
+
   arg_list_finalize( vmstack, num_args, arglist ); // Move sp pointer & deallocate arg_list* 
   return 1;
 }

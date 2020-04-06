@@ -36,9 +36,9 @@ char* current_vm_label(){
     return cur_vm_label;
 }
 
-void free_vm_label(){
-	free(cur_vm_label);
-}
+//void free_vm_label(){
+//	free(cur_vm_label);
+//}
 
 /*
 int main(int argc, char** argv){

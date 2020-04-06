@@ -47,6 +47,23 @@ vm_inst_show( vm_inst* inst )
 int
 vm_inst_free( vm_inst* inst )
 {
+	switch(inst->cmd){
+	case VM_PUSH_PP_IVAL:
+	case VM_PUSH_PP_DVAL:
+	case VM_PUSH_PP_NUM:
+	case VM_PUSH_PP_STR:
+	case VM_PUSH_PP_REXP:
+	case VM_PUSH_NULL:
+		free(inst->ptr_key);
+		break;
+	case VM_LABEL:
+	case VM_FJMP:
+	case VM_JMP:
+		free(inst->label);
+		break;
+	default:
+		break;
+	}
 	free(inst);
 }
 

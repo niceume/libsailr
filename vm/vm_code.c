@@ -61,6 +61,9 @@ vm_inst_free( vm_inst* inst )
 	case VM_JMP:
 		free(inst->label);
 		break;
+	case VM_FCALL:
+		free(inst->ptr_fname);
+		break;
 	default:
 		break;
 	}

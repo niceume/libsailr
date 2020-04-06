@@ -189,6 +189,7 @@ ptr_table_create_anonym_string(ptr_table** table, string_object** strptr)
 	new_key = create_new_str_key(table);
 	ptr_record* new_ptr_record;
 	new_ptr_record = ptr_table_add(table, new_key, (void**)strptr, PTR_STR, GC_YES);
+	free(new_key);
 	return new_ptr_record ;
 }
 
@@ -259,6 +260,7 @@ ptr_table_create_anonym_rexp(ptr_table** table, const char* pattern, const char*
 	new_re = simple_re_compile( pattern, enc );
 	ptr_record* new_ptr_record;
 	new_ptr_record = ptr_table_add(table, new_key, (void**) &new_re, PTR_REXP, GC_YES);
+	free(new_key);
 	return new_ptr_record ;
 }
 

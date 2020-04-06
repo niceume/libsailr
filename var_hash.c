@@ -96,6 +96,7 @@ var_hash_names_free( char** hash_names, int size )
     name = hash_names[idx];
     free(name);
   }
+  free(hash_names);
 }
 
 void
@@ -108,6 +109,7 @@ var_hash_print_names(var_hash** hash)
 	for(idx = 0; idx < size; ++idx){
 		printf("%s \n", names[idx]);
 	}
+	var_hash_names_free(names, size);
 }
 
 int
@@ -115,9 +117,12 @@ var_hash_free(var_hash** hash){
 	var_elem* elem;
 	var_elem* temp;
 
+	/* When deleting elements of UTHASH, use both HASH_DEL() and free(). */
+	/* Without HASH_DEL(), some memory leak happens*/
 	HASH_ITER(hh, *hash, elem, temp) {
 //		printf("Delete %s\n", elem->name );
-		free(elem);
+		HASH_DEL(*hash, elem); 
+		free(elem);  /* Free structure & memory */
 	}
 }
 

@@ -33,6 +33,7 @@ vm_stack_init()
 	item->p_vm_stack_info->last_rexp = NULL;
 
 	memcpy( &(stack->stack[stack->sp]), item, sizeof(stack_item));
+	free(item);
 
 #ifdef DEBUG
 	printf("Initializing vm_stack: Address to Pointer to last_rexp field is %p \n", &(item->p_vm_stack_info->last_rexp));
@@ -96,6 +97,7 @@ vm_stack_push_ival( vm_stack* stack , int num)
 		(&(stack_item const){ IVAL, {.ival = num} , JUST_A_VALUE }),
 		sizeof(stack_item));
 	vm_stack_push_item(stack, new_stack_item);
+	free(new_stack_item);
 	return 1;
 }
 
@@ -107,6 +109,7 @@ vm_stack_push_dval( vm_stack* stack , double num)
 		(&(stack_item const){ DVAL, {.dval = num} , JUST_A_VALUE }),
 		sizeof(stack_item));
 	vm_stack_push_item(stack, new_stack_item);
+	free(new_stack_item);
 	return 1;
 }
 
@@ -123,6 +126,8 @@ vm_stack_push_pp_ival( vm_stack* stack , ptr_table** table, char* ptr_key)
 		sizeof(stack_item));
 	DEBUG_PRINT("push new_stack_item: pointer to pointer to %d \n", **(new_stack_item->pp_ival) );
 	vm_stack_push_item(stack, new_stack_item);
+	free(new_stack_item);
+	return 1;
 }
 
 int
@@ -136,6 +141,8 @@ vm_stack_push_pp_dval( vm_stack* stack , ptr_table** table, char* ptr_key)
 		sizeof(stack_item));
 	DEBUG_PRINT("push new_stack_item: pointer to pointer to %f \n", **(new_stack_item->pp_dval) );
 	vm_stack_push_item(stack, new_stack_item);
+	free(new_stack_item);
+	return 1;
 }
 
 int
@@ -161,6 +168,8 @@ vm_stack_push_pp_str( vm_stack* stack , ptr_table** table, char* ptr_key)
 		(&(stack_item const){ PP_STR, {.pp_str = pp_str}, record }),
 		sizeof(stack_item));
 	vm_stack_push_item(stack, new_stack_item);
+	free(new_stack_item);
+	return 1;
 }
 
 int
@@ -171,6 +180,8 @@ vm_stack_push_temp_pp_str( vm_stack* stack , string_object** pp_str)
 		(&(stack_item const){ PP_STR, {.pp_str = pp_str}, TEMP_OBJECT }),
 		sizeof(stack_item));
 	vm_stack_push_item(stack, new_stack_item);
+	free(new_stack_item);
+	return 1;
 }
 
 int
@@ -183,6 +194,8 @@ vm_stack_push_pp_rexp( vm_stack* stack , ptr_table** table, char* ptr_key)
 		(&(stack_item const){ PP_REXP, {.pp_rexp = pp_rexp}, record }),
 		sizeof(stack_item));
 	vm_stack_push_item(stack, new_stack_item);
+	free(new_stack_item);
+	return 1;
 }
 
 int
@@ -194,6 +207,8 @@ vm_stack_push_null( vm_stack* stack , ptr_table** table, char* ptr_key)
 		(&(stack_item const){ NULL_ITEM, {.ptr = NULL}, record }),
 		sizeof(stack_item));
 	vm_stack_push_item(stack, new_stack_item);
+	free(new_stack_item);
+	return 1;
 }
 
 int
@@ -224,6 +239,7 @@ vm_stack_push_boolean( vm_stack* stack, bool boolean)
 		(&(stack_item const){ BOOLEAN, {.boolean = boolean} , NOT_ON_PTR_TABLE }),
 		sizeof(stack_item));
 	vm_stack_push_item(stack, new_stack_item);
+	free(new_stack_item);
 	return 1;
 }
 

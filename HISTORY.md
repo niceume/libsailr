@@ -431,7 +431,7 @@ age2 = age
 
 ## Ver 0.8.3
 
-* Fix memory leaks (Apr. 5-6 2020)
+* Fix memory leaks (Apr. 5-7 2020)
 
 
 ## Plan 

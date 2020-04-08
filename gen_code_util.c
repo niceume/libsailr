@@ -36,18 +36,26 @@ new_vm_inst_push_dval( double dval )
 vm_inst*
 new_vm_inst_push_pp_ival( char* ptr_key )
 {
-//	vm_inst* temp_inst = new_vm_inst_command( VM_PUSH_PP_IVAL );
     vm_inst* temp_inst = new_vm_inst_command( VM_PUSH_PP_NUM );
-	temp_inst->ptr_key = ptr_key;
+
+	int length = strlen(ptr_key);
+	char* key_copied = (char*) malloc(length*sizeof(char)+1);
+	strcpy(key_copied, ptr_key);
+	temp_inst->ptr_key = key_copied;
+
 	return temp_inst;
 }
 
 vm_inst*
 new_vm_inst_push_pp_dval( char* ptr_key )
 {
-//	vm_inst* temp_inst = new_vm_inst_command( VM_PUSH_PP_DVAL );
     vm_inst* temp_inst = new_vm_inst_command( VM_PUSH_PP_NUM );
-	temp_inst->ptr_key = ptr_key;
+
+	int length = strlen(ptr_key);
+	char* key_copied = (char*) malloc(length*sizeof(char)+1);
+	strcpy(key_copied, ptr_key);
+	temp_inst->ptr_key = key_copied;
+
 	return temp_inst;
 }
 
@@ -55,7 +63,12 @@ vm_inst*
 new_vm_inst_push_pp_str( char* ptr_key )
 {
 	vm_inst* temp_inst = new_vm_inst_command( VM_PUSH_PP_STR );
-	temp_inst->ptr_key = ptr_key;
+
+	int length = strlen(ptr_key);
+	char* key_copied = (char*) malloc(length*sizeof(char)+1);
+	strcpy(key_copied, ptr_key);
+	temp_inst->ptr_key = key_copied;
+
 	return temp_inst;
 }
 
@@ -63,7 +76,12 @@ vm_inst*
 new_vm_inst_push_pp_rexp( char* ptr_key )
 {
 	vm_inst* temp_inst = new_vm_inst_command( VM_PUSH_PP_REXP );
-	temp_inst->ptr_key = ptr_key;
+
+	int length = strlen(ptr_key);
+	char* key_copied = (char*) malloc(length*sizeof(char)+1);
+	strcpy(key_copied, ptr_key);
+	temp_inst->ptr_key = key_copied;
+
 	return temp_inst;
 }
 
@@ -71,7 +89,12 @@ vm_inst*
 new_vm_inst_push_null( char* ptr_key )
 {
 	vm_inst* temp_inst = new_vm_inst_command( VM_PUSH_NULL );
-	temp_inst->ptr_key = ptr_key;
+
+	int length = strlen(ptr_key);
+	char* key_copied = (char*) malloc(length*sizeof(char)+1);
+	strcpy(key_copied, ptr_key);
+	temp_inst->ptr_key = key_copied;
+
 	return temp_inst;
 }
 
@@ -79,7 +102,12 @@ vm_inst*
 new_vm_inst_label( char* label )
 {
 	vm_inst* temp_inst = new_vm_inst_command( VM_LABEL );
-	temp_inst->label = label;
+
+	int length = strlen(label);
+	char* label_copied = (char*) malloc(length*sizeof(char)+1);
+	strcpy(label_copied, label);
+	temp_inst->label = label_copied;
+
 	return temp_inst;
 }
 
@@ -88,7 +116,12 @@ vm_inst*
 new_vm_inst_fjmp( char* label )
 {
 	vm_inst* temp_inst = new_vm_inst_command( VM_FJMP );
-	temp_inst->label = label;
+
+	int length = strlen(label);
+	char* label_copied = (char*) malloc(length*sizeof(char)+1);
+	strcpy(label_copied, label);
+	temp_inst->label = label_copied;
+
 	return temp_inst;
 }
 
@@ -97,7 +130,12 @@ vm_inst*
 new_vm_inst_jmp( char* label )
 {
 	vm_inst* temp_inst = new_vm_inst_command( VM_JMP );
-	temp_inst->label = label;
+
+	int length = strlen(label);
+	char* label_copied = (char*) malloc(length*sizeof(char)+1);
+	strcpy(label_copied, label);
+	temp_inst->label = label_copied;
+
 	return temp_inst;
 }
 

@@ -12,7 +12,6 @@ struct _vm_inst{
 		double dval;
 		char* ptr_key;
 		char* label;
-		char* ptr_fname;
 	};
 	char fname[MAX_FUNC_NAME_LEN + 1];
 	int num_arg;

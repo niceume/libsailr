@@ -169,7 +169,6 @@ gen_code_fcall( char* fname, int num_arg, vm_inst* farg_code)
     int fname_len = strlen(fname);
     if( fname_len < MAX_FUNC_NAME_LEN){
         memcpy( fcall_inst->fname, fname, fname_len + 1 );
-		fcall_inst->ptr_fname = fname;
     } else { 
         printf("ERROR: function name is too long. over %d.", MAX_FUNC_NAME_LEN);
     }  
@@ -287,6 +286,7 @@ vm_inst* gen_code(TreeNode* nd, ptr_table* table){
     }else{
       DEBUG_PRINT("ERROR: Unintended node under NODE_FCALL\n");
     }
+	free(fname);
     return nd_code;
     break;
 
@@ -342,6 +342,9 @@ vm_inst* gen_code(TreeNode* nd, ptr_table* table){
 	if(nd->e3.nd != NULL){ // If e3 exists.
 	    nd_code = vm_inst_list_cat( nd_code, new_vm_inst_label(label_L2));
 	}
+
+	free(label_L1);
+	free(label_L2);
 
 	return nd_code;
     break;

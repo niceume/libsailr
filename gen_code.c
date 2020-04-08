@@ -286,7 +286,6 @@ vm_inst* gen_code(TreeNode* nd, ptr_table* table){
     }else{
       DEBUG_PRINT("ERROR: Unintended node under NODE_FCALL\n");
     }
-	free(fname);
     return nd_code;
     break;
 

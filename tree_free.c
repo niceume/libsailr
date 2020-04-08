@@ -40,6 +40,7 @@ tree_free( TreeNode* nd, int level)
     break;
   case NODE_IDENT:
     DEBUG_PRINT("%s%s(%s)\n", rep_spaces(level),"Free NODE_IDENT", nd->e1.id);
+	free(nd->e1.id);
     free(nd);
     break;
   case NODE_FCALL:

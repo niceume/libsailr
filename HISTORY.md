@@ -431,7 +431,10 @@ age2 = age
 
 ## Ver 0.8.3
 
-* Fix memory leaks (Apr. 5-7 2020)
+* Solve valgrind errors (Apr. 5-7 2020)
+    + Fix memory leaks.
+    + avoid multiple deallocation for the same memory.
+
 
 
 ## Plan 

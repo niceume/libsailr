@@ -249,7 +249,6 @@ vm_inst_list_free( vm_inst_list* inst_list )
 	vm_inst* curr_inst = inst_list;
 	vm_inst* next_inst = curr_inst->next;
 	vm_inst_free( curr_inst );
-	printf("Free vm_inst \n");
 	if(next_inst != NULL){
 		vm_inst_list_free(next_inst);
 	}

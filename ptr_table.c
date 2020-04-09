@@ -53,8 +53,11 @@ ptr_table_add (ptr_table** table, const char* key, void** address, PtrType type,
         ptr_table_insert( table, new_ptr_record );
         result = new_ptr_record;
     } else {
-        printf("ERROR: The key name of ptr_record that try being added already exists on ptr_table.");
-        result = NULL;
+        if(type != PTR_NULL){
+            ptr_record_update( result, *address, type, gc );
+        }else{
+            ptr_record_update( result, NULL, type, gc );
+        }
 	}
 	return result;
 }

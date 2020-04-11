@@ -431,10 +431,10 @@ age2 = age
 
 ## Ver 0.8.3
 
-* Solve valgrind errors (Apr. 5-7 2020)
+* Solve valgrind errors (Apr. 5-11 2020)
     + Fix memory leaks.
-    + avoid multiple deallocation for the same memory.
-
+    + Avoid multiple deallocation for the same memory.
+    + Memory for string was unintentionally freed.
 
 
 ## Plan 

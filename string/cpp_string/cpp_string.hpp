@@ -10,10 +10,11 @@ extern "C" {
 	cpp_object* cpp_string_new_with_len (const char* , int);
 	cpp_object* cpp_string_new_unescaped_string(cpp_object* ori_str, const char* encoding);
 	cpp_object* cpp_string_clone( cpp_object* );
-	cpp_object* cpp_string_int2str( int num);
-	cpp_object* cpp_string_double2str( double num);
-	const char* cpp_string_int2cstr(int num);
-	const char* cpp_string_double2cstr(double num);
+	cpp_object* cpp_string_new_int2str( int num);
+	cpp_object* cpp_string_new_double2str( double num);
+//	Deprecaetd: it is confusing and difficult to track and free newly created c strings.
+//	const char* cpp_string_int2cstr(int num);
+//	const char* cpp_string_double2cstr(double num);
 	cpp_object* cpp_string_lstrip( cpp_object* );
 	cpp_object* cpp_string_rstrip( cpp_object* );
 	cpp_object* cpp_string_strip( cpp_object* );

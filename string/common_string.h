@@ -11,10 +11,12 @@ string_object* string_new(const c_char* str );
 string_object* string_new_with_len( const c_char* str, int len);
 string_object* string_new_unescaped_and_delete_ori(string_object* str, const char* encoding);
 string_object* string_clone( string_object* );
-string_object* string_int2str( int num); 
-string_object* string_double2str( double num);
+string_object* string_new_int2str( int num); 
+string_object* string_new_double2str( double num);
+/*
 const c_char* string_int2cstr( int num); 
 const c_char* string_double2cstr( double num); 
+*/
 string_object* string_strip( cpp_object* ); 
 string_object* string_lstrip( cpp_object* ); 
 string_object* string_rstrip( cpp_object* ); 

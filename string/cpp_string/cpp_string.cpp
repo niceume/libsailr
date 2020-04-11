@@ -48,7 +48,7 @@ cpp_string_clone (cpp_object* obj)
 }
 
 cpp_object*
-cpp_string_int2str(int num)
+cpp_string_new_int2str(int num)
 {
 	std::string* p_str;
 //	std::stringstream ss;
@@ -60,7 +60,7 @@ cpp_string_int2str(int num)
 }
 
 cpp_object*
-cpp_string_double2str(double num)
+cpp_string_new_double2str(double num)
 {
 	std::string* p_str;
 //	std::stringstream ss;
@@ -71,21 +71,10 @@ cpp_string_double2str(double num)
 	return (cpp_object*) p_str;
 }
 
-const char*
-cpp_string_int2cstr(int num)
-{
-	std::string str;
-	str = std::to_string(num);
-	return str.c_str();
-}
-
-const char*
-cpp_string_double2cstr(double num)
-{
-	std::string str;
-	str = std::to_string(num);
-	return str.c_str();
-}
+/* Deprecaetd: it is confusing and difficult to track and free newly created c strings.
+const char* cpp_string_int2cstr(int num){}
+const char* cpp_string_double2cstr(double num){}
+*/
 
 cpp_object*
 cpp_string_lstrip(cpp_object* obj)

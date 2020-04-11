@@ -62,30 +62,44 @@ append_arg_list_as_string( string_object* new_str, arg_list* arglist)
   bool tmp_bool;
 
   for( argitem = arglist ; argitem != NULL; arg_item_next(&argitem) ){
+	printf("ARG ITEM TYPE: %c \n", arg_item_interpret_type(argitem));
+
 	switch(arg_item_interpret_type(argitem)){ 
     case 's': // string
       ASSIGN_STRING_PTR( tmp_str , argitem , "ERROR: This should be string.\n" );
+	  printf("%s\n", string_read(tmp_str));
       string_append_string(new_str, tmp_str);
     break;
     case 'i': // int
       ASSIGN_INT_VALUE( tmp_int , argitem , "ERROR: This should be int.\n" );
-      string_append_cstring(new_str, string_int2cstr(tmp_int));
+	  printf("%d\n", tmp_int);
+	  tmp_str = string_new_int2str(tmp_int);
+      string_append_string(new_str, tmp_str);
+	  string_free(tmp_str);
     break;
     case 'd': // double
       ASSIGN_DOUBLE_VALUE( tmp_double , argitem , "ERROR: This should be int.\n" );
-      string_append_cstring(new_str, string_double2cstr(tmp_double));      
+	  printf("%f\n", tmp_double);
+	  tmp_str = string_new_double2str(tmp_double);
+      string_append_string(new_str, tmp_str);
+	  string_free(tmp_str);
     break;
     case 'r': // regexp
       tmp_re = arg_item_rexp_obj( argitem );
+	  printf("%s\n", simple_re_read_pattern(tmp_re));
       string_append_cstring(new_str, simple_re_read_pattern(tmp_re));      
     break;
     case 'b': // boolan
       tmp_bool = arg_item_bool_value( argitem );
       tmp_int = tmp_bool ? 1 : 0 ;
-      string_append_cstring(new_str, string_int2cstr(tmp_int));
+	  printf("%d\n", tmp_int);
+	  tmp_str = string_new_int2str(tmp_int);
+      string_append_string(new_str, tmp_str);
+	  string_free(tmp_str);
     break;
     case 'n': // null
       // Nothing to be added.
+	  printf("null\n");
     break;
     default:  // shoud never enter this branch
       printf("ERROR: This should never be executed (sailr_func_print()).\n");      
@@ -122,10 +136,10 @@ sailr_func_num_to_str(vm_stack* vmstack, int num_args , ptr_table** table)
   string_object** pp_str = (string_object**) malloc(sizeof(string_object*));
 
   if(arg_item_confirm_int(argitem)){
-    p_str = (string_object*) string_int2str( arg_item_int_value(argitem) );
+    p_str = (string_object*) string_new_int2str( arg_item_int_value(argitem) );
     *pp_str = p_str;  // Never do "pp_str = &p_str;"
   }else if(arg_item_confirm_double(argitem)){
-    p_str = string_double2str( arg_item_double_value(argitem) );
+    p_str = string_new_double2str( arg_item_double_value(argitem) );
     *pp_str = p_str;  // Never do "pp_str = &p_str;"
   }else{
     printf("ERROR: For argument, number shouble be specified.\n");

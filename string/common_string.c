@@ -30,28 +30,21 @@ string_clone(string_object* str)
 }
 
 string_object*
-string_int2str(int num)
+string_new_int2str(int num)
 {
-	return cpp_string_int2str(num);
+	return cpp_string_new_int2str(num);
 }
 
 string_object*
-string_double2str(double num)
+string_new_double2str(double num)
 {
-	return cpp_string_double2str(num);
+	return cpp_string_new_double2str(num);
 }
 
-const c_char*
-string_int2cstr(int num)
-{
-	return cpp_string_int2cstr(num);
-}
-
-const c_char*
-string_double2cstr(double num)
-{
-	return cpp_string_double2cstr(num);
-}
+/* Deprecaetd: it is confusing and difficult to track and free newly created c strings.
+const char* string_int2cstr(int num){}
+const char* string_double2cstr(double num){}
+*/
 
 string_object*
 string_strip( string_object* str)

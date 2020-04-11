@@ -198,6 +198,13 @@ arg_item_confirm_string( arg_item* arg)
   return arg_item_confirm_type( arg, PP_STR);
 }
 
+// confirm regular expression
+bool
+arg_item_confirm_rexp( arg_item* arg)
+{
+  return arg_item_confirm_type( arg, PP_REXP);
+}
+
 // return type using char
 char
 arg_item_interpret_type( arg_item* arg)
@@ -208,6 +215,8 @@ arg_item_interpret_type( arg_item* arg)
     return 'd';
   }else if(arg_item_confirm_string(arg)){
     return 's';
+  }else if(arg_item_confirm_rexp(arg)){
+    return 'r';
   }else if(arg_item_confirm_type(arg, BOOLEAN)){
     return 'b';
   }else if(arg_item_confirm_type(arg, NULL_ITEM)){

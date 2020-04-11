@@ -62,44 +62,44 @@ append_arg_list_as_string( string_object* new_str, arg_list* arglist)
   bool tmp_bool;
 
   for( argitem = arglist ; argitem != NULL; arg_item_next(&argitem) ){
-	printf("ARG ITEM TYPE: %c \n", arg_item_interpret_type(argitem));
+//	printf("ARG ITEM TYPE: %c \n", arg_item_interpret_type(argitem));
 
 	switch(arg_item_interpret_type(argitem)){ 
     case 's': // string
       ASSIGN_STRING_PTR( tmp_str , argitem , "ERROR: This should be string.\n" );
-	  printf("%s\n", string_read(tmp_str));
+//	  printf("%s\n", string_read(tmp_str));
       string_append_string(new_str, tmp_str);
     break;
     case 'i': // int
       ASSIGN_INT_VALUE( tmp_int , argitem , "ERROR: This should be int.\n" );
-	  printf("%d\n", tmp_int);
+//	  printf("%d\n", tmp_int);
 	  tmp_str = string_new_int2str(tmp_int);
       string_append_string(new_str, tmp_str);
 	  string_free(tmp_str);
     break;
     case 'd': // double
       ASSIGN_DOUBLE_VALUE( tmp_double , argitem , "ERROR: This should be int.\n" );
-	  printf("%f\n", tmp_double);
+//	  printf("%f\n", tmp_double);
 	  tmp_str = string_new_double2str(tmp_double);
       string_append_string(new_str, tmp_str);
 	  string_free(tmp_str);
     break;
     case 'r': // regexp
       tmp_re = arg_item_rexp_obj( argitem );
-	  printf("%s\n", simple_re_read_pattern(tmp_re));
+//	  printf("%s\n", simple_re_read_pattern(tmp_re));
       string_append_cstring(new_str, simple_re_read_pattern(tmp_re));      
     break;
     case 'b': // boolan
       tmp_bool = arg_item_bool_value( argitem );
       tmp_int = tmp_bool ? 1 : 0 ;
-	  printf("%d\n", tmp_int);
+//	  printf("%d\n", tmp_int);
 	  tmp_str = string_new_int2str(tmp_int);
       string_append_string(new_str, tmp_str);
 	  string_free(tmp_str);
     break;
     case 'n': // null
       // Nothing to be added.
-	  printf("null\n");
+//	  printf("null\n");
     break;
     default:  // shoud never enter this branch
       printf("ERROR: This should never be executed (sailr_func_print()).\n");      

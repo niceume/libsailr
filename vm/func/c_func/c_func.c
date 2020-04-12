@@ -185,19 +185,19 @@ sailr_func_str_func_ptr (vm_stack* vmstack, int num_args , ptr_table** table , s
 int
 sailr_func_str_strip( vm_stack* vmstack, int num_args, ptr_table** table )
 {
-  sailr_func_str_func_ptr(vmstack, num_args, table, &string_strip);
+  return sailr_func_str_func_ptr(vmstack, num_args, table, &string_strip);
 }
 
 int
 sailr_func_str_lstrip( vm_stack* vmstack, int num_args, ptr_table** table )
 {
-  sailr_func_str_func_ptr(vmstack, num_args, table, &string_lstrip); 
+  return sailr_func_str_func_ptr(vmstack, num_args, table, &string_lstrip); 
 }
  
 int
 sailr_func_str_rstrip( vm_stack* vmstack, int num_args, ptr_table** table )
 {
-  sailr_func_str_func_ptr(vmstack, num_args, table, &string_rstrip);
+  return sailr_func_str_func_ptr(vmstack, num_args, table, &string_rstrip);
 }
 
 int
@@ -327,6 +327,7 @@ sailr_func_str_to_num ( vm_stack* vmstack, int num_args )
   } else if(ival_or_dval == 'i'){
     vm_stack_push_ival( vmstack , ival);
   }
+  return 1;
 }
 
 int
@@ -381,6 +382,8 @@ sailr_func_date_ymd(vm_stack* vmstack, int num_args )
 
   arg_list_finalize( vmstack, num_args, arglist ); // Move sp pointer & deallocate arg_list* 
   vm_stack_push_ival( vmstack , idate );
+
+  return 1;
 }
 
 int
@@ -409,6 +412,8 @@ sailr_func_date_ym_weekday_nth(vm_stack* vmstack, int num_args )
 
   arg_list_finalize( vmstack, num_args, arglist ); // Move sp pointer & deallocate arg_list* 
   vm_stack_push_ival( vmstack , idate );
+
+  return 1;
 }
 
 
@@ -430,25 +435,27 @@ sailr_func_date_add_n_unit(vm_stack* vmstack, int num_args, int (*add_n_unit)(in
 
   arg_list_finalize( vmstack, num_args, arglist ); // Move sp pointer & deallocate arg_list* 
   vm_stack_push_ival( vmstack , idate );
+
+  return 1;
 }
 
 
 int
 sailr_func_date_add_n_years(vm_stack* vmstack, int num_args ) 
 {
-  sailr_func_date_add_n_unit(vmstack, num_args, &simple_date_add_n_years);
+  return sailr_func_date_add_n_unit(vmstack, num_args, &simple_date_add_n_years);
 }
 
 int
 sailr_func_date_add_n_months(vm_stack* vmstack, int num_args ) 
 {
-  sailr_func_date_add_n_unit(vmstack, num_args, &simple_date_add_n_months);
+  return sailr_func_date_add_n_unit(vmstack, num_args, &simple_date_add_n_months);
 }
 
 int
 sailr_func_date_add_n_days(vm_stack* vmstack, int num_args ) 
 {
-  sailr_func_date_add_n_unit(vmstack, num_args, &simple_date_add_n_days);
+  return sailr_func_date_add_n_unit(vmstack, num_args, &simple_date_add_n_days);
 }
 
 

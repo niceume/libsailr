@@ -27,7 +27,7 @@ arg_item* arg_item_new( stack_item* item );
 bool arg_num_should_be( int num_args1, int num_args2 );
 bool arg_num_should_be_larger_than( int num_args1, int num_args2 );
 bool arg_num_should_be_smaller_than( int num_args1, int num_args2 );
-int arg_item_push_back(arg_item** items, arg_item** new_item);
+void arg_item_push_back(arg_item** items, arg_item** new_item);
 arg_list* arg_list_initialize(vm_stack* vmstack , int num_args );
 int arg_list_finalize(vm_stack* vmstack, int num_args, arg_list* alist);
 int arg_item_next( arg_item** item );
@@ -91,7 +91,7 @@ arg_item_new( stack_item* item )
   return arg;
 }
 
-int
+void
 arg_item_push_back(arg_item** pp_items, arg_item** pp_new_item)
 {
   arg_item* p_items = *pp_items;
@@ -131,7 +131,7 @@ int
 arg_list_finalize(vm_stack* vmstack, int num_args, arg_list* alist)
 {
   arg_list_free(alist);
-  vm_stack_clean_and_pop(vmstack, num_args);
+  return vm_stack_clean_and_pop(vmstack, num_args);
 }
 
 int
@@ -330,11 +330,13 @@ arg_list_free( arg_list* head)
 }
 
 // Show
+/*
 int
 arg_list_show( arg_list* head )
 {
 
 }
+*/
 
 #endif /* FUNC_HELPER_H */
 

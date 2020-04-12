@@ -9,6 +9,7 @@
 int
 call_func( vm_stack* vmstack, char* fname, int num_args, ptr_table** table )
 {
+	int func_exists = 1;
     if(FUNC_NAME_IS(fname, "print")){
         sailr_func_print(vmstack, num_args);
     }else if(FUNC_NAME_IS(fname, "num_to_str")){
@@ -43,6 +44,8 @@ call_func( vm_stack* vmstack, char* fname, int num_args, ptr_table** table )
         sailr_func_date_format(vmstack, num_args, table);
 	}else{
         printf("ERROR: Function, %s , cannot be found. \n", fname );
+		func_exists = -1;
     }
 //	vm_stack_display_all(vmstack);
+	return func_exists;
 }

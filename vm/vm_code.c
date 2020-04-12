@@ -67,6 +67,7 @@ vm_inst_free( vm_inst* inst )
 		break;
 	}
 	free(inst);
+	return 1;
 }
 
 

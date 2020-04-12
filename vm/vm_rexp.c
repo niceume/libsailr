@@ -63,6 +63,8 @@ vm_rexp_match(vm_stack* vmstack)
 
 	vm_stack_clean_and_pop(vmstack, 2); 
 	vm_stack_push_boolean(vmstack, result_bool);
+
+	return 1;
 }
 
 	

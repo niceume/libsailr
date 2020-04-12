@@ -59,6 +59,7 @@ vm_exec_code( vm_inst* code , int num_insts , ptr_table* table , vm_stack* vmsta
 			vm_run_inst(inst, table , vmstack);
 		}
 	}
+	return 1;
 }
 
 int

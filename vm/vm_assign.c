@@ -196,7 +196,9 @@ vm_stack_assign_numval_to_ptr_dbl_record(ptr_record* left_record, stack_item* rv
 				left_record->gc = left_record->gc; // This heap area is usually prepared by library user.
 			}else {
 				printf("ERROR: Object other than IVAL an DVAL is trying to be assigned to PTR_DBL.\n");
+				return -1;
 			}
+			return 1;
 }
 
 int
@@ -215,7 +217,9 @@ vm_stack_assign_numval_to_ptr_int_record(ptr_record* left_record, stack_item* rv
 				left_record->gc = left_record->gc; // This heap area is usually prepared by library user.
 			}else {
 				printf("ERROR: Object other than IVAL an DVAL is trying to be assigned to PTR_INT.\n");
+				return -1;
 			}
+			return 1;
 }
 
 int
@@ -225,12 +229,14 @@ vm_stack_assign_temp_str_to_record(ptr_record* left_record, stack_item* rvalue)
 	free(rvalue->pp_str);
 	rvalue->pp_str = NULL;
 	rvalue->type = VOID_ITEM;
+	return 1;
 }
 
 int
 vm_stack_assign_copy_str_to_record(ptr_record* left_record, stack_item* rvalue)
 {
 	left_record->address = (void*) string_new(string_read((string_object*) *(rvalue->pp_str)));
+	return 1;
 }
 
 

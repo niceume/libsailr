@@ -156,6 +156,7 @@ vm_stack_push_pp_num( vm_stack* stack , ptr_table** table, char* ptr_key)
     } else {
         printf("ERROR: For PUSH_PP_NUM instruction, types on pointer table should be PTR_INT or PTR_DBL.\n");
     }
+	return 1;
 }
 
 int
@@ -228,7 +229,9 @@ vm_stack_push_corresp_item( vm_stack* stack , ptr_table** table, char* ptr_key)
 	}else{
 		// Boolean is not on ptr table. vm_stack_push_boolean is not required in this function.
 		printf("ERROR: ptr_table holds unknown type for variable, %s\n", ptr_key);
+		return -1;
 	}
+	return 1;
 }
 
 int
@@ -247,7 +250,7 @@ int
 vm_stack_fcall( vm_stack* vmstack, char* fname , int num_args, ptr_table** table)
 {
 	DEBUG_PRINT("Function name is %s\n", fname);
-	call_func(vmstack, fname, num_args, table);
+	return call_func(vmstack, fname, num_args, table);
 }
 
 
@@ -320,6 +323,8 @@ vm_stack_clean_top(vm_stack* vmstack)
 	top_item.type = VOID_ITEM;
 	top_item.p_record = NULL;
 	DEBUG_PRINT("clean %s\n", display_item_type(top_item.type));
+
+	return 1;
 }
 
 int
@@ -450,6 +455,8 @@ vm_stack_end( vm_stack* vmstack ){
 	vm_stack_clean_items_from_zero_to_top(vmstack);
 	vm_stack_free(vmstack);
 	DEBUG_PRINT("Virtual machine is disallocated. \n");
+
+	return 1;
 }
 
 int
@@ -485,6 +492,7 @@ int
 vm_stack_free( vm_stack* vmstack )
 {
 	free(vmstack) ;
+	return 1;
 }
 
 stack_item*

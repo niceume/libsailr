@@ -94,7 +94,7 @@ sailr_tree_dump( parser_state_object* ps )
 	tree_dump( ((parser_state*) ps)->tree, 0);
 }
 
-int
+void
 sailr_tree_free(parser_state_object* ps)
 {
 	tree_free( ((parser_state*) ps)->tree, 0);
@@ -309,16 +309,16 @@ sailr_ptr_record_reset_rexp(ptr_record_object* pr)
 	return ptr_record_reset_rexp((ptr_record*) pr);
 }
 
-int
+void
 sailr_ptr_table_del_records_except(ptr_table_object** table, const char** keys, int key_num )
 {
-	return ptr_table_del_records_except((ptr_table**)table, keys, key_num );
+	ptr_table_del_records_except((ptr_table**)table, keys, key_num );
 }
 
-int
+void
 sailr_ptr_table_del_all(ptr_table_object** table)
 {
-	return ptr_table_del_all((ptr_table**) table);
+	ptr_table_del_all((ptr_table**) table);
 }
 
 

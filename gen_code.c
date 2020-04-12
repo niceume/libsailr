@@ -120,6 +120,7 @@ convert_op(char* op_name)
 		return VM_REXP_MATCH;
 	} else {
 		printf("ERROR: node op has undefined oprator!!\n");
+		return VM_NOP;
 	}
 }
 
@@ -349,7 +350,10 @@ vm_inst* gen_code(TreeNode* nd, ptr_table* table){
     break;
 
   case NODE_NULL:
+  default:
     DEBUG_PRINT("This part should not be executed.\n");
+
+	return NULL;
     break;
   }
   DEBUG_FLUSH();

@@ -112,7 +112,7 @@ var_hash_print_names(var_hash** hash)
 	var_hash_names_free(names, size);
 }
 
-int
+void
 var_hash_free(var_hash** hash){
 	var_elem* elem;
 	var_elem* temp;

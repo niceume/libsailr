@@ -16,7 +16,7 @@ const char*           sailr_parser_state_get_source_encoding(parser_state_object
 int                   sailr_run_parser (const char* code , parser_state_object* ps); 
 int                   sailr_parser_state_free(parser_state_object* ps);
 void                  sailr_tree_dump( parser_state_object* ps ); 
-int                   sailr_tree_free( parser_state_object* ps ); 
+void                  sailr_tree_free( parser_state_object* ps ); 
 vm_inst_object*       sailr_gen_code( parser_state_object* ps , ptr_table_object*); // VM Code is generated.
 vm_inst_object*       sailr_vm_inst_list_to_code( vm_inst_object* );
 int                   sailr_vm_inst_list_size( vm_inst_object* );
@@ -56,8 +56,8 @@ int sailr_ptr_table_update_string(ptr_table_object** table, const char* key, str
 int sailr_ptr_record_reset_rexp(ptr_record_object* pr);
 
 // Delete
-int sailr_ptr_table_del_records_except(ptr_table_object** table, const char** keys, int key_num );
-int sailr_ptr_table_del_all(ptr_table_object** table);
+void sailr_ptr_table_del_records_except(ptr_table_object** table, const char** keys, int key_num );
+void sailr_ptr_table_del_all(ptr_table_object** table);
 
 // Utility
 void sailr_ptr_table_show_all(ptr_table_object** table);

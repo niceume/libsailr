@@ -20,6 +20,6 @@ var_elem* var_hash_find (var_hash** , char* );
 int var_hash_size( var_hash** );
 char** var_hash_names( var_hash** );
 void var_hash_names_free( char** hash_names, int size );
-int var_hash_free( var_hash** );
+void var_hash_free( var_hash** );
 
 #endif // VAR_HASH_H

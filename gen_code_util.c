@@ -252,6 +252,7 @@ vm_inst_list_free( vm_inst_list* inst_list )
 	if(next_inst != NULL){
 		vm_inst_list_free(next_inst);
 	}
+	return 1;
 }
 
 vm_inst*

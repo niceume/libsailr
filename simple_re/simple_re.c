@@ -120,7 +120,7 @@ simple_re_matched_str( simple_re* re , int idx )
 
 	matched = re->matched;
 	num_groups = simple_re_matched_group_num( re );
-	if(idx < 0 | idx > num_groups ){
+	if((idx < 0) | (idx > num_groups)){
 		printf("ERROR: Index is not within matched groups. \n");
 		matched_str = NULL;
 		return matched_str ;

@@ -435,6 +435,7 @@ age2 = age
     + Fix memory leaks.
     + Avoid multiple deallocation for the same memory.
     + Memory for string was unintentionally freed.
+* Warnings by -Wreturn-type -Wparentheses -Wunused-value are solved. (Apr. 12 2020)
 
 
 ## Plan 

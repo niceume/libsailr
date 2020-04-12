@@ -238,13 +238,17 @@ int
 ptr_table_update_string(ptr_table** table, const char* key, string_object** strptr)
 {
     ptr_record* to_be_updated = ptr_table_find(table, key);
-    if(to_be_updated->type != PTR_STR)
+    if(to_be_updated->type != PTR_STR){
         printf("ERROR: Record with non-string is trying to be updated with string.");
+        return -1;
+    }
 
-    if(to_be_updated->gc == GC_YES)
+    if(to_be_updated->gc == GC_YES){
         free(to_be_updated->address);
+    }
     
     to_be_updated->address = *strptr;
+    return 1;
 }
 
 int
@@ -252,6 +256,7 @@ ptr_record_update_string(ptr_record* pr , string_object** pp_str, GCReq gc)
 {
 	pr->address = *pp_str;
 	pr->gc = gc;
+    return 1;
 }
 
 ptr_record*
@@ -286,11 +291,11 @@ ptr_table_del_record(ptr_table** table, const char* key)
 		return 1;
 	} else {
 		printf("Cannot find record to be deleted.\n");
-		return 0;
+		return -1;
 	}
 }
 
-int
+void
 ptr_record_free_gc_required_memory(ptr_record* pr)
 {
 //	ptr_record_show(pr);
@@ -343,13 +348,13 @@ ptr_record_free_gc_required_memory(ptr_record* pr)
 	}
 }
 
-int
+void
 ptr_record_free_struct(ptr_record* pr)
 {
 	free(pr);
 }
 
-int
+void
 ptr_record_free(ptr_record* pr)
 {
 	ptr_record_free_gc_required_memory(pr);  /* Free memory pointed by address. */
@@ -395,7 +400,7 @@ ptr_record_next(ptr_record* pr){
 	return pr->hh.next;
 }
 
-int
+void
 ptr_table_del_records_except(ptr_table** table, const char** keys, int key_num )
 {
 	/* keys is array of pointers to chars. */
@@ -431,7 +436,7 @@ ptr_table_del_records_except(ptr_table** table, const char** keys, int key_num )
 	}
 }
 
-int
+void
 ptr_table_del_all(ptr_table** table)
 {
   ptr_record *current_record;
@@ -502,6 +507,7 @@ ptr_record_obtain_table(ptr_record* pr)
 		return *table;
 	}else{
 		printf("ERROR: The function cannot find header of UTHASH.\n");
+		return NULL;
 	}
 }
 

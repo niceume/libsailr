@@ -503,7 +503,6 @@ vm_calc_eq(vm_stack* vmstack)
 		}
 	}else if(item_is_str(sec_item) && item_is_str(top_item)){
 		result_bool = string_compare( *(sec_item->pp_str), *(top_item->pp_str) ) ;
-		result_bool;
 	}else{
 		printf("ERROR: Types are invalied for VM_EQ command.\n");
 		return 0;
@@ -553,7 +552,6 @@ vm_calc_neq(vm_stack* vmstack)
 		}
 	}else if(item_is_str(sec_item) && item_is_str(top_item)){
 		result_bool = !(string_compare( *(sec_item->pp_str), *(top_item->pp_str) )) ;
-		result_bool;
 	}else{
 		printf("ERROR: Types are invalied for VM_EQ command.\n");
 		return 0;

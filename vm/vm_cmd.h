@@ -51,8 +51,10 @@
 	X(VM_LT, "VM_LT") \
 	X(VM_GE, "VM_GE") \
 	X(VM_LE, "VM_LE") \
-	X(VM_NEG, "VM_NEG")
-
+	X(VM_NEG, "VM_NEG") \
+\
+/* No operation */ \
+	X(VM_NOP, "VM_NOP") 
 
 #define X(a, b) a,
 enum _VM_CMD {

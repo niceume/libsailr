@@ -1,12 +1,12 @@
 YACC = bison -y
 LEX = flex
 CC = gcc
-CPPC = g++
+CXX = g++
 AR = ar rvs
 RM = rm -f
 
 CFLAGS := $(CFLAGS) -std=c11 -g -O3 -I. -Ivm -Istring -Isimple_re -Isimple_date -I$(ONIG_INCLUDE_DIR) $(CC_USER_DEFINES)
-CPPCFLAGS := $(CPPFLAGS) -std=c++11 -g -O3 -Ivm -Istring $(CPPC_USER_DEFINES) 
+CXXFLAGS := $(CXXFLAGS) -std=c++11 -g -O3 -Ivm -Istring $(CXX_USER_DEFINES) 
 
 ARCH_TRIPLE := $(subst -, ,$(shell $(CC) -dumpmachine))
 
@@ -16,11 +16,11 @@ else
     ifneq (,$(findstring linux,$(ARCH_TRIPLE)))
 		# linux
         CFLAGS := $(CFLAGS) -fstack-protector-strong -fPIC
-        CPPCFLAGS := $(CPPCFLAGS) -fstack-protector-strong -fPIC 
+        CXXFLAGS := $(CXXFLAGS) -fstack-protector-strong -fPIC 
     else
 		# e.g. daarwin
         CFLAGS := $(CFLAGS) -fPIC
-        CPPCFLAGS := $(CPPCFLAGS) -fPIC 
+        CXXFLAGS := $(CXXFLAGS) -fPIC 
     endif
 endif
 $(info SHOW ARCH_TRIPLE)
@@ -32,14 +32,14 @@ TARGET = libsailr.a
 
 SRCS=$(filter-out y.tab.c lex.yy.c, $(wildcard *.c)) $(wildcard vm/*.c) 
 OBJS:=$(SRCS:.c=.o) parse.o lex.o
-SRCS_CPP_STR:=$(wildcard string/cpp_string/*.cpp)
-OBJS_CPP_STR:=$(SRCS_CPP_STR:.cpp=.o) 
+SRCS_CXX_STR:=$(wildcard string/cpp_string/*.cpp)
+OBJS_CXX_STR:=$(SRCS_CXX_STR:.cpp=.o) 
 OBJS_STR:= string/common_string.o 
 OBJS_RE:= simple_re/simple_re.o
 OBJS_DATE:= simple_date/simple_date.o simple_date/cpp_date.o
 SRCS_CFUNC:= $(wildcard vm/func/c_func/*.c)
 OBJS_CFUNC:=$(SRCS_CFUNC:.c=.o)
-DEPS:=$(OBJS:.o=.d) $(OBJS_STR:.o=.d) $(OBJS_RE:.o=.d) $(OBJS_DATE:.o=.d) $(OBJS_CFUNC:.o=.d) $(OBJS_CPP_STR:.o=.d)
+DEPS:=$(OBJS:.o=.d) $(OBJS_STR:.o=.d) $(OBJS_RE:.o=.d) $(OBJS_DATE:.o=.d) $(OBJS_CFUNC:.o=.d) $(OBJS_CXX_STR:.o=.d)
 
 # List "objfile depends on source and header"
 -include $(DEPS)
@@ -48,8 +48,8 @@ DEPS:=$(OBJS:.o=.d) $(OBJS_STR:.o=.d) $(OBJS_RE:.o=.d) $(OBJS_DATE:.o=.d) $(OBJS
 
 build : parse.o lex.o  $(TARGET) 
 
-$(TARGET) : $(OBJS) $(OBJS_CPP_STR) $(OBJS_STR)  $(OBJS_RE) $(OBJS_DATE) $(OBJS_CFUNC)
-	$(AR) $(TARGET) $(OBJS) $(OBJS_CPP_STR) $(OBJS_STR) $(OBJS_RE) $(OBJS_DATE) $(OBJS_CFUNC)
+$(TARGET) : $(OBJS) $(OBJS_CXX_STR) $(OBJS_STR)  $(OBJS_RE) $(OBJS_DATE) $(OBJS_CFUNC)
+	$(AR) $(TARGET) $(OBJS) $(OBJS_CXX_STR) $(OBJS_STR) $(OBJS_RE) $(OBJS_DATE) $(OBJS_CFUNC)
 
 parse.o : y.tab.c
 	$(CC) -o parse.o -c y.tab.c $(CFLAGS) -MMD -MP 
@@ -71,7 +71,7 @@ vm/%.o : vm/%.c
 	$(CC) -c -o $@ $<  $(CFLAGS) -I. -MMD -MP
 
 string/cpp_string/%.o : string/cpp_string/%.cpp
-	$(CPPC) -c -o $@ $< $(CPPCFLAGS) -MMD -MP 
+	$(CXX) -c -o $@ $< $(CXXFLAGS) -MMD -MP 
 
 string/%.o : string/%.c 
 	$(CC) -c -o $@ $<  $(CFLAGS) -I. -MMD -MP
@@ -80,7 +80,7 @@ simple_re/%.o : simple_re/%.c
 	$(CC) -c -o $@ $<  $(CFLAGS) -I. -MMD -MP
 
 simple_date/cpp_date.o : simple_date/cpp_date.cpp
-	$(CPPC) -c -o $@ $< $(CPPCFLAGS) -MMD -MP 
+	$(CXX) -c -o $@ $< $(CXXFLAGS) -MMD -MP 
 
 simple_date/%.o : simple_date/%.c
 	$(CC) -c -o $@ $<  $(CFLAGS) -I. -MMD -MP

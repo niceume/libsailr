@@ -76,7 +76,8 @@ var_hash_names(var_hash** hash)
 	for( elem = *hash ; elem != NULL; elem = elem->hh.next) {
 		if( (elem->dummy) != 1 ){
 			char* new_str = (char*) malloc(sizeof(char) * MAX_KEY_LEN);
-			strncpy( new_str, elem->name , MAX_KEY_LEN - 1);
+			strncpy( new_str, elem->name , MAX_KEY_LEN );
+			new_str[MAX_KEY_LEN - 1] = '\0';
         	hash_names[idx] = new_str ;
 			idx = idx + 1;
 		}

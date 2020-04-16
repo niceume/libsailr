@@ -89,6 +89,7 @@ vm_stack_push_item( vm_stack* stack, stack_item* item )
 	return 1;
 }
 
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)  /* C11 */
 int
 vm_stack_push_ival( vm_stack* stack , int num)
 {
@@ -100,7 +101,21 @@ vm_stack_push_ival( vm_stack* stack , int num)
 	free(new_stack_item);
 	return 1;
 }
+#else
+int
+vm_stack_push_ival( vm_stack* stack , int num)
+{
+	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
+	new_stack_item->type = IVAL;
+	new_stack_item->ival = num;
+	new_stack_item->p_record = JUST_A_VALUE;
+	vm_stack_push_item(stack, new_stack_item);
+	free(new_stack_item);
+	return 1;
+}
+#endif
 
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)  /* C11 */
 int
 vm_stack_push_dval( vm_stack* stack , double num)
 {
@@ -112,8 +127,21 @@ vm_stack_push_dval( vm_stack* stack , double num)
 	free(new_stack_item);
 	return 1;
 }
+#else
+int
+vm_stack_push_dval( vm_stack* stack , double num)
+{
+	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
+	new_stack_item->type = DVAL;
+	new_stack_item->dval = num;
+	new_stack_item->p_record = JUST_A_VALUE;
+	vm_stack_push_item(stack, new_stack_item);
+	free(new_stack_item);
+	return 1;
+}
+#endif
 
-
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)  /* C11 */
 int
 vm_stack_push_pp_ival( vm_stack* stack , ptr_table** table, char* ptr_key)
 {
@@ -129,7 +157,25 @@ vm_stack_push_pp_ival( vm_stack* stack , ptr_table** table, char* ptr_key)
 	free(new_stack_item);
 	return 1;
 }
+#else
+int
+vm_stack_push_pp_ival( vm_stack* stack , ptr_table** table, char* ptr_key)
+{
+	ptr_record* record = ptr_table_find(table, ptr_key);
+	int** pp_ival = (int**) &(record->address);
 
+	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
+	new_stack_item->type = PP_IVAL;
+	new_stack_item->pp_ival = pp_ival;
+	new_stack_item->p_record = record;
+	DEBUG_PRINT("push new_stack_item: pointer to pointer to %d \n", **(new_stack_item->pp_ival) );
+	vm_stack_push_item(stack, new_stack_item);
+	free(new_stack_item);
+	return 1;
+}
+#endif
+
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)  /* C11 */
 int
 vm_stack_push_pp_dval( vm_stack* stack , ptr_table** table, char* ptr_key)
 {
@@ -144,6 +190,23 @@ vm_stack_push_pp_dval( vm_stack* stack , ptr_table** table, char* ptr_key)
 	free(new_stack_item);
 	return 1;
 }
+#else
+int
+vm_stack_push_pp_dval( vm_stack* stack , ptr_table** table, char* ptr_key)
+{
+	ptr_record* record = ptr_table_find(table, ptr_key);
+	double** pp_dval = (double**) &(record->address);
+
+	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
+	new_stack_item->type = PP_DVAL;
+	new_stack_item->pp_dval = pp_dval;
+	new_stack_item->p_record = record;
+	DEBUG_PRINT("push new_stack_item: pointer to pointer to %f \n", **(new_stack_item->pp_dval) );
+	vm_stack_push_item(stack, new_stack_item);
+	free(new_stack_item);
+	return 1;
+}
+#endif
 
 int
 vm_stack_push_pp_num( vm_stack* stack , ptr_table** table, char* ptr_key)
@@ -159,6 +222,7 @@ vm_stack_push_pp_num( vm_stack* stack , ptr_table** table, char* ptr_key)
 	return 1;
 }
 
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)  /* C11 */
 int
 vm_stack_push_pp_str( vm_stack* stack , ptr_table** table, char* ptr_key)
 {
@@ -172,7 +236,24 @@ vm_stack_push_pp_str( vm_stack* stack , ptr_table** table, char* ptr_key)
 	free(new_stack_item);
 	return 1;
 }
+#else
+int
+vm_stack_push_pp_str( vm_stack* stack , ptr_table** table, char* ptr_key)
+{
+	ptr_record* record = ptr_table_find(table, ptr_key);
+	string_object** pp_str = (string_object**) &(record->address);
 
+	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
+	new_stack_item->type = PP_STR;
+	new_stack_item->pp_str = pp_str;
+	new_stack_item->p_record = record;
+	vm_stack_push_item(stack, new_stack_item);
+	free(new_stack_item);
+	return 1;
+}
+#endif
+
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)  /* C11 */
 int
 vm_stack_push_temp_pp_str( vm_stack* stack , string_object** pp_str)
 {
@@ -184,7 +265,21 @@ vm_stack_push_temp_pp_str( vm_stack* stack , string_object** pp_str)
 	free(new_stack_item);
 	return 1;
 }
+#else
+int
+vm_stack_push_temp_pp_str( vm_stack* stack , string_object** pp_str)
+{
+	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
+	new_stack_item->type = PP_STR;
+	new_stack_item->pp_str = pp_str;
+	new_stack_item->p_record = TEMP_OBJECT;
+	vm_stack_push_item(stack, new_stack_item);
+	free(new_stack_item);
+	return 1;
+}
+#endif
 
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)  /* C11 */
 int
 vm_stack_push_pp_rexp( vm_stack* stack , ptr_table** table, char* ptr_key)
 {
@@ -198,7 +293,23 @@ vm_stack_push_pp_rexp( vm_stack* stack , ptr_table** table, char* ptr_key)
 	free(new_stack_item);
 	return 1;
 }
+#else
+int
+vm_stack_push_pp_rexp( vm_stack* stack , ptr_table** table, char* ptr_key)
+{
+	ptr_record* record = ptr_table_find(table, ptr_key);
+	simple_re** pp_rexp = (simple_re**) &(record->address);
+	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
+	new_stack_item->type = PP_REXP;
+	new_stack_item->pp_rexp = pp_rexp;
+	new_stack_item->p_record = record;
+	vm_stack_push_item(stack, new_stack_item);
+	free(new_stack_item);
+	return 1;
+}
+#endif
 
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)  /* C11 */
 int
 vm_stack_push_null( vm_stack* stack , ptr_table** table, char* ptr_key)
 {
@@ -211,6 +322,20 @@ vm_stack_push_null( vm_stack* stack , ptr_table** table, char* ptr_key)
 	free(new_stack_item);
 	return 1;
 }
+#else
+int
+vm_stack_push_null( vm_stack* stack , ptr_table** table, char* ptr_key)
+{
+	ptr_record* record = ptr_table_find(table, ptr_key);
+	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
+	new_stack_item->type = NULL_ITEM;
+	new_stack_item->ptr = NULL;
+	new_stack_item->p_record = record;
+	vm_stack_push_item(stack, new_stack_item);
+	free(new_stack_item);
+	return 1;
+}
+#endif
 
 int
 vm_stack_push_corresp_item( vm_stack* stack , ptr_table** table, char* ptr_key)
@@ -234,6 +359,7 @@ vm_stack_push_corresp_item( vm_stack* stack , ptr_table** table, char* ptr_key)
 	return 1;
 }
 
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)  /* C11 */
 int
 vm_stack_push_boolean( vm_stack* stack, bool boolean)
 {
@@ -245,6 +371,19 @@ vm_stack_push_boolean( vm_stack* stack, bool boolean)
 	free(new_stack_item);
 	return 1;
 }
+#else
+int
+vm_stack_push_boolean( vm_stack* stack, bool boolean)
+{
+	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
+	new_stack_item->type = BOOLEAN;
+	new_stack_item->boolean = boolean;
+	new_stack_item->p_record = NOT_ON_PTR_TABLE;
+	vm_stack_push_item(stack, new_stack_item);
+	free(new_stack_item);
+	return 1;
+}
+#endif
 
 int
 vm_stack_fcall( vm_stack* vmstack, char* fname , int num_args, ptr_table** table)

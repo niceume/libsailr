@@ -7,12 +7,16 @@
 
 struct _vm_inst{
 	VM_CMD cmd;
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)  /* C11 */
 	union{ 
+#endif
 		int ival;
 		double dval;
 		char* ptr_key;
 		char* label;
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L) 
 	};
+#endif
 	char fname[MAX_FUNC_NAME_LEN + 1];
 	int num_arg;
 	struct _vm_inst* prev; // Only used for linked list structure

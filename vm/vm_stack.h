@@ -56,7 +56,9 @@ typedef struct _vm_stack_info vm_stack_info;
 
 struct _stack_item {
 	ItemType type ; 
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)  /* C11 */
 	union {
+#endif
 		int ival;
 		double dval;
 		bool boolean;
@@ -66,7 +68,9 @@ struct _stack_item {
 		simple_re** pp_rexp;
 		vm_stack_info* p_vm_stack_info;
 		void* ptr; // Used by NULL_ITEM
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)
 	};
+#endif
     ptr_record* p_record;  /* Pointer to ptr_record. If the object is just temporary, NOT_ON_PTR_TABLE(=NULL) is assigned. */
 };
 typedef struct _stack_item stack_item ;

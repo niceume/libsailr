@@ -437,6 +437,7 @@ age2 = age
     + Memory for string was unintentionally freed.
 * Warnings by -Wreturn-type -Wparentheses -Wunused-value are solved. (Apr. 12 2020)
 * Macro functions are changed to use do{}while(0). For portable codes, statement expressions are removed. (Apr.16 2020)
+* Anonymous unions are changed to be used only in c11 or higher (__STDC_VERSION__ >= 201112L). (Apr.16 2020)
 
 
 ## Plan 

@@ -75,7 +75,7 @@ cpp_string_subset_utf8(std::string* ori_str, int from_idx, int to_idx)
 		try{
 			curr_cp = utf8::next(curr_iter, str_end);
 			curr_idx = curr_idx + 1;
-		}catch(utf8::not_enough_room e){
+		}catch(const utf8::not_enough_room& e){
 			break;
 		}
 
@@ -107,13 +107,13 @@ cpp_string_new_unescaped_string_utf8( std::string* ori_str )
 	while(1){
 		try{
 			curr_cp = utf8::next(curr_iter, str_end);
-		}catch(utf8::not_enough_room e){
+		}catch(const utf8::not_enough_room& e){
 			break;
 		}
 		if(curr_cp == U'\\'){
 			try{
 				curr_cp = utf8::next(curr_iter, str_end);
-			}catch(utf8::not_enough_room e){
+			}catch(const utf8::not_enough_room& e){
 				printf("ERROR: string litereal should not end with single backslash.");
 				break;
 			}
@@ -138,7 +138,7 @@ cpp_string_new_unescaped_string_utf8( std::string* ori_str )
 		}
 		try{
 			utf8::append(curr_cp, std::back_inserter( *new_str ));
-		}catch(utf8::invalid_code_point e){
+		}catch(const utf8::invalid_code_point& e){
 			std::cout << "invalid code point" << curr_cp << std::endl; 
 			std::cout << "CODE_POINT_MAX" << utf8::internal::CODE_POINT_MAX << std::endl; 
 			break;

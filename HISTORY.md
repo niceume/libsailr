@@ -439,7 +439,7 @@ age2 = age
 * Macro functions are changed to use do{}while(0). For portable codes, statement expressions are removed. (Apr.16 2020)
 * Anonymous unions are changed to be used only in c11 or higher (__STDC_VERSION__ >= 201112L). (Apr.16 2020)
 * Binary literals are now only used in C11 or higher.
-
+* C++ errors are now catched by reference.
 
 ## Plan 
 

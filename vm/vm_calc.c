@@ -238,7 +238,7 @@ vm_calc_addx(vm_stack* vmstack, ptr_table** table)
 }
 
 #define DEFINE_BINARY_OPERATOR( INTFUNC , DBLFUNC ) \
-({ \
+do { \
 	int sp = vmstack->sp; \
 	stack_item* stack = vmstack->stack; \
 	stack_item* top_item = vm_stack_top(vmstack); \
@@ -278,7 +278,7 @@ vm_calc_addx(vm_stack* vmstack, ptr_table** table)
 		vm_stack_push_dval( vmstack, result_dval ); \
 	} \
 	return 1; \
-})
+} while(0)
 
 int
 vm_calc_mulx(vm_stack* vmstack)
@@ -566,7 +566,7 @@ vm_calc_neq(vm_stack* vmstack)
 }
 
 #define DEFINE_LOGICAL_OPERATOR( OP ) \
-({ \
+do { \
 	int sp = vmstack->sp; \
 	stack_item* stack = vmstack->stack; \
 	stack_item* top_item = vm_stack_top(vmstack); \
@@ -596,7 +596,7 @@ vm_calc_neq(vm_stack* vmstack)
 	sec_item->type = BOOLEAN ; \
 	sec_item->boolean = result_bool; \
 	return 1; \
-})
+} while(0)
 
 int
 vm_calc_gt(vm_stack* vmstack)
@@ -642,15 +642,5 @@ vm_calc_neg(vm_stack* vmstack)
 	}
 	return 1;
 }
-
-
-
-
-
-
-
-
-
-
 
 

@@ -436,6 +436,7 @@ age2 = age
     + Avoid multiple deallocation for the same memory.
     + Memory for string was unintentionally freed.
 * Warnings by -Wreturn-type -Wparentheses -Wunused-value are solved. (Apr. 12 2020)
+* Macro functions are changed to use do{}while(0). For portable codes, statement expressions are removed. (Apr.16 2020)
 
 
 ## Plan 

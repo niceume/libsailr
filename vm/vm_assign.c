@@ -16,8 +16,7 @@ int vm_stack_assign_copy_str_to_record(ptr_record* left_record, stack_item* rval
 // Needed?
 int vm_stack_convert_str_item_into_void(ptr_record* left_record, stack_item* rvalue);
 
-#define PTR_TABLE_NULL_UPDATED( ptr_to_ptr_record , ptr_type ) ({ ptr_table* table = ptr_record_obtain_table( ptr_to_ptr_record ); ptr_table_info_change_null_updated_by_type(&table, ptr_type ); })
-
+#define PTR_TABLE_NULL_UPDATED( ptr_to_ptr_record , ptr_type ) do{ ptr_table* table = ptr_record_obtain_table( ptr_to_ptr_record ); ptr_table_info_change_null_updated_by_type(&table, ptr_type ); } while(0)
 
 int
 vm_stack_store_val(vm_stack* vmstack)

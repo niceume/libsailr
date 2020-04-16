@@ -21,31 +21,31 @@
 // ptr_record* ptr_table_create_anonym_string(ptr_table** table, string_object** strptr);
 
 #define ASSIGN_INT_VALUE( VAR , ARG_PTR , ERROR_MSG ) \
-({ \
+do { \
 	if(arg_item_confirm_int( ARG_PTR )){ \
 		VAR = arg_item_int_value( ARG_PTR ); \
 	}else{ \
 		printf( ERROR_MSG ); \
 	} \
-})
+} while (0)
 
 #define ASSIGN_DOUBLE_VALUE( VAR , ARG_PTR , ERROR_MSG ) \
-({ \
+do { \
 	if(arg_item_confirm_double( ARG_PTR )){ \
 		VAR = arg_item_double_value( ARG_PTR ); \
 	}else{ \
 		printf( ERROR_MSG ); \
 	} \
-})
+} while (0)
 
 #define ASSIGN_STRING_PTR( VAR , ARG_PTR , ERROR_MSG ) \
-({ \
+do { \
 	if(arg_item_confirm_string( ARG_PTR )){ \
 		VAR = arg_item_string_obj( ARG_PTR ); \
 	}else{ \
 		printf( ERROR_MSG ); \
 	} \
-})
+} while (0)
 
 
 // This fucntion is used by print() and str_concat(), to concatenate multiple objects as string.

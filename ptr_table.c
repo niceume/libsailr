@@ -42,6 +42,7 @@ ptr_table_add (ptr_table** table, const char* key, void** address, PtrType type,
         ptr_record* new_ptr_record;
         new_ptr_record = (ptr_record *)malloc(sizeof(ptr_record));
         strncpy( new_ptr_record->key , key, MAX_KEY_LEN ) ;
+        new_ptr_record->key[ MAX_KEY_LEN - 1] = '\0';
         if(type != PTR_NULL){
             new_ptr_record->address = *address;
         }else{

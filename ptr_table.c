@@ -16,11 +16,8 @@ ptr_table_init (){
 	new_ptr_table_info = (ptr_table_info *) malloc(sizeof(ptr_table_info));
 	new_ptr_table_info->str_counter = 0;
 	new_ptr_table_info->rexp_counter = 0;
-#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)  /* C11 */
-	new_ptr_table_info->null_updated = 0b0000 ;
-#else
+//	new_ptr_table_info->null_updated = 0b0000 ; // GNU extension
 	new_ptr_table_info->null_updated = 0x0 ;
-#endif
 	new_ptr_record->address = new_ptr_table_info;
 	new_ptr_record->type = PTR_INFO;
 	new_ptr_record->gc = GC_YES;
@@ -541,11 +538,8 @@ ptr_table_info_change_null_updated_by_type(ptr_table** table, PtrType type)
 		current_null_updated = ((ptr_table_info*) (pr->address))->null_updated ;
 		
 		if( PTR_INT <= type && type <= PTR_REXP ){
-#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)  /* C11 */
-			bitmask = ( 0b0001 << ((int)type));
-#else
+//			bitmask = ( 0b0001 << ((int)type));  // GNU extension
 			bitmask = ( 0x1 << ((int)type));
-#endif
 			DEBUG_PRINT( "new type is %d, new bitmask is %d \n", type, bitmask);
 			DEBUG_PRINT( "current null_update value is %d, new value is %d \n", current_null_updated, (current_null_updated | bitmask));
 		}else{
@@ -579,11 +573,8 @@ ptr_table_info_reset_null_updated(ptr_table** table)
 	ptr_record* pr;
 	if(ptr_table_points_to_header(table)){
 		pr = (ptr_record*) *table;
-#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)  /* C11 */
-		((ptr_table_info*) (pr->address))->null_updated = 0b0000 ;
-#else
+//		((ptr_table_info*) (pr->address))->null_updated = 0b0000 ;  // GNU extension
 		((ptr_table_info*) (pr->address))->null_updated = 0x0 ;
-#endif
 		return 1;
 	}else{
 		printf("ERROR: The pointer passed is not pointing to valid ptr_table.");

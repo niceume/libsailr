@@ -440,6 +440,8 @@ age2 = age
 * Anonymous unions are changed to be used only in c11 or higher (__STDC_VERSION__ >= 201112L). (Apr.16 2020)
 * Binary literals are now only used in C11 or higher.
 * C++ errors are now catched by reference.
+* sprintf() is removed. snprintf() is now used to avoid warnings.
+
 
 ## Plan 
 

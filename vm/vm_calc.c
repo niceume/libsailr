@@ -223,7 +223,9 @@ vm_calc_addx(vm_stack* vmstack, ptr_table** table)
 			str1 = (* (sec_item->pp_str)); /* Left on ADDX operator */
 			str2 = (* (top_item->pp_str)); /* Right on ADDX operator */
 
-			new_pp_str = (string_object**) string_ptr_concat( str1, str2 );
+			new_p_str = (string_object*) string_ptr_concat( str1, str2 );
+			new_pp_str = (string_object**) malloc(sizeof(string_object*));
+			*new_pp_str = new_p_str;
 			vm_stack_clean_and_pop( vmstack, 2);
 			vm_stack_push_temp_pp_str( vmstack, new_pp_str);
 			return 1;

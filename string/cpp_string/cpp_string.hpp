@@ -20,7 +20,7 @@ extern "C" {
 	cpp_object* cpp_string_strip( cpp_object* );
 	const char* cpp_string_read (cpp_object* );
 	cpp_object* cpp_string_concat (cpp_object*, cpp_object*);
-	cpp_object** cpp_string_ptr_concat (cpp_object*, cpp_object*);
+	cpp_object* cpp_string_ptr_concat (cpp_object*, cpp_object*);
 	void cpp_string_append_string (cpp_object*, cpp_object*);
 	void cpp_string_append_cstring (cpp_object*, const char*);
 	cpp_object* cpp_string_repeat (cpp_object*, int);

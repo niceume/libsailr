@@ -80,10 +80,10 @@ string_concat( string_object* str1, string_object* str2 )
 }
 
 
-string_object**
+string_object*
 string_ptr_concat( string_object* str1, string_object* str2 )
 {
-	string_object** str_obj = (string_object**) cpp_string_ptr_concat( str1, str2 );
+	string_object* str_obj = (string_object**) cpp_string_ptr_concat( str1, str2 );
 	return str_obj;
 }
 

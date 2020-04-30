@@ -133,7 +133,7 @@ cpp_string_concat (cpp_object* obj1 , cpp_object* obj2 )
 }
 
 
-cpp_object**
+cpp_object*
 cpp_string_ptr_concat (cpp_object* obj1 , cpp_object* obj2 )
 {
 	std::string* str1 = static_cast<std::string*>(obj1);
@@ -143,9 +143,7 @@ cpp_string_ptr_concat (cpp_object* obj1 , cpp_object* obj2 )
 	std::stringstream ss;
 	ss << *str1 << *str2;
 	std::string* new_p_str = new std::string( ss.str() );
-	std::string** new_pp_str = new std::string*();
-	(*new_pp_str) = new_p_str;
-	return (void**) new_pp_str;
+	return (void*) new_p_str;
 }
 
 void

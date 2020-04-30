@@ -22,7 +22,7 @@ string_object* string_lstrip( cpp_object* );
 string_object* string_rstrip( cpp_object* ); 
 const c_char* string_read( string_object* str);
 string_object* string_concat( string_object* str1, string_object* str2 );
-string_object** string_ptr_concat( string_object* str1, string_object* str2 );
+string_object* string_ptr_concat( string_object* str1, string_object* str2 );
 void string_append_string(string_object* str1, string_object* str2 );
 void string_append_cstring(string_object* str1, const char* cstr );
 string_object* string_repeat( string_object* str, int rep );

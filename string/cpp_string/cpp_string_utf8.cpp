@@ -132,7 +132,7 @@ cpp_string_new_unescaped_string_utf8( std::string* ori_str )
 			break;
 			case '?' : curr_cp= U'?';
 			break;
-			default : curr_cp = curr_cp ;
+			default : // curr_cp = curr_cp ;
 			break;
 			}
 		}

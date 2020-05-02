@@ -71,7 +71,13 @@ simple_re_match ( simple_re* re , const char* str , simple_re** pptr_for_last_re
 
 	OnigRegexType* regexp = re->regexp;
 	UChar* text =  re->str;
-	const UChar* end_ptr = re->str + strlen(re->str) ;
+	unsigned int len , idx; // Here, what this code does is same as strlen(text)
+	idx = 0;
+	while( text[idx] != '\0'){
+		idx = idx + 1;
+	}
+    len = idx; 
+	const UChar* end_ptr = re->str + len ;
 	const UChar* start_ptr = re->str ;
 	OnigRegion* region = re->matched ; 
 

@@ -176,8 +176,6 @@ item_is_nan (stack_item* item)
 int
 vm_calc_addx(vm_stack* vmstack, ptr_table** table)
 {
-	int sp = vmstack->sp;
-	stack_item* stack = vmstack->stack;
 	stack_item* top_item = vm_stack_top(vmstack);
 	stack_item* sec_item = vm_stack_second(vmstack);
 	stack_item_pp2value( top_item );
@@ -197,16 +195,10 @@ vm_calc_addx(vm_stack* vmstack, ptr_table** table)
 		temp_dval = dbl_add ( (double) sec_item->ival , (double) top_item->ival ) ; 
 		if( within_int_limits( temp_dval )){ 
 			result_ival = int_add ( sec_item->ival , top_item->ival ) ; 
-			// vmstack->sp = vmstack->sp - 1;  
-			// sec_item->type = IVAL; 
-			// sec_item->ival = result_ival; 
 			vm_stack_clean_and_pop( vmstack, 2);
 			vm_stack_push_ival( vmstack, result_ival );
 		}else{ 
-			result_dval = temp_dval ; 
-			// vmstack->sp = vmstack->sp - 1;  
-			// sec_item->type = DVAL; 
-			// sec_item->dval = result_dval; 
+			result_dval = temp_dval ;  
 			vm_stack_clean_and_pop( vmstack, 2);
 			vm_stack_push_dval( vmstack, result_dval );
 		} 
@@ -241,8 +233,6 @@ vm_calc_addx(vm_stack* vmstack, ptr_table** table)
 
 #define DEFINE_BINARY_OPERATOR( INTFUNC , DBLFUNC ) \
 do { \
-	int sp = vmstack->sp; \
-	stack_item* stack = vmstack->stack; \
 	stack_item* top_item = vm_stack_top(vmstack); \
 	stack_item* sec_item = vm_stack_second(vmstack); \
 	stack_item_pp2value( top_item ); \
@@ -310,14 +300,12 @@ vm_calc_modx(vm_stack* vmstack)
 int
 vm_calc_divx(vm_stack* vmstack)
 {
-	int sp = vmstack->sp;
-	stack_item* stack = vmstack->stack;
 	stack_item* top_item = vm_stack_top(vmstack);
 	stack_item* sec_item = vm_stack_second(vmstack);
 	stack_item_pp2value( top_item );
 	stack_item_pp2value( sec_item );
 
-	int result_ival;
+//	int result_ival;  // divx always return double
 	double result_dval;
 	// For ivals
 	if((top_item->type == IVAL) && (sec_item->type == IVAL)){
@@ -359,8 +347,6 @@ vm_calc_divx(vm_stack* vmstack)
 int
 vm_calc_factorial(vm_stack* vmstack)
 {
-	int sp = vmstack->sp;
-	stack_item* stack = vmstack->stack;
 	stack_item* top_item = vm_stack_top(vmstack);
 	stack_item_pp2value( top_item );
 
@@ -399,8 +385,6 @@ vm_calc_factorial(vm_stack* vmstack)
 // unitary minus (single operator)
 int vm_calc_uminus(vm_stack* vmstack)
 {
-	int sp = vmstack->sp;
-	stack_item* stack = vmstack->stack;
 	stack_item* top_item = vm_stack_top(vmstack);
 	stack_item_pp2value( top_item );
 
@@ -431,8 +415,6 @@ int vm_calc_uminus(vm_stack* vmstack)
 int
 vm_calc_and(vm_stack* vmstack)
 {
-	int sp = vmstack->sp;
-	stack_item* stack = vmstack->stack;
 	stack_item* top_item = vm_stack_top(vmstack);
 	stack_item* sec_item = vm_stack_second(vmstack);
 	bool result_bool;
@@ -452,8 +434,6 @@ vm_calc_and(vm_stack* vmstack)
 int
 vm_calc_or(vm_stack* vmstack)
 {
-	int sp = vmstack->sp;
-	stack_item* stack = vmstack->stack;
 	stack_item* top_item = vm_stack_top(vmstack);
 	stack_item* sec_item = vm_stack_second(vmstack);
 	bool result_bool;
@@ -473,8 +453,6 @@ vm_calc_or(vm_stack* vmstack)
 int
 vm_calc_eq(vm_stack* vmstack)
 {
-	int sp = vmstack->sp;
-	stack_item* stack = vmstack->stack;
 	stack_item* top_item = vm_stack_top(vmstack);
 	stack_item* sec_item = vm_stack_second(vmstack);
 	stack_item_pp2value( top_item ); 
@@ -502,10 +480,14 @@ vm_calc_eq(vm_stack* vmstack)
 			result_bool = ( sec_item->ival == top_item->dval ) ;
 		}else if((top_item->type == DVAL) && (sec_item->type == DVAL)){
 			result_bool = ( sec_item->dval == top_item->dval ) ;
+		}else{
+			result_bool = false;
+			printf("ERROR: This branch should not be executed.\n");
 		}
 	}else if(item_is_str(sec_item) && item_is_str(top_item)){
 		result_bool = string_compare( *(sec_item->pp_str), *(top_item->pp_str) ) ;
 	}else{
+		result_bool = false;
 		printf("ERROR: Types are invalied for VM_EQ command.\n");
 		return 0;
 	}
@@ -522,8 +504,6 @@ vm_calc_eq(vm_stack* vmstack)
 int
 vm_calc_neq(vm_stack* vmstack)
 {
-	int sp = vmstack->sp;
-	stack_item* stack = vmstack->stack;
 	stack_item* top_item = vm_stack_top(vmstack);
 	stack_item* sec_item = vm_stack_second(vmstack);
 	stack_item_pp2value( top_item ); 
@@ -551,10 +531,14 @@ vm_calc_neq(vm_stack* vmstack)
 			result_bool = ( sec_item->ival != top_item->dval ) ;
 		}else if((top_item->type == DVAL) && (sec_item->type == DVAL)){
 			result_bool = ( sec_item->dval != top_item->dval ) ;
+		}else{
+			result_bool = false;
+			printf("ERROR: This branch should not be executed.\n");
 		}
 	}else if(item_is_str(sec_item) && item_is_str(top_item)){
 		result_bool = !(string_compare( *(sec_item->pp_str), *(top_item->pp_str) )) ;
 	}else{
+		result_bool = true;  // Currently comparing incompatible types returns true, though this should be an error case. 
 		printf("ERROR: Types are invalied for VM_EQ command.\n");
 		return 0;
 	}
@@ -569,8 +553,6 @@ vm_calc_neq(vm_stack* vmstack)
 
 #define DEFINE_LOGICAL_OPERATOR( OP ) \
 do { \
-	int sp = vmstack->sp; \
-	stack_item* stack = vmstack->stack; \
 	stack_item* top_item = vm_stack_top(vmstack); \
 	stack_item* sec_item = vm_stack_second(vmstack); \
 	stack_item_pp2value( top_item ); \
@@ -586,11 +568,15 @@ do { \
 			result_bool = ( sec_item->ival OP top_item->dval ) ; \
 		}else if((top_item->type == DVAL) && (sec_item->type == DVAL)){ \
 			result_bool = ( sec_item->dval OP top_item->dval ) ; \
+		}else{ \
+			result_bool = false; \
+			printf("ERROR: This branch should not be executed.\n"); \
 		} \
 	}else if(item_is_str(sec_item) && item_is_str(top_item)){ \
 		printf("ERROR: String is not supported for OP calculation.\n"); \
 		return 0; \
 	}else{ \
+		result_bool = false; \
 		printf("ERROR: Types are invalied for OP calculation.\n"); \
 		return 0; \
 	} \
@@ -628,8 +614,6 @@ vm_calc_le(vm_stack* vmstack)
 int
 vm_calc_neg(vm_stack* vmstack)
 {
-	int sp = vmstack->sp;
-	stack_item* stack = vmstack->stack;
 	stack_item* top_item = vm_stack_top(vmstack);
 	bool result_bool;
 

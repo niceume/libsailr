@@ -443,6 +443,11 @@ age2 = age
 * sprintf() is removed. snprintf() is now used to avoid warnings.
 
 
+## Ver 0.8.4
+
+* Warnings are resolved (Apr.30- 2020)
+
+
 ## Plan 
 
 * Report run time error.

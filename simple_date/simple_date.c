@@ -68,9 +68,9 @@ simple_date_add_n_days( int unix_date , int days )
   return cpp_date_add_n_days( unix_date , days );
 }
 
-const char*
-simple_date_format ( int unix_date, const char* fmt  )
+char*
+simple_date_new_cstr_format ( int unix_date, const char* fmt  )
 {
-  return cpp_date_format ( unix_date, fmt );
+  return cpp_date_new_cstr_format ( unix_date, fmt );
 }
 

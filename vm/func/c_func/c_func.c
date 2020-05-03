@@ -478,7 +478,10 @@ int sailr_func_date_format(vm_stack* vmstack, int num_args , ptr_table** table )
 
   ASSIGN_STRING_PTR( fmt_str , argitem , "ERROR: For 2nd argument, string shouble be specified.\n" );
 
-  p_str = string_new( simple_date_format ( unix_date, string_read(fmt_str)));
+  char* formatted_cstr = simple_date_new_cstr_format ( unix_date, string_read(fmt_str));
+  p_str = string_new( formatted_cstr );
+  free(formatted_cstr);
+
   *pp_str = p_str; // Never do "pp_str = &p_str;"
   arg_list_finalize( vmstack, num_args, arglist ); // Move sp pointer & deallocate arg_list* 
   vm_stack_push_temp_pp_str( vmstack, pp_str);

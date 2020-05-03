@@ -6,6 +6,6 @@ int simple_date_ym_weekday_nth( int int_y, unsigned int int_m, const char* c_wd 
 int simple_date_add_n_years( int unix_date , int years);
 int simple_date_add_n_months( int unix_date , int months);
 int simple_date_add_n_days( int unix_date , int days );
-const char* simple_date_format ( int unix_date, const char* fmt  );
+char* simple_date_new_cstr_format ( int unix_date, const char* fmt  );
 
 #endif // SIMPLE_DATE_H

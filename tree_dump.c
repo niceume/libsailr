@@ -20,8 +20,6 @@ rep_spaces( int rep )
 void
 tree_dump( TreeNode* nd, int level )
 {
-  char* prefix_space ;
-
   switch(nd->type){
   case NODE_PRGM:
     printf( "%s%s\n", rep_spaces(level), "NODE_PRGM" );

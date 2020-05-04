@@ -207,7 +207,6 @@ vm_inst_list_cat( vm_inst_list* list1, vm_inst_list* list2 )
 void
 vm_inst_list_show_all( vm_inst_list* list )
 {
-	char* curr_cmd;
 	vm_inst* curr_inst;
 	curr_inst = list;
     DEBUG_PRINT("For ptr_table record, VM instructions just holds 'key name'.\n");

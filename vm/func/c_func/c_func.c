@@ -25,6 +25,7 @@ do { \
 	if(arg_item_confirm_int( ARG_PTR )){ \
 		VAR = arg_item_int_value( ARG_PTR ); \
 	}else{ \
+		VAR = 0; /* This branch should not be executed */ \
 		printf( ERROR_MSG ); \
 	} \
 } while (0)
@@ -34,6 +35,7 @@ do { \
 	if(arg_item_confirm_double( ARG_PTR )){ \
 		VAR = arg_item_double_value( ARG_PTR ); \
 	}else{ \
+		VAR = 0.0; /* This branch should not be executed */ \
 		printf( ERROR_MSG ); \
 	} \
 } while (0)
@@ -43,6 +45,7 @@ do { \
 	if(arg_item_confirm_string( ARG_PTR )){ \
 		VAR = arg_item_string_obj( ARG_PTR ); \
 	}else{ \
+		VAR = NULL; /* This branch should not be executed */ \
 		printf( ERROR_MSG ); \
 	} \
 } while (0)

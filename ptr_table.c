@@ -513,6 +513,7 @@ ptr_record_obtain_table(ptr_record* pr)
 	}
 }
 
+/*
 int
 ptr_table_info_set_null_updated(ptr_table** table, int updated_value)
 {
@@ -526,13 +527,14 @@ ptr_table_info_set_null_updated(ptr_table** table, int updated_value)
 		return 0;
 	}
 }
+*/
 
 int
 ptr_table_info_change_null_updated_by_type(ptr_table** table, PtrType type)
 {
 	ptr_record* pr;
-	int current_null_updated;
-    int bitmask;
+	unsigned int current_null_updated;
+	unsigned int bitmask;
 	if(ptr_table_points_to_header(table)){
 		pr = (ptr_record*) *table;
 		current_null_updated = ((ptr_table_info*) (pr->address))->null_updated ;
@@ -543,6 +545,7 @@ ptr_table_info_change_null_updated_by_type(ptr_table** table, PtrType type)
 			DEBUG_PRINT( "new type is %d, new bitmask is %d \n", type, bitmask);
 			DEBUG_PRINT( "current null_update value is %d, new value is %d \n", current_null_updated, (current_null_updated | bitmask));
 		}else{
+			bitmask = 0 ; // This branch should never be executed.
 			printf("ERROR: Null may be converted to unintentional type on ptr_table." );
 		}
 		((ptr_table_info*) (pr->address))->null_updated = current_null_updated | bitmask ;

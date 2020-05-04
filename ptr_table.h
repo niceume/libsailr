@@ -44,7 +44,7 @@ typedef ptr_record ptr_table;
 struct _ptr_table_info {
 	int str_counter;
 	int rexp_counter;
-	int null_updated;
+	unsigned int null_updated;
 };
 typedef struct _ptr_table_info ptr_table_info ;
 
@@ -86,7 +86,7 @@ void ptr_table_del_all(ptr_table** table);
 void ptr_table_show_all(ptr_table** table);
 void ptr_record_show(ptr_record* pr);
 ptr_table* ptr_record_obtain_table(ptr_record* pr);
-int ptr_table_info_set_null_updated(ptr_table** table, int updated_value);
+// int ptr_table_info_set_null_updated(ptr_table** table, int updated_value);
 int ptr_table_info_change_null_updated_by_type(ptr_table** table, PtrType type);
 int ptr_table_info_get_null_updated(ptr_table** table);
 int ptr_table_info_reset_null_updated(ptr_table** table);

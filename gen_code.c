@@ -61,7 +61,7 @@ gen_code_rexp(TreeNode* nd )  // Terminal OK
 vm_inst* 
 gen_code_ident(TreeNode* nd, ptr_table* table)  // Terminal OK
 {
-	vm_inst* code;
+	vm_inst* code = NULL;
 	char* id_name = nd->e1.id;
 	ptr_record* record = ptr_table_find( &table, id_name );
 	if(record->type == PTR_INT){

@@ -8,14 +8,13 @@
 int
 vm_rexp_match(vm_stack* vmstack)
 {
-	stack_item* stack = vmstack->stack;
 	stack_item* top_item = vm_stack_top(vmstack);
 	stack_item* sec_item = vm_stack_second(vmstack);
 	stack_item_pp2value( top_item );
 	stack_item_pp2value( sec_item );
 
-	stack_item* str_item ;
-	stack_item* rexp_item ;
+	stack_item* str_item = NULL;
+	stack_item* rexp_item = NULL;
 
 	string_object* str_obj;
 	simple_re* rexp_obj;

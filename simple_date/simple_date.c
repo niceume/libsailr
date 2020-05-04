@@ -45,7 +45,8 @@ simple_date_ym_weekday_nth( int int_y, unsigned int int_m, const char* c_wd , un
   }else if( strcmp( str, "SAT" ) == 0 ){
     int_wd = 6;
   }else{
-     printf("ERROR: Specified symbol is not valid for weekday. %s\n", str );
+    int_wd = 0; // This branch should never be executed.
+    printf("ERROR: Specified symbol is not valid for weekday. %s\n", str );
   }
   return cpp_date_ym_weekday_nth( int_y, int_m, int_wd, int_nth); 
 }

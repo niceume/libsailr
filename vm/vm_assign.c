@@ -27,18 +27,12 @@ vm_stack_store_val(vm_stack* vmstack)
 	
 	// lvalue should point to heap memory to store objects or values, b/c they should be returned to library user.
 	// If they are not stored on heap, there are possibilities that they are automatically destroyed.
-	ptr_record* left_record;
+	ptr_record* left_record = NULL;
 	if( (lvalue->type != NULL_ITEM) && (lvalue->type != PP_IVAL ) && (lvalue->type != PP_DVAL ) && (lvalue->type != PP_STR )){
 		printf("ERROR: lvalue should be pointer to pointer, such as PP_IVAL, PP_DVAL or PP_STR, or NULL_ITEM.\n");
 	} else {
 		left_record = (ptr_record*)lvalue->p_record;
 	}
-
-	double tmp_dbl;
-	int tmp_int; 
-	char* tmp_str;
-	string_object* tmp_s_str;
-
 
 	if(lvalue->type == NULL_ITEM){ // Unknown variables
 		// ------------------------------

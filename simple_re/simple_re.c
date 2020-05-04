@@ -112,8 +112,6 @@ simple_re_matched_str( simple_re* re , int idx )
 {
 	OnigRegion* matched;
 	int num_groups;
-	int start;
-	int end;
 	int length;
 	char* matched_str;
 	char* new_str;

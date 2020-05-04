@@ -14,7 +14,6 @@
 #define LABEL_FORMAT CAT3( L%0 , MAX_LABEL_DIGITS , u )
 
 static unsigned int vm_label_counter = 0;
-static char* cur_vm_label;
 
 char* new_vm_label(){
 	char* new_label = (char *)malloc((MAX_LABEL_DIGITS + 2) * sizeof(char)); 
@@ -33,18 +32,12 @@ char* new_vm_label(){
 		printf("Compiler exhausted counts for label creation. \n");
 		exit(1);
 	}
-	char* prev_vm_label = cur_vm_label; 
-    cur_vm_label = new_label;
 	return new_label;
 }
 
-char* current_vm_label(){
-    return cur_vm_label;
+void free_vm_label( char* vm_label ){
+	free(vm_label);
 }
-
-//void free_vm_label(){
-//	free(cur_vm_label);
-//}
 
 /*
 int main(int argc, char** argv){

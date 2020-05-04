@@ -343,8 +343,8 @@ vm_inst* gen_code(TreeNode* nd, ptr_table* table){
 	    nd_code = vm_inst_list_cat( nd_code, new_vm_inst_label(label_L2));
 	}
 
-	free(label_L1);
-	free(label_L2);
+	free_vm_label(label_L1);
+	free_vm_label(label_L2);
 
 	return nd_code;
     break;

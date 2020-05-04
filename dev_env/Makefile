@@ -7,7 +7,7 @@ build_onigmo:
 	./compile_onigmo_if_needed.sh
 
 build_lib:
-	make --directory ../ build  ONIG_INCLUDE_DIR=dev_env/onigmo_build/include CC_USER_DEFINES="-Wreturn-type -Wparentheses -Wunused-value" ## CC_USER_DEFINES="-DDEBUG"
+	make --directory ../ build  ONIG_INCLUDE_DIR=dev_env/onigmo_build/include CC_USER_DEFINES="-Wall " ## CC_USER_DEFINES="-DDEBUG"
 
 
 clean: clean_onigmo clean_dev clean_lib

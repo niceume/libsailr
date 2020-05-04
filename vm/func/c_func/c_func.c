@@ -60,7 +60,6 @@ append_arg_list_as_string( string_object* new_str, arg_list* arglist)
   string_object* tmp_str;
   int tmp_int;
   double tmp_double;
-  const char* tmp_cstr;
   simple_re* tmp_re;
   bool tmp_bool;
 
@@ -208,8 +207,6 @@ sailr_func_str_concat( vm_stack* vmstack, int num_args, ptr_table** table )
 {
   arg_num_should_be_larger_than( num_args, 0 );
   arg_list* arglist = arg_list_initialize( vmstack, num_args );
-
-  string_object* tmp_str;
 
   string_object* p_str = string_new(""); 
   string_object** pp_str = (string_object**) malloc(sizeof(string_object*));

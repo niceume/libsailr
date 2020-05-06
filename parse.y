@@ -16,12 +16,23 @@ int yydebug = 0; /* 0 : no debug, 1: debug */
   char* id;
 }
 
+/* Explicitly generate the code processing the locations */
+/* With the use of '%define api.pure full', this results in generating the following declaration, */
+/* 1. int yylex (YYSTYPE *lvalp, YYLTYPE *llocp); */
+/* 2. void yyeror (YYLTYPE *llocp, const char *msg); */
+/* 3. int yyparse(); No change */
+/* Later, %lex-param directive adds more parameters to communicate with lex.*/
+/* Later, %parse-param directive adds more parameters to yyerror() and yyparse(). */
+/* Note that for yyerror() the additional parameters are added between llocp and msg. */
+/* (ref) https://www.gnu.org/software/bison/manual/html_node/Pure-Calling.html */
+%locations
+
 /* Options about parser function  and how to interact with yylex() */
 /* pure-parser makes variables local. Note that currenlty pusre-parser is deprecated, and %define api.pure full is strongly recommended. */
 /* (ref) https://homeunix.nl/manual/bison/NEWS */
 /* To share values with another binary,*/
 /* you need to pass it via function arguments. */
-/* parse-param: argument for yyparse() and yyerror() definition. */
+/* parse-param: add arguments for yyparse() and yyerror() basic definitions. (Basic definitions change based on %api.pure and %locations directives.) */
 /* Then you can use p in actions from yyparse() .*/
 /* Also you can write "int yyerror(parser_state* p , char* str){} "*/
 /* lex-param: additional argument to pass  when calling yylex(). */
@@ -32,6 +43,7 @@ int yydebug = 0; /* 0 : no debug, 1: debug */
 /* yyerror() also takes the same parameters from parse-param*/
 %lex-param {parser_state *p } {void* scanner} 
 /* This results in adding "parser_state* " argument to yylex() */
+/* yyerror() does not seem to be influenced. It can be defined in lexer file as you want, b/c it's called explicitly within the file. */
 /* About %parse-param and %lex-param, */
 /* See this ref. https://stackoverflow.com/questions/34418381/how-to-reference-lex-or-parse-parameters-in-flex-rules */
 
@@ -39,8 +51,8 @@ int yydebug = 0; /* 0 : no debug, 1: debug */
 // Prevent undefined reference warnings
 // (ref) https://stackoverflow.com/questions/23717039/generating-a-compiler-from-lex-and-yacc-grammar
 // (ref) https://stackoverflow.com/questions/28643114/how-to-use-flex-with-my-own-parser
-int yylex (YYSTYPE* yylval, parser_state* p, void* scanner);
-void yyerror (parser_state* p, void* scanner, char const *);
+int yylex (YYSTYPE* yylval, YYLTYPE* yylloc, parser_state* p, void* scanner);
+void yyerror (YYLTYPE* loc, parser_state* p, void* scanner, char const *);
 %}
 
 
@@ -193,11 +205,9 @@ termins		: TERMIN termins
 
 %%
 
-void yyerror(parser_state* p, void* scanner, char const* s)
+void yyerror(YYLTYPE* loc , parser_state* p, void* scanner, char const* message)
 {
   p->yynerrs++;
-  fprintf(stderr, "%d: %s\n", p->lineno, s);
-  /* yylineno does not seem to work in reentrant parser, b/c it's global.*/
-  /* Instead, the line number is set in parser_state by tokenizer or scanner. */
+  fprintf(stderr, "%s (near line: %d column: %d )\n", message , loc->first_line, loc->first_column );
 }
 

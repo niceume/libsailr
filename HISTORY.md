@@ -445,7 +445,10 @@ age2 = age
 
 ## Ver 0.8.4
 
-* Warnings are resolved (Apr.30- 2020)
+* Warnings are resolved (Apr.30-May.4 2020)
+* Location information (not only line but also column number) becomes available in lex.l and parse.y. (May.6 2020)
+    + YYLTYPE* is used for this purpose.
+    + yyerror() now prints out line number and column number, when encountering syntax error.
 
 
 ## Plan 

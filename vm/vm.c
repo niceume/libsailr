@@ -137,52 +137,52 @@ vm_run_inst (vm_inst* inst, ptr_table* table, vm_stack* vmstack )
 		vm_stack_fcall(vmstack, inst->fname, inst->num_arg, &table );
 		break;
 	case VM_ADDX:
-		vm_calc_addx(vmstack, &table);
+		result = vm_calc_addx(vmstack, &table);
 		break;
 	case VM_MULX:
-		vm_calc_mulx(vmstack);
+		result = vm_calc_mulx(vmstack);
 		break;
 	case VM_SUBX:
-		vm_calc_subx(vmstack);
+		result = vm_calc_subx(vmstack);
 		break;
 	case VM_DIVX:
-		vm_calc_divx(vmstack);
+		result = vm_calc_divx(vmstack);
 		break;
 	case VM_POWX:
-		vm_calc_powx(vmstack);
+		result = vm_calc_powx(vmstack);
 		break;
 	case VM_FAC:
-		vm_calc_factorial(vmstack);
+		result = vm_calc_factorial(vmstack);
 		break;
 	case VM_UMINUS:
-		vm_calc_uminus(vmstack);
+		result = vm_calc_uminus(vmstack);
 		break;
 	case VM_AND:
-		vm_calc_and(vmstack);
+		result = vm_calc_and(vmstack);
 		break;
 	case VM_OR:
-		vm_calc_or(vmstack);
+		result = vm_calc_or(vmstack);
 		break;
 	case VM_EQ:
-		vm_calc_eq(vmstack);
+		result = vm_calc_eq(vmstack);
 		break;
 	case VM_NEQ:
-		vm_calc_neq(vmstack);
+		result = vm_calc_neq(vmstack);
 		break;
 	case VM_LT:
-		vm_calc_lt(vmstack);
+		result = vm_calc_lt(vmstack);
 		break;
 	case VM_LE:
-		vm_calc_le(vmstack);
+		result = vm_calc_le(vmstack);
 		break;
 	case VM_GT:
-		vm_calc_gt(vmstack);
+		result = vm_calc_gt(vmstack);
 		break;
 	case VM_GE:
-		vm_calc_ge(vmstack);
+		result = vm_calc_ge(vmstack);
 		break;
 	case VM_NEG:
-		vm_calc_neg(vmstack);
+		result = vm_calc_neg(vmstack);
 		break;
 	case VM_REXP_MATCH:
 		result = vm_rexp_match(vmstack);

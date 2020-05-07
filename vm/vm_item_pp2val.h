@@ -3,6 +3,6 @@
 
 #include "vm_stack.h"
 
-int stack_item_pp2value(stack_item* item);
+void stack_item_pp2value(stack_item* item);
 
 #endif

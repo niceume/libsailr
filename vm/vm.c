@@ -14,12 +14,14 @@
 #include "vm_calc.h"
 #include "vm_assign.h"
 #include "vm_rexp.h"
+#include "vm_error.h"
 
 int vm_run_inst (vm_inst* , ptr_table* , vm_stack* );
 
 int
 vm_exec_code( vm_inst* code , int num_insts , ptr_table* table , vm_stack* vmstack)
 {
+	int exec_result = 1; // success 1, fail 0
 	int inst_idx = 0;
 	int move_forward = 0;	
 	stack_item* top_item;
@@ -52,62 +54,84 @@ vm_exec_code( vm_inst* code , int num_insts , ptr_table* table , vm_stack* vmsta
 
 			} else {
 				printf("ERROR: Top item of the current stack is not boolean... \n");
+				exec_result = 0; // fail
+				break;
 			}
 		}else {
 			DEBUG_PRINT("----- VM INSTRUCTION ----- \n");
 			DEBUG_PRINT("%s(%d/%d)\n", vm_cmd_to_string(inst->cmd), inst_idx, num_insts);
-			vm_run_inst(inst, table , vmstack);
+			exec_result = vm_run_inst(inst, table , vmstack);
+			if(exec_result == 0){ // fail
+				printf("ERROR: current vm instruction causing some problem.\n");
+				break;
+			}
+		}
+
+		// During execution of virtual machine, two mechanisms report errors.
+		// One is using function return value (0: success, 1: fail), and the other is using vm_error_*** functions defined in vm_error.c. 
+		// Which one is used depends on each function, meaning both are used.
+		// The following code checks the errors raised by the latter mechanism.
+		if( (inst->cmd != VM_END) && vm_error_exist( vmstack ) ){
+			printf("ERROR REPORT: %d runtime error(s) raised", vm_error_num( vmstack ));
+			exec_result = 0; // fail
+			break;
 		}
 	}
-	return 1;
+
+	return exec_result;
 }
 
 int
 vm_run_inst (vm_inst* inst, ptr_table* table, vm_stack* vmstack )
 {
-	int move_forward = 0;
+	int result = 1;
 	switch (inst->cmd){
 	case VM_PUSH_IVAL:
-		vm_stack_push_ival(vmstack, inst->ival);
+		result = vm_stack_push_ival(vmstack, inst->ival);
 		break;
 	case VM_PUSH_DVAL:
-		vm_stack_push_dval(vmstack, inst->dval);
+		result = vm_stack_push_dval(vmstack, inst->dval);
 		break;
 	case VM_PUSH_PP_IVAL:
+//		result = vm_stack_push_pp_ival(vmstack, &table, inst->ptr_key);
         printf("ERROR: This instruction is not used. Use VM_PUSH_PP_NUM.");
-		vm_stack_push_pp_ival(vmstack, &table, inst->ptr_key);
+		result = 0;
 		break;
 	case VM_PUSH_PP_DVAL:
+//		result = vm_stack_push_pp_dval(vmstack, &table, inst->ptr_key);
         printf("ERROR: This instruction is not used. Use VM_PUSH_PP_NUM.");
-		vm_stack_push_pp_dval(vmstack, &table, inst->ptr_key);
+		result = 0;
 		break;
 	case VM_PUSH_PP_NUM:
-		vm_stack_push_pp_num(vmstack, &table, inst->ptr_key);
+		result = vm_stack_push_pp_num(vmstack, &table, inst->ptr_key);
 		break;
 	case VM_PUSH_PP_STR:
-		vm_stack_push_pp_str(vmstack, &table, inst->ptr_key);
+		result = vm_stack_push_pp_str(vmstack, &table, inst->ptr_key);
 		break;
 	case VM_PUSH_PP_REXP:
-		vm_stack_push_pp_rexp(vmstack, &table, inst->ptr_key);
+		result = vm_stack_push_pp_rexp(vmstack, &table, inst->ptr_key);
 		break;
     case VM_PUSH_NULL:
-    	vm_stack_push_corresp_item(vmstack, &table, inst->ptr_key);
+    	result = vm_stack_push_corresp_item(vmstack, &table, inst->ptr_key);
 	    break;
 	case VM_POP:
-		vm_stack_pop(vmstack);
+		if( vm_stack_pop(vmstack) == NULL){
+			result = 0;
+		}
 		break;
 	case VM_FJMP:
 	case VM_JMP:
 		printf("ERROR: This code should never be run. ");
+		result = 0;
 		break;
 	case VM_END:
-		vm_stack_end(vmstack);
+		result = vm_stack_end(vmstack);
 		break;
 	case VM_DISP:
-		vm_stack_display_item(vmstack, vmstack->sp);
+		result = vm_stack_display_item(vmstack, vmstack->sp);
 		break;
 	case VM_STO:
-		vm_stack_store_val(vmstack);
+		result = vm_stack_store_val(vmstack);
 		break;
 	case VM_FCALL:
 		vm_stack_fcall(vmstack, inst->fname, inst->num_arg, &table );
@@ -161,18 +185,19 @@ vm_run_inst (vm_inst* inst, ptr_table* table, vm_stack* vmstack )
 		vm_calc_neg(vmstack);
 		break;
 	case VM_REXP_MATCH:
-		vm_rexp_match(vmstack);
+		result = vm_rexp_match(vmstack);
 		break;
 	case VM_LABEL:
 		// Do nothing.
 		break;
 	default:
 		printf("ERROR: undefined VM command specified. \n");
+		result = 0;
 		break;
 	}
 
 //	ptr_table_show_all(&table);
-	return move_forward;
+	return result;
 }
 
 // Sample Code

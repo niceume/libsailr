@@ -449,6 +449,7 @@ age2 = age
 * Location information (not only line but also column number) becomes available in lex.l and parse.y. (May.6 2020)
     + YYLTYPE* is used for this purpose.
     + yyerror() now prints out line number and column number, when encountering syntax error.
+* When VM detects runtime errors, it stops further execution.
 
 
 ## Plan 

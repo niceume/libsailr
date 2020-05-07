@@ -5,6 +5,7 @@
 #include "vm_call_func.h"
 #include <stdio.h>
 #include "helper.h"
+#include "vm_error.h"
 
 #define Y(a, b) b,
 char *vm_stack_item_name[] = {
@@ -24,6 +25,7 @@ vm_stack_init()
 {
 	vm_stack* stack = (vm_stack*)malloc(sizeof(vm_stack));
 	stack->sp = 0;
+	stack->error = 0;
 
 	stack_item* item = (stack_item*)malloc(sizeof(stack_item));
 	item->type = INFO_ITEM;
@@ -84,6 +86,7 @@ vm_stack_push_item( vm_stack* stack, stack_item* item )
 
 	if (vm_stack_is_full(stack)) {
 		printf("ERROR: The stack is full.\n");
+		vm_error_raise(stack);
 		return 0;
 	}
 	return 1;
@@ -93,25 +96,27 @@ vm_stack_push_item( vm_stack* stack, stack_item* item )
 int
 vm_stack_push_ival( vm_stack* stack , int num)
 {
+	int result = 1;
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	memcpy(new_stack_item,
 		(&(stack_item const){ IVAL, {.ival = num} , JUST_A_VALUE }),
 		sizeof(stack_item));
-	vm_stack_push_item(stack, new_stack_item);
+	result = vm_stack_push_item(stack, new_stack_item);
 	free(new_stack_item);
-	return 1;
+	return result;
 }
 #else
 int
 vm_stack_push_ival( vm_stack* stack , int num)
 {
+	int result = 1;
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	new_stack_item->type = IVAL;
 	new_stack_item->ival = num;
 	new_stack_item->p_record = JUST_A_VALUE;
-	vm_stack_push_item(stack, new_stack_item);
+	result = vm_stack_push_item(stack, new_stack_item);
 	free(new_stack_item);
-	return 1;
+	return result;
 }
 #endif
 
@@ -119,25 +124,27 @@ vm_stack_push_ival( vm_stack* stack , int num)
 int
 vm_stack_push_dval( vm_stack* stack , double num)
 {
+	int result = 1;
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	memcpy(new_stack_item,
 		(&(stack_item const){ DVAL, {.dval = num} , JUST_A_VALUE }),
 		sizeof(stack_item));
-	vm_stack_push_item(stack, new_stack_item);
+	result = vm_stack_push_item(stack, new_stack_item);
 	free(new_stack_item);
-	return 1;
+	return result;
 }
 #else
 int
 vm_stack_push_dval( vm_stack* stack , double num)
 {
+	int result = 1;
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	new_stack_item->type = DVAL;
 	new_stack_item->dval = num;
 	new_stack_item->p_record = JUST_A_VALUE;
-	vm_stack_push_item(stack, new_stack_item);
+	result = vm_stack_push_item(stack, new_stack_item);
 	free(new_stack_item);
-	return 1;
+	return result;
 }
 #endif
 
@@ -145,6 +152,7 @@ vm_stack_push_dval( vm_stack* stack , double num)
 int
 vm_stack_push_pp_ival( vm_stack* stack , ptr_table** table, char* ptr_key)
 {
+	int result = 1;
 	ptr_record* record = ptr_table_find(table, ptr_key);
 	int** pp_ival = (int**) &(record->address);
 
@@ -153,14 +161,15 @@ vm_stack_push_pp_ival( vm_stack* stack , ptr_table** table, char* ptr_key)
 		(&(stack_item const){ PP_IVAL, {.pp_ival = pp_ival}, record }),
 		sizeof(stack_item));
 	DEBUG_PRINT("push new_stack_item: pointer to pointer to %d \n", **(new_stack_item->pp_ival) );
-	vm_stack_push_item(stack, new_stack_item);
+	result = vm_stack_push_item(stack, new_stack_item);
 	free(new_stack_item);
-	return 1;
+	return result;
 }
 #else
 int
 vm_stack_push_pp_ival( vm_stack* stack , ptr_table** table, char* ptr_key)
 {
+	int result = 1;
 	ptr_record* record = ptr_table_find(table, ptr_key);
 	int** pp_ival = (int**) &(record->address);
 
@@ -169,9 +178,9 @@ vm_stack_push_pp_ival( vm_stack* stack , ptr_table** table, char* ptr_key)
 	new_stack_item->pp_ival = pp_ival;
 	new_stack_item->p_record = record;
 	DEBUG_PRINT("push new_stack_item: pointer to pointer to %d \n", **(new_stack_item->pp_ival) );
-	vm_stack_push_item(stack, new_stack_item);
+	result = vm_stack_push_item(stack, new_stack_item);
 	free(new_stack_item);
-	return 1;
+	return result;
 }
 #endif
 
@@ -179,6 +188,7 @@ vm_stack_push_pp_ival( vm_stack* stack , ptr_table** table, char* ptr_key)
 int
 vm_stack_push_pp_dval( vm_stack* stack , ptr_table** table, char* ptr_key)
 {
+	int result = 1;
 	ptr_record* record = ptr_table_find(table, ptr_key);
 	double** pp_dval = (double**) &(record->address);
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
@@ -186,14 +196,15 @@ vm_stack_push_pp_dval( vm_stack* stack , ptr_table** table, char* ptr_key)
 		(&(stack_item const){ PP_DVAL, {.pp_dval = pp_dval}, record }),
 		sizeof(stack_item));
 	DEBUG_PRINT("push new_stack_item: pointer to pointer to %f \n", **(new_stack_item->pp_dval) );
-	vm_stack_push_item(stack, new_stack_item);
+	result = vm_stack_push_item(stack, new_stack_item);
 	free(new_stack_item);
-	return 1;
+	return result;
 }
 #else
 int
 vm_stack_push_pp_dval( vm_stack* stack , ptr_table** table, char* ptr_key)
 {
+	int result = 1;
 	ptr_record* record = ptr_table_find(table, ptr_key);
 	double** pp_dval = (double**) &(record->address);
 
@@ -202,44 +213,48 @@ vm_stack_push_pp_dval( vm_stack* stack , ptr_table** table, char* ptr_key)
 	new_stack_item->pp_dval = pp_dval;
 	new_stack_item->p_record = record;
 	DEBUG_PRINT("push new_stack_item: pointer to pointer to %f \n", **(new_stack_item->pp_dval) );
-	vm_stack_push_item(stack, new_stack_item);
+	result = vm_stack_push_item(stack, new_stack_item);
 	free(new_stack_item);
-	return 1;
+	return result;
 }
 #endif
 
 int
 vm_stack_push_pp_num( vm_stack* stack , ptr_table** table, char* ptr_key)
 {
+	int result = 1;
 	ptr_record* record = ptr_table_find(table, ptr_key);
     if(record->type == PTR_INT){
-        vm_stack_push_pp_ival(stack, table, ptr_key);
+        result = vm_stack_push_pp_ival(stack, table, ptr_key);
     } else if (record->type == PTR_DBL){
-        vm_stack_push_pp_dval(stack, table, ptr_key);
+        result = vm_stack_push_pp_dval(stack, table, ptr_key);
     } else {
+		result = 0;
         printf("ERROR: For PUSH_PP_NUM instruction, types on pointer table should be PTR_INT or PTR_DBL.\n");
     }
-	return 1;
+	return result;
 }
 
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)  /* C11 */
 int
 vm_stack_push_pp_str( vm_stack* stack , ptr_table** table, char* ptr_key)
 {
+	int result = 1;
 	ptr_record* record = ptr_table_find(table, ptr_key);
 	string_object** pp_str = (string_object**) &(record->address);
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	memcpy(new_stack_item,
 		(&(stack_item const){ PP_STR, {.pp_str = pp_str}, record }),
 		sizeof(stack_item));
-	vm_stack_push_item(stack, new_stack_item);
+	result = vm_stack_push_item(stack, new_stack_item);
 	free(new_stack_item);
-	return 1;
+	return result;
 }
 #else
 int
 vm_stack_push_pp_str( vm_stack* stack , ptr_table** table, char* ptr_key)
 {
+	int result = 1;
 	ptr_record* record = ptr_table_find(table, ptr_key);
 	string_object** pp_str = (string_object**) &(record->address);
 
@@ -247,9 +262,9 @@ vm_stack_push_pp_str( vm_stack* stack , ptr_table** table, char* ptr_key)
 	new_stack_item->type = PP_STR;
 	new_stack_item->pp_str = pp_str;
 	new_stack_item->p_record = record;
-	vm_stack_push_item(stack, new_stack_item);
+	result = vm_stack_push_item(stack, new_stack_item);
 	free(new_stack_item);
-	return 1;
+	return result;
 }
 #endif
 
@@ -257,25 +272,27 @@ vm_stack_push_pp_str( vm_stack* stack , ptr_table** table, char* ptr_key)
 int
 vm_stack_push_temp_pp_str( vm_stack* stack , string_object** pp_str)
 {
+	int result = 1;
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	memcpy(new_stack_item,
 		(&(stack_item const){ PP_STR, {.pp_str = pp_str}, TEMP_OBJECT }),
 		sizeof(stack_item));
-	vm_stack_push_item(stack, new_stack_item);
+	result = vm_stack_push_item(stack, new_stack_item);
 	free(new_stack_item);
-	return 1;
+	return result;
 }
 #else
 int
 vm_stack_push_temp_pp_str( vm_stack* stack , string_object** pp_str)
 {
+	int result = 1;
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	new_stack_item->type = PP_STR;
 	new_stack_item->pp_str = pp_str;
 	new_stack_item->p_record = TEMP_OBJECT;
-	vm_stack_push_item(stack, new_stack_item);
+	result = vm_stack_push_item(stack, new_stack_item);
 	free(new_stack_item);
-	return 1;
+	return result;
 }
 #endif
 
@@ -283,29 +300,31 @@ vm_stack_push_temp_pp_str( vm_stack* stack , string_object** pp_str)
 int
 vm_stack_push_pp_rexp( vm_stack* stack , ptr_table** table, char* ptr_key)
 {
+	int result = 1;
 	ptr_record* record = ptr_table_find(table, ptr_key);
 	simple_re** pp_rexp = (simple_re**) &(record->address);
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	memcpy(new_stack_item,
 		(&(stack_item const){ PP_REXP, {.pp_rexp = pp_rexp}, record }),
 		sizeof(stack_item));
-	vm_stack_push_item(stack, new_stack_item);
+	result = vm_stack_push_item(stack, new_stack_item);
 	free(new_stack_item);
-	return 1;
+	return result;
 }
 #else
 int
 vm_stack_push_pp_rexp( vm_stack* stack , ptr_table** table, char* ptr_key)
 {
+	int result = 1;
 	ptr_record* record = ptr_table_find(table, ptr_key);
 	simple_re** pp_rexp = (simple_re**) &(record->address);
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	new_stack_item->type = PP_REXP;
 	new_stack_item->pp_rexp = pp_rexp;
 	new_stack_item->p_record = record;
-	vm_stack_push_item(stack, new_stack_item);
+	result = vm_stack_push_item(stack, new_stack_item);
 	free(new_stack_item);
-	return 1;
+	return result;
 }
 #endif
 
@@ -313,75 +332,80 @@ vm_stack_push_pp_rexp( vm_stack* stack , ptr_table** table, char* ptr_key)
 int
 vm_stack_push_null( vm_stack* stack , ptr_table** table, char* ptr_key)
 {
+	int result = 1;
 	ptr_record* record = ptr_table_find(table, ptr_key);
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	memcpy(new_stack_item,
 		(&(stack_item const){ NULL_ITEM, {.ptr = NULL}, record }),
 		sizeof(stack_item));
-	vm_stack_push_item(stack, new_stack_item);
+	result = vm_stack_push_item(stack, new_stack_item);
 	free(new_stack_item);
-	return 1;
+	return result;
 }
 #else
 int
 vm_stack_push_null( vm_stack* stack , ptr_table** table, char* ptr_key)
 {
+	int result = 1;
 	ptr_record* record = ptr_table_find(table, ptr_key);
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	new_stack_item->type = NULL_ITEM;
 	new_stack_item->ptr = NULL;
 	new_stack_item->p_record = record;
-	vm_stack_push_item(stack, new_stack_item);
+	result = vm_stack_push_item(stack, new_stack_item);
 	free(new_stack_item);
-	return 1;
+	return result;
 }
 #endif
 
 int
 vm_stack_push_corresp_item( vm_stack* stack , ptr_table** table, char* ptr_key)
 {
+	int result = 1;
 	ptr_record* record = ptr_table_find(table, ptr_key);
 	if(record->type == PTR_NULL ){
-		vm_stack_push_null( stack, table, ptr_key);
+		result = vm_stack_push_null( stack, table, ptr_key);
 	}else if(record->type == PTR_INT ){
-		vm_stack_push_pp_ival( stack, table, ptr_key);
+		result = vm_stack_push_pp_ival( stack, table, ptr_key);
 	}else if(record->type == PTR_DBL ){
-		vm_stack_push_pp_dval( stack, table, ptr_key);
+		result = vm_stack_push_pp_dval( stack, table, ptr_key);
 	}else if(record->type == PTR_STR ){
-		vm_stack_push_pp_str( stack, table, ptr_key);
+		result = vm_stack_push_pp_str( stack, table, ptr_key);
 	}else if(record->type == PTR_REXP ){
-		vm_stack_push_pp_rexp( stack, table, ptr_key);
+		result = vm_stack_push_pp_rexp( stack, table, ptr_key);
 	}else{
 		// Boolean is not on ptr table. vm_stack_push_boolean is not required in this function.
 		printf("ERROR: ptr_table holds unknown type for variable, %s\n", ptr_key);
-		return -1;
+		result = 0;
 	}
-	return 1;
+	return result;
 }
 
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)  /* C11 */
 int
 vm_stack_push_boolean( vm_stack* stack, bool boolean)
 {
+	int result = 1;
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	memcpy(new_stack_item,
 		(&(stack_item const){ BOOLEAN, {.boolean = boolean} , NOT_ON_PTR_TABLE }),
 		sizeof(stack_item));
-	vm_stack_push_item(stack, new_stack_item);
+	result = vm_stack_push_item(stack, new_stack_item);
 	free(new_stack_item);
-	return 1;
+	return result;
 }
 #else
 int
 vm_stack_push_boolean( vm_stack* stack, bool boolean)
 {
+	int result = 1;
 	stack_item* new_stack_item = (stack_item*)malloc(sizeof(stack_item));
 	new_stack_item->type = BOOLEAN;
 	new_stack_item->boolean = boolean;
 	new_stack_item->p_record = NOT_ON_PTR_TABLE;
-	vm_stack_push_item(stack, new_stack_item);
+	result = vm_stack_push_item(stack, new_stack_item);
 	free(new_stack_item);
-	return 1;
+	return result;
 }
 #endif
 
@@ -398,7 +422,7 @@ vm_stack_pop( vm_stack* vmstack )
 {
 	if (vm_stack_is_empty(vmstack)){
 		printf("ERROR: The stack is empty.\n");
-		return 0;
+		return NULL;
 	}
 	stack_item* current_item_ptr = &(vmstack->stack[vmstack->sp]) ;
 	vmstack->sp = vmstack->sp - 1;
@@ -523,13 +547,17 @@ vm_stack_item_is_temp( stack_item* item )
 	return false;
 }
 
-void
+int
 vm_stack_display_item(vm_stack* vmstack, int idx)
 {
-	if(idx < 0 )
+	int result = 1;
+	if(idx < 0 ){
 		printf("ERROR: idx does not allow negative values. \n");
-	if(idx > (vmstack->sp) )
+		result = 0;
+	}else if(idx > (vmstack->sp) ){
 		printf("ERROR: idx specifieed is over stack pointer. \n");
+		result = 0;
+	}
 
 	stack_item* stack = vmstack->stack;
 	switch (stack[idx].type)
@@ -573,6 +601,7 @@ vm_stack_display_item(vm_stack* vmstack, int idx)
 		DEBUG_PRINT("%04d This INFO_ITEM should not be displayed. Only for internal use.\n", idx);
 		break;
 	}
+	return result;
 }
 
 void

@@ -2,6 +2,7 @@
 #include "simple_re.h"
 #include "common_string.h"
 #include "vm_item_pp2val.h"
+#include "vm_error.h"
 #include <stdio.h>
 #include <stdbool.h>
 
@@ -29,6 +30,8 @@ vm_rexp_match(vm_stack* vmstack)
 		rexp_item = top_item;
 	} else {
 		printf("ERROR: REXP_MATCH should have REXP and STR on each side respectively.\n");
+		vm_error_raise(vmstack);
+		return 0;
 	}
 
 	str_obj = *(str_item->pp_str);

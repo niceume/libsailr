@@ -163,10 +163,10 @@ sailr_vm_inst_code_free( vm_inst_object* vmcode )
   free( (vm_inst*) vmcode );
 }
 
-void
+int
 sailr_vm_exec_code( vm_inst_object* code , int num_insts , ptr_table_object* table , vm_stack_object* vmstack)
 {
-	vm_exec_code((vm_inst*)code, num_insts, (ptr_table*)table, (vm_stack*)vmstack);
+	return vm_exec_code((vm_inst*)code, num_insts, (ptr_table*)table, (vm_stack*)vmstack);
 }
 
 ptr_record_object*

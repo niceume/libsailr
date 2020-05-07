@@ -78,6 +78,7 @@ typedef struct _stack_item stack_item ;
 struct _vm_stack{
 	int sp ; 
 	stack_item stack[ MAXSTACKSIZE ];
+	unsigned int error;
 };
 typedef struct _vm_stack vm_stack;
 
@@ -116,7 +117,7 @@ int vm_stack_clean_and_pop( vm_stack* , int n);
 int vm_stack_clean_items_from_zero_to_top( vm_stack* );
 
 bool vm_stack_item_is_temp( stack_item* item );
-void vm_stack_display_item( vm_stack*, int );
+int vm_stack_display_item( vm_stack*, int );
 void vm_stack_display_all( vm_stack* );
 int vm_stack_end( vm_stack* );
 int vm_stack_is_full( vm_stack* );

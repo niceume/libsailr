@@ -449,7 +449,11 @@ age2 = age
 * Location information (not only line but also column number) becomes available in lex.l and parse.y. (May.6 2020)
     + YYLTYPE* is used for this purpose.
     + yyerror() now prints out line number and column number, when encountering syntax error.
-* When VM detects runtime errors, it stops further execution.
+* When VM detects runtime errors, it now stops further execution.
+    + Currently, two mechanisms are used for this purpose. (May. 8 2020)
+        1. Function return values (1:success, 0:fail)
+        2. vm_error_raise() and vm_error_exist() in vm_error.c (available from this version)
+            + The former is more strainghtforward. The latter is useful when function calls (caller/callee relationships) are complex.
 
 
 ## Plan 

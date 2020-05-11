@@ -7,6 +7,11 @@
 
 #include "helper.h"
 
+/* Wrapper macro to add script location information */
+
+#define ADD_LOC( VM_CODE , LOC ) vm_inst_set_loc_to_last( LOC, VM_CODE )
+
+
 /* Helper Functions ---------------- */
 
 vm_inst*
@@ -202,8 +207,8 @@ vm_inst* gen_code(TreeNode* nd, ptr_table* table){
     tmp_code1 = gen_code(nd->e1.nd, table);
     vm_inst* termin_code = new_vm_inst_command(VM_END);
     nd_code = vm_inst_list_cat( tmp_code1 , termin_code );
-	return nd_code;
-	break;
+    return nd_code;
+    break;
 
   case NODE_STMT:
     DEBUG_PRINT("NODE_STMT\n");
@@ -219,31 +224,36 @@ vm_inst* gen_code(TreeNode* nd, ptr_table* table){
 
   case NODE_INT:  // terminal node
     DEBUG_PRINT("NODE_INT\n");
-	nd_code = gen_code_int(nd);
+    nd_code = gen_code_int(nd);
+    ADD_LOC(nd_code, nd->loc);
     return nd_code;
     break;
 
   case NODE_DBL:  // terminal node
     DEBUG_PRINT("NODE_DBL\n");
     nd_code = gen_code_double(nd);
+    ADD_LOC(nd_code, nd->loc);
     return nd_code;
     break;
 
   case NODE_STR:  // terminal node
     DEBUG_PRINT("NODE_STR\n");
     nd_code = gen_code_str(nd);
+    ADD_LOC(nd_code, nd->loc);
     return nd_code;
     break;
 
   case NODE_REXP:  // terminal node
     DEBUG_PRINT("NODE_REXP\n");
     nd_code = gen_code_rexp(nd);
+    ADD_LOC(nd_code, nd->loc);
     return nd_code;
     break;
 
   case NODE_IDENT:  // terminal node
     DEBUG_PRINT("NODE_IDENT\n");
     nd_code = gen_code_ident(nd, table);
+    ADD_LOC(nd_code, nd->loc);
     return nd_code;
     break;
 
@@ -253,7 +263,8 @@ vm_inst* gen_code(TreeNode* nd, ptr_table* table){
     tmp_code2 = gen_code(nd->e2.nd, table);
     tmp_code3 = gen_code(nd->e3.nd, table);
     nd_code = gen_code_op( cmd , tmp_code2, tmp_code3 );
-	return nd_code;
+    ADD_LOC(nd_code, nd->loc);
+    return nd_code;
     break;
 
   case NODE_UNIOP:
@@ -261,15 +272,17 @@ vm_inst* gen_code(TreeNode* nd, ptr_table* table){
     cmd = convert_op(nd->e1.op);
     tmp_code2 = gen_code(nd->e2.nd, table);
     nd_code = gen_code_unitary_op( cmd , tmp_code2 );
-	return nd_code;
-	break;
+    ADD_LOC(nd_code, nd->loc);
+    return nd_code;
+    break;
 
   case NODE_LET:
     DEBUG_PRINT("NODE_LET\n");
     tmp_code1 = gen_code(nd->e1.nd, table);
     tmp_code2 = gen_code(nd->e2.nd, table);
     nd_code = gen_code_let( tmp_code1, tmp_code2 );
-	return nd_code;
+    ADD_LOC(nd_code, nd->loc);
+    return nd_code;
     break;
 
   case NODE_FCALL:
@@ -282,8 +295,10 @@ vm_inst* gen_code(TreeNode* nd, ptr_table* table){
       num_arg = count_num_farg( nd );
       DEBUG_PRINT("function, %s , with %d args \n", fname, num_arg);
       nd_code = gen_code_fcall(fname, num_arg, tmp_code3 );
+      ADD_LOC(nd_code, nd->loc);
     }else if( nd->e3.nd->type == NODE_NULL ){
       nd_code = gen_code_fcall(fname, 0, NULL);
+      ADD_LOC(nd_code, nd->loc);
     }else{
       DEBUG_PRINT("ERROR: Unintended node under NODE_FCALL\n");
     }
@@ -302,7 +317,7 @@ vm_inst* gen_code(TreeNode* nd, ptr_table* table){
       nd_code = tmp_code1;
     }
     return nd_code;
-	break;
+    break;
 
   case NODE_IF:
     DEBUG_PRINT("NODE_IF\n");

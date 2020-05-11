@@ -2,6 +2,7 @@
 #define VM_CODE_H
 
 #include "vm_cmd.h"
+#include "script_loc.h"
 
 // VM codes consist of a command and an optional argument.
 
@@ -22,6 +23,8 @@ struct _vm_inst{
 	struct _vm_inst* prev; // Only used for linked list structure
 	struct _vm_inst* next; // Only used for linked list structure
 	struct _vm_inst* last; // Only used for linked list structure. The first element should have a pointer to the last element for performance purpose.
+
+	struct script_loc loc; // Location information of raw Sailr script. (Not essential for VM itself)
 };
 typedef struct _vm_inst vm_inst;
 

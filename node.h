@@ -5,6 +5,7 @@
 #include <string.h>
 #include "ptr_table.h"
 #include "common_string.h"
+#include "script_loc.h"
 
 extern int node_cnt;
 
@@ -50,6 +51,8 @@ typedef struct TreeNode_ {
     struct TreeNode_ *nd;
     struct TreeNode_ *sibling;
   } e3;
+
+  struct script_loc loc; // hold the corresponding Sailr script location information 
 } TreeNode ;
 
 /* ********************************************* */

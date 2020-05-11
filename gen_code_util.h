@@ -28,4 +28,7 @@ int vm_inst_list_free( vm_inst_list* );
 
 vm_inst* vm_inst_list_to_code( vm_inst_list* );
 
+void vm_inst_set_loc_to_last( struct script_loc, vm_inst* );
+// Used to set script location to vm instruction
+
 #endif /* GEN_CODE_UTIL */

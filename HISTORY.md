@@ -454,14 +454,16 @@ age2 = age
         1. Function return values (1:success, 0:fail)
         2. vm_error_raise() and vm_error_exist() in vm_error.c (available from this version)
             + The former is more strainghtforward. The latter is useful when function calls (caller/callee relationships) are complex.
+* Corresponding script position (location) is reported when runtime error happens. (long-awaited feature!)
+    + `struct script_loc` (defined in script_loc.h) holds script location information.
+    + `struct TreeNode_` (i.e. TreeNode) and `struct _vm_inst` (i.e. vm_inst) now have location field, `struct script loc`.
+        + TreeNode's loc field is set during node construction in parse.y. 
+        + vm_inst's loc field is set during converting node tree to vm instructions in gen_code.c
+    + When runtime error is deteted in vm_exec_code in vm.c, the location is reported.
 
 
 ## Plan 
 
-* Report run time error.
-    + Append line number and column number of corresponding codes to AST node.
-    + Paass the information to VM instruction.
-    + Report error with this column and line number.
 * Avoid directly manipulate ptr_table's properties. Provide functions and use them.
 * Consider some script language extension. BSD licensed language is best (e.g. Lua, mruby or Gauche??)
 * Macro to add variables for users to ptr_table.

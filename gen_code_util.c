@@ -14,6 +14,7 @@ new_vm_inst_command( VM_CMD cmd )
 	temp_inst->prev = NULL;
 	temp_inst->next = NULL;
 	temp_inst->last = temp_inst;
+	temp_inst->loc = loc_init();
 	return temp_inst;
 }
 
@@ -269,6 +270,15 @@ vm_inst_list_to_code( vm_inst_list* list)
 	}
 	return vm_code_start;
 }
+
+
+// Used to set script location to vm instruction
+void
+vm_inst_set_loc_to_last( struct script_loc loc, vm_inst* insts)
+{
+	insts->last->loc = loc;
+}
+
 
 
 // main function to check behavior 

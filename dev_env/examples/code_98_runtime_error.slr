@@ -1,0 +1,8 @@
+if( hello =~ re/(Hello)/ ){
+  a = "matched"
+}else{
+  a = "not matched"
+}
+
+b = rexp_matched("1")
+

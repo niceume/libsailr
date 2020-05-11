@@ -55,6 +55,9 @@ int yylex (YYSTYPE* yylval, YYLTYPE* yylloc, parser_state* p, void* scanner);
 void yyerror (YYLTYPE* loc, parser_state* p, void* scanner, char const *);
 %}
 
+%{
+TreeNode* node_set_loc( TreeNode* nd, YYLTYPE* loc);
+%}
 
 /* ***************************** */
 /*  Non-terminals                */
@@ -117,26 +120,26 @@ stmt		: assign_stmt			{ /*printf("ASSIGN STMT!!!"); */ $$ = $1; }
 			| if_stmt				{ /*printf("IF STMT!!!"); */ $$ = $1; }
 			| expr					{ /*printf("JUST STMT!!!"); */ $$ = $1; }
 
-expr		: expr AND expr		{ $$ = new_node_op("AND", $1, $3); }
-			| expr OR expr			{ $$ = new_node_op("OR", $1, $3); }
+expr		: expr AND expr		{ $$ = new_node_op("AND", $1, $3); $$ = node_set_loc( $$, &@$ ); }
+			| expr OR expr			{ $$ = new_node_op("OR", $1, $3); $$ = node_set_loc( $$, &@$ ); }
 			| arg					{ $$ = $1; }
 
 arg		: fcall				{ $$ = $1; }
-			| arg OP_PLUS arg		{ $$ = new_node_op("PLUS", $1, $3); }
-			| arg OP_SUB arg		{ $$ = new_node_op("SUB", $1, $3); }
-			| arg OP_MULT arg		{ $$ = new_node_op("MULT", $1, $3); }
-			| arg OP_DIV arg		{ $$ = new_node_op("DIV", $1, $3); }
-			| arg OP_MOD arg		{ $$ = new_node_op("MOD", $1, $3); }
-			| arg FACTOR			{ $$ = new_node_uniop("FACTOR", $1); }
-			| arg OP_POWER arg		{ $$ = new_node_op("POWER", $1, $3); }
-			| arg OP_EQ arg		{ $$ = new_node_op("EQ", $1, $3); }
-			| arg OP_NEQ arg		{ $$ = new_node_op("NEQ", $1, $3); }
-			| arg OP_GT arg		{ $$ = new_node_op("GT", $1, $3); }
-			| arg OP_LT arg		{ $$ = new_node_op("LT", $1, $3); }
-			| arg OP_GE arg		{ $$ = new_node_op("GE", $1, $3); }
-			| arg OP_LE arg		{ $$ = new_node_op("LE", $1, $3); }
-			| OP_SUB arg %prec UMINUS	{ $$ = new_node_uniop("UMINUS", $2); }
-			| primary REXP_MATCH primary		{ $$ = new_node_op("REXP_MATCH", $1, $3); }
+			| arg OP_PLUS arg		{ $$ = new_node_op("PLUS", $1, $3); $$ = node_set_loc( $$, &@$ ); }
+			| arg OP_SUB arg		{ $$ = new_node_op("SUB", $1, $3); $$ = node_set_loc( $$, &@$ ); }
+			| arg OP_MULT arg		{ $$ = new_node_op("MULT", $1, $3); $$ = node_set_loc( $$, &@$ ); }
+			| arg OP_DIV arg		{ $$ = new_node_op("DIV", $1, $3); $$ = node_set_loc( $$, &@$ ); }
+			| arg OP_MOD arg		{ $$ = new_node_op("MOD", $1, $3); $$ = node_set_loc( $$, &@$ ); }
+			| arg FACTOR			{ $$ = new_node_uniop("FACTOR", $1); $$ = node_set_loc( $$, &@$ ); }
+			| arg OP_POWER arg		{ $$ = new_node_op("POWER", $1, $3); $$ = node_set_loc( $$, &@$ ); }
+			| arg OP_EQ arg		{ $$ = new_node_op("EQ", $1, $3); $$ = node_set_loc( $$, &@$ ); }
+			| arg OP_NEQ arg		{ $$ = new_node_op("NEQ", $1, $3); $$ = node_set_loc( $$, &@$ ); }
+			| arg OP_GT arg		{ $$ = new_node_op("GT", $1, $3); $$ = node_set_loc( $$, &@$ ); }
+			| arg OP_LT arg		{ $$ = new_node_op("LT", $1, $3); $$ = node_set_loc( $$, &@$ ); }
+			| arg OP_GE arg		{ $$ = new_node_op("GE", $1, $3); $$ = node_set_loc( $$, &@$ ); }
+			| arg OP_LE arg		{ $$ = new_node_op("LE", $1, $3); $$ = node_set_loc( $$, &@$ ); }
+			| OP_SUB arg %prec UMINUS	{ $$ = new_node_uniop("UMINUS", $2); $$ = node_set_loc( $$, &@$ ); }
+			| primary REXP_MATCH primary		{ $$ = new_node_op("REXP_MATCH", $1, $3); $$ = node_set_loc( $$, &@$ ); }
 			| primary				{ $$ = $1; }
 
 primary	: IDENT	
@@ -144,16 +147,17 @@ primary	: IDENT
 			$$ = new_node_ident( $1 ); 
 			var_hash_add_name( &(p->vars) , $1 );
 			var_hash_add_name( &(p->rhsvars) , $1 );
+			$$ = node_set_loc( $$, &@$ ); 
 			}
-			| LIT_NUM				{ $$ = $1; }
-			| LIT_STR				{ $$ = new_node_str( $1 , p->ptrtable ); }
-			| LIT_REXP				{ $$ = new_node_rexp( $1 , p->ptrtable , p->rexp_encoding ); }
+			| LIT_NUM				{ $$ = $1; $$ = node_set_loc( $$, &@$ ); }
+			| LIT_STR				{ $$ = new_node_str( $1 , p->ptrtable ); $$ = node_set_loc( $$, &@$ ); }
+			| LIT_REXP				{ $$ = new_node_rexp( $1 , p->ptrtable , p->rexp_encoding ); $$ = node_set_loc( $$, &@$ ); }
 			| '(' expr ')'			{ $$ = $2; }
 			| NA_NUM				{ $$ = $1; }
 
-fcall		: fname '(' args ')'	{ $$ = new_node_fcall($1, $3); }
+fcall		: fname '(' args ')'	{ $$ = new_node_fcall($1, $3); $$ = node_set_loc( $$, &@$ ); }
 
-fname		: IDENT				{ $$ = new_node_ident($1); }
+fname		: IDENT				{ $$ = new_node_ident($1); $$ = node_set_loc( $$, &@$ ); }
 
 args		: /* empty */  		{ $$ = new_node_null(); }
 			| expr				{ 
@@ -191,6 +195,7 @@ lvar			: IDENT
 					$$ = new_node_ident( $1 );
 					var_hash_add_name( &(p->vars) , $1 );
 					var_hash_add_name( &(p->lhsvars) , $1 );
+					$$ = node_set_loc( $$, &@$ ); 
 					}
 
 opt_termin		: /* empty */
@@ -209,5 +214,15 @@ void yyerror(YYLTYPE* loc , parser_state* p, void* scanner, char const* message)
 {
   p->yynerrs++;
   fprintf(stderr, "%s (near line: %d column: %d )\n", message , loc->first_line, loc->first_column );
+}
+
+TreeNode*
+node_set_loc( TreeNode* nd, YYLTYPE* loc)
+{
+  nd->loc.first_line   = loc->first_line;
+  nd->loc.first_column = loc->first_column;
+  nd->loc.last_line    = loc->last_line;
+  nd->loc.last_column  = loc->last_column;
+  return nd;
 }
 

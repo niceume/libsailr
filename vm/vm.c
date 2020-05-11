@@ -16,6 +16,8 @@
 #include "vm_rexp.h"
 #include "vm_error.h"
 
+#include "script_loc.h"
+
 int vm_run_inst (vm_inst* , ptr_table* , vm_stack* );
 
 int
@@ -76,6 +78,10 @@ vm_exec_code( vm_inst* code , int num_insts , ptr_table* table , vm_stack* vmsta
 			exec_result = 0; // fail
 			break;
 		}
+	}
+
+	if(exec_result == 0){ // fail
+		loc_show( inst->loc );
 	}
 
 	return exec_result;

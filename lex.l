@@ -37,11 +37,14 @@ extern void update_loc(YYLTYPE *loc, char *txt);
 
 /* Location information needs to be updated manually. (Flex and bison provide framework and initialize variables, but do not update them.) */
 /* https://stackoverflow.com/questions/656703/how-does-flex-support-bison-location-exactly See Brent's answer.*/
-/* Usually, this update is done just before lexer action is performed by defining YY_USER_ACTION macro. I use another way here, b/c it's more explicit and called just before return. */
+/* Usually, this update is done just before lexer action is performed by defining YY_USER_ACTION macro. */
+#define YY_USER_ACTION update_loc( yylloc_param , yytext );
+
+
+/* This function enables some modification of parameters before returning value to parser. */
 static int
 lex_return(YYLTYPE* loc, char* txt, parser_state *p, yyscan_t scanner, int c)
 {
-  update_loc( loc, txt);
   return c;
 }
 

@@ -7,7 +7,6 @@ typedef void parser_state_object;
 typedef void vm_inst_object;
 typedef void vm_stack_object;
 typedef void string_type_object;
-typedef void parser_state_object;
 
 ptr_table_object*     sailr_ptr_table_init();
 parser_state_object*  sailr_new_parser_state(const char* , ptr_table_object* );

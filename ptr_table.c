@@ -498,7 +498,7 @@ ptr_table*
 ptr_record_obtain_table(ptr_record* pr)
 {
 	ptr_record* temp ;
-	ptr_record* pre_temp;
+	ptr_record* pre_temp = NULL;
 	ptr_table** table;
 
     for( temp = pr ; temp != NULL; temp = (ptr_record*) (temp->hh.prev)) {

@@ -36,3 +36,12 @@ Copyright (c) 2012-2017, Kim Grasman <kim.grasman@gmail.com>
 All rights reserved.
 
 
+## Quoted codes
+
+* Functions to convert encoding names to onigmo names in simple_re/simple_re.c
+    + The code is quoted from "ore" R package by jonclayden on Github.
+
+Copyright 2019 Jon Clayden (University College London)
+All rights reserved
+
+

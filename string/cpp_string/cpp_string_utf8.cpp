@@ -48,7 +48,7 @@ cpp_string_subset_utf8(std::string* ori_str, int from_idx, int to_idx)
 	decltype(curr_iter) to_iter ;
 
 	int curr_idx = 0;
-	uint32_t curr_cp;
+	// uint32_t curr_cp;
 
 
 	// Validate indexes specified.
@@ -73,7 +73,7 @@ cpp_string_subset_utf8(std::string* ori_str, int from_idx, int to_idx)
 		}
 
 		try{
-			curr_cp = utf8::next(curr_iter, str_end);
+			utf8::next(curr_iter, str_end);
 			curr_idx = curr_idx + 1;
 		}catch(const utf8::not_enough_room& e){
 			break;
@@ -101,7 +101,7 @@ cpp_string_new_unescaped_string_utf8( std::string* ori_str )
 	
 	auto curr_iter = ori_str->begin();
 	auto str_end = ori_str->end();
-	auto new_str_iter = new_str->end();
+
 	utf8::uint32_t curr_cp;
 
 	while(1){

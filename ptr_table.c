@@ -324,6 +324,7 @@ ptr_record_free_gc_required_memory(ptr_record* pr)
 				break;
 		}
 		pr->address = NULL;
+		pr->gc = GC_NO;
 	}	
 	if(pr->ex_gc == GC_YES){
 		switch( pr->ex_type ){	
@@ -347,6 +348,7 @@ ptr_record_free_gc_required_memory(ptr_record* pr)
 				break;
 		}
 		pr->ex_addr = NULL;
+		pr->ex_gc = GC_NO;
 	}
 }
 

@@ -310,6 +310,14 @@ sailr_ptr_record_reset_rexp(ptr_record_object* pr)
 }
 
 void
+sailr_ptr_table_free_objects(ptr_table_object** table, const char* key)
+{
+	ptr_record* record = ptr_table_find((ptr_table**) table, key);
+	ptr_record_free_gc_required_memory(record);
+}
+
+
+void
 sailr_ptr_table_del_records_except(ptr_table_object** table, const char** keys, int key_num )
 {
 	ptr_table_del_records_except((ptr_table**)table, keys, key_num );

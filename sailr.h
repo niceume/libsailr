@@ -53,6 +53,7 @@ int sailr_ptr_table_update_int(ptr_table_object** table, const char* key, int iv
 int sailr_ptr_table_update_double(ptr_table_object** table, const char* key, double dval);
 int sailr_ptr_table_update_string(ptr_table_object** table, const char* key, string_type_object** str);
 int sailr_ptr_record_reset_rexp(ptr_record_object* pr);
+void sailr_ptr_table_free_objects(ptr_table_object** table, const char* key);
 
 // Delete
 void sailr_ptr_table_del_records_except(ptr_table_object** table, const char** keys, int key_num );

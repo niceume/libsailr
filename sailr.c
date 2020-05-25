@@ -249,6 +249,16 @@ sailr_ptr_record_get_type(ptr_record_object* pr)
 	}
 }
 
+int
+sailr_ptr_record_is_anonym(ptr_record_object* pr)
+{
+	if( ptr_record_get_anonym((ptr_record*) pr) == 1 ){
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
 int sailr_ptr_record_is_ptr_null(ptr_table_object** table, const char* key)
 {
 	return ptr_record_is_ptr_null((ptr_table**) table, key);

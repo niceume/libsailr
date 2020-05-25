@@ -39,6 +39,7 @@ ptr_record_object* sailr_ptr_table_create_null(ptr_table_object** table, const c
 // Read
 char sailr_ptr_table_get_type(ptr_table_object** table, const char* key);
 char sailr_ptr_record_get_type(ptr_record_object* pr);
+int sailr_ptr_record_is_anonym(ptr_record_object* pr);
 int sailr_ptr_record_is_ptr_null(ptr_table_object** table, const char* key);
 void** sailr_ptr_table_get_pptr(ptr_table_object** table, const char* key);
 const char* sailr_ptr_table_read_string(ptr_table_object** table, const char* key);

@@ -24,6 +24,7 @@ ptr_table_init (){
 	new_ptr_record->ex_addr = (void*) NULL;
 	new_ptr_record->ex_type = PTR_NULL;
 	new_ptr_record->ex_gc = GC_NO;
+	new_ptr_record->anonym = 0;
 	ptr_table_insert(&table, new_ptr_record );
 	return table;
 }
@@ -51,6 +52,7 @@ ptr_table_add (ptr_table** table, const char* key, void** address, PtrType type,
         new_ptr_record->ex_addr = NULL;
         new_ptr_record->ex_type = PTR_NULL;
         new_ptr_record->ex_gc = GC_NO ; 
+        new_ptr_record->anonym = 0;
         // Insert new ptr_record on ptr_table
         ptr_table_insert( table, new_ptr_record );
         result = new_ptr_record;
@@ -186,6 +188,17 @@ create_new_rexp_key(ptr_table** table){
 	return new_str ; 
 }
 
+void
+ptr_record_set_anonym( ptr_record* pr, int val)
+{
+	pr->anonym = val;
+}
+
+int
+ptr_record_get_anonym( ptr_record* pr)
+{
+	return pr->anonym;
+}
 
 ptr_record*
 ptr_table_create_anonym_string(ptr_table** table, string_object** strptr)
@@ -194,6 +207,7 @@ ptr_table_create_anonym_string(ptr_table** table, string_object** strptr)
 	new_key = create_new_str_key(table);
 	ptr_record* new_ptr_record;
 	new_ptr_record = ptr_table_add(table, new_key, (void**)strptr, PTR_STR, GC_YES);
+	ptr_record_set_anonym( new_ptr_record, 1);
 	free(new_key);
 	return new_ptr_record ;
 }
@@ -270,6 +284,7 @@ ptr_table_create_anonym_rexp(ptr_table** table, const char* pattern, const char*
 	new_re = simple_re_compile( pattern, enc );
 	ptr_record* new_ptr_record;
 	new_ptr_record = ptr_table_add(table, new_key, (void**) &new_re, PTR_REXP, GC_YES);
+	ptr_record_set_anonym( new_ptr_record, 1);
 	free(new_key);
 	return new_ptr_record ;
 }
@@ -467,48 +482,48 @@ ptr_record_show(ptr_record* pr)
 {
 		if(pr->type == PTR_INT){
 			if( pr->address != NULL ){
-	        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%d\t (EXTR_ADR:%p\t TYPE:%d\t GC:%d\t VAL:%lf) \n", 
+	        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%d\t (EXTR_ADR:%p\t TYPE:%d\t GC:%d\t VAL:%lf) [Anonym:%d]\n", 
 				pr->key, pr->address, pr->type, pr->gc, *((int*)(pr->address)),
-				pr->ex_addr, pr->ex_type, pr->ex_gc, *((double*)(pr->ex_addr)) );
+				pr->ex_addr, pr->ex_type, pr->ex_gc, *((double*)(pr->ex_addr)), pr->anonym );
 			}else{
-	        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:(NULL)\t (EXTR_ADR:%p\t TYPE:%d\t GC:%d\t VAL:(NULL)) \n", 
+	        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:(NULL)\t (EXTR_ADR:%p\t TYPE:%d\t GC:%d\t VAL:(NULL)) [Anonym:%d]\n", 
 				pr->key, pr->address, pr->type, pr->gc,
-				pr->ex_addr, pr->ex_type, pr->ex_gc );
+				pr->ex_addr, pr->ex_type, pr->ex_gc, pr->anonym );
 			}
 		}else if(pr->type == PTR_DBL){
 			if( pr->address != NULL ){
-	        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%lf\t (EXTR_ADR:%p\t TYPE:%d\t GC:%d\t VAL:%d)\n", 
+	        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%lf\t (EXTR_ADR:%p\t TYPE:%d\t GC:%d\t VAL:%d) [Anonym:%d]\n", 
 				pr->key, pr->address, pr->type, pr->gc, *((double*)(pr->address)),
-				pr->ex_addr, pr->ex_type, pr->ex_gc, *((int*)(pr->ex_addr)));
+				pr->ex_addr, pr->ex_type, pr->ex_gc, *((int*)(pr->ex_addr)), pr->anonym);
 			}else{
-	        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:(NULL)\t (EXTR_ADR:%p\t TYPE:%d\t GC:%d\t VAL:(NULL))\n", 
+	        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:(NULL)\t (EXTR_ADR:%p\t TYPE:%d\t GC:%d\t VAL:(NULL)) [Anonym:%d]\n", 
 				pr->key, pr->address, pr->type, pr->gc, 
-				pr->ex_addr, pr->ex_type, pr->ex_gc );
+				pr->ex_addr, pr->ex_type, pr->ex_gc, pr->anonym );
 			}
 		}else if(pr->type == PTR_STR){
 			if( pr->address != NULL ){
-				printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%s\t (EXTR_ADR:%p (Not used for string))\n", 
+				printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%s\t (EXTR_ADR:%p (Not used for string)) [Anonym:%d]\n", 
 				pr->key, pr->address, pr->type, pr->gc, string_read((string_object*)(pr->address)),
-				pr->ex_addr );
+				pr->ex_addr, pr->anonym );
 			}else{
-				printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:(NULL)\t (EXTR_ADR:%p (Not used for string))\n", 
-				pr->key, pr->address, pr->type, pr->gc, pr->ex_addr );
+				printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:(NULL)\t (EXTR_ADR:%p (Not used for string)) [Anonym:%d]\n", 
+				pr->key, pr->address, pr->type, pr->gc, pr->ex_addr, pr->anonym );
 			}
 		}else if(pr->type == PTR_REXP){
-        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%s\t (EXTR_ADR:%p)\n", 
+        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%s\t (EXTR_ADR:%p) [Anonym:%d]\n", 
 			pr->key, pr->address, pr->type, pr->gc, simple_re_read_pattern((simple_re*)(pr->address)),
-			pr->ex_addr );
+			pr->ex_addr, pr->anonym );
 		}else if(pr->type == PTR_NULL){
-        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t (EXTR_ADR:%p) \n", 
-			pr->key, pr->address, pr->type, pr->gc, pr->ex_addr);
+        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t (EXTR_ADR:%p) [Anonym:%d]\n", 
+			pr->key, pr->address, pr->type, pr->gc, pr->ex_addr, pr->anonym);
 		}else if(pr->type == PTR_INFO){
-        	printf("KEY:%s\t ADR:%p\t TYPE:%s\t GC:%d\t (EXTR_ADR:%p) ", 
+        	printf("KEY:%s\t ADR:%p\t TYPE:%s\t GC:%d\t (EXTR_ADR:%p)", 
 			pr->key, pr->address, "INFO" , pr->gc, pr->ex_addr);
 			ptr_table_info* pti = (ptr_table_info*) (pr->address);
 			printf("\t str_counter %d, rexp_counter %d, null_updated %d \n", pti->str_counter, pti->rexp_counter, pti->null_updated);
 		}else{
-        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t (EXTR_ADR:%p) \n", 
-			pr->key, pr->address, pr->type, pr->gc,	pr->ex_addr);
+        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t (EXTR_ADR:%p) [Anonym:%d]\n", 
+			pr->key, pr->address, pr->type, pr->gc,	pr->ex_addr, pr->anonym);
 		}
 }
 

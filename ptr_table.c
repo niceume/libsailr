@@ -466,17 +466,34 @@ void
 ptr_record_show(ptr_record* pr)
 {
 		if(pr->type == PTR_INT){
-        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%d\t (EXTR_ADR:%p\t TYPE:%d\t GC:%d\t VAL:%lf) \n", 
-			pr->key, pr->address, pr->type, pr->gc, *((int*)(pr->address)),
-			pr->ex_addr, pr->ex_type, pr->ex_gc, *((double*)(pr->ex_addr)) );
+			if( pr->address != NULL ){
+	        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%d\t (EXTR_ADR:%p\t TYPE:%d\t GC:%d\t VAL:%lf) \n", 
+				pr->key, pr->address, pr->type, pr->gc, *((int*)(pr->address)),
+				pr->ex_addr, pr->ex_type, pr->ex_gc, *((double*)(pr->ex_addr)) );
+			}else{
+	        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:(NULL)\t (EXTR_ADR:%p\t TYPE:%d\t GC:%d\t VAL:(NULL)) \n", 
+				pr->key, pr->address, pr->type, pr->gc,
+				pr->ex_addr, pr->ex_type, pr->ex_gc );
+			}
 		}else if(pr->type == PTR_DBL){
-        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%lf\t (EXTR_ADR:%p\t TYPE:%d\t GC:%d\t VAL:%d)\n", 
-			pr->key, pr->address, pr->type, pr->gc, *((double*)(pr->address)),
-			pr->ex_addr, pr->ex_type, pr->ex_gc, *((int*)(pr->ex_addr)));
+			if( pr->address != NULL ){
+	        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%lf\t (EXTR_ADR:%p\t TYPE:%d\t GC:%d\t VAL:%d)\n", 
+				pr->key, pr->address, pr->type, pr->gc, *((double*)(pr->address)),
+				pr->ex_addr, pr->ex_type, pr->ex_gc, *((int*)(pr->ex_addr)));
+			}else{
+	        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:(NULL)\t (EXTR_ADR:%p\t TYPE:%d\t GC:%d\t VAL:(NULL))\n", 
+				pr->key, pr->address, pr->type, pr->gc, 
+				pr->ex_addr, pr->ex_type, pr->ex_gc );
+			}
 		}else if(pr->type == PTR_STR){
-        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%s\t (EXTR_ADR:%p (Not used for string))\n", 
-			pr->key, pr->address, pr->type, pr->gc, string_read((string_object*)(pr->address)),
-			pr->ex_addr );
+			if( pr->address != NULL ){
+				printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%s\t (EXTR_ADR:%p (Not used for string))\n", 
+				pr->key, pr->address, pr->type, pr->gc, string_read((string_object*)(pr->address)),
+				pr->ex_addr );
+			}else{
+				printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:(NULL)\t (EXTR_ADR:%p (Not used for string))\n", 
+				pr->key, pr->address, pr->type, pr->gc, pr->ex_addr );
+			}
 		}else if(pr->type == PTR_REXP){
         	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%s\t (EXTR_ADR:%p)\n", 
 			pr->key, pr->address, pr->type, pr->gc, simple_re_read_pattern((simple_re*)(pr->address)),

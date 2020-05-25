@@ -43,6 +43,7 @@ int sailr_ptr_record_is_ptr_null(ptr_table_object** table, const char* key);
 void** sailr_ptr_table_get_pptr(ptr_table_object** table, const char* key);
 const char* sailr_ptr_table_read_string(ptr_table_object** table, const char* key);
 
+ptr_record_object* sailr_ptr_table_find( ptr_table_object** table, const char* key );
 ptr_record_object* sailr_ptr_table_first_record(ptr_table_object** table);
 ptr_record_object* sailr_ptr_record_next(ptr_record_object* pr );
 
@@ -54,6 +55,7 @@ int sailr_ptr_table_update_double(ptr_table_object** table, const char* key, dou
 int sailr_ptr_table_update_string(ptr_table_object** table, const char* key, string_type_object** str);
 int sailr_ptr_record_reset_rexp(ptr_record_object* pr);
 void sailr_ptr_table_free_objects(ptr_table_object** table, const char* key);
+void sailr_ptr_record_free_objects(ptr_record_object* pr);
 
 // Delete
 void sailr_ptr_table_del_records_except(ptr_table_object** table, const char** keys, int key_num );

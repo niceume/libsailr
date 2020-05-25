@@ -100,8 +100,9 @@ ptr_record* ptr_record_next(ptr_record* pr);
 
 void ptr_record_free_gc_required_memory(ptr_record*);
 
-// private
 ptr_record* ptr_table_find(ptr_table** table, const char* key);
+
+// private
 ptr_record* ptr_table_insert(ptr_table** table, ptr_record* pr);
 int ptr_record_update(ptr_record* pr, void* address, PtrType type, GCReq gc);
 void ptr_record_free(ptr_record* );

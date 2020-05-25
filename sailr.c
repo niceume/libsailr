@@ -272,6 +272,12 @@ sailr_ptr_table_read_string(ptr_table_object** table, const char* key){
 }
 
 ptr_record_object*
+sailr_ptr_table_find( ptr_table_object** table, const char* key )
+{
+	return (ptr_record_object*) ptr_table_find((ptr_table**) table, key);
+}
+
+ptr_record_object*
 sailr_ptr_table_first_record(ptr_table_object** table)
 {
 	return (ptr_record_object*) ptr_table_first_record((ptr_table**)table);
@@ -316,6 +322,11 @@ sailr_ptr_table_free_objects(ptr_table_object** table, const char* key)
 	ptr_record_free_gc_required_memory(record);
 }
 
+void
+sailr_ptr_record_free_objects(ptr_record_object* pr)
+{
+	ptr_record_free_gc_required_memory(pr);
+}
 
 void
 sailr_ptr_table_del_records_except(ptr_table_object** table, const char** keys, int key_num )

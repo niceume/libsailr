@@ -13,6 +13,8 @@ int vm_stack_assign_numval_to_ptr_dbl_record(ptr_record* left_record, stack_item
 int vm_stack_assign_numval_to_ptr_int_record(ptr_record* left_record, stack_item* rvalue);
 int vm_stack_assign_temp_str_to_record(ptr_record* left_record, stack_item* rvalue);
 int vm_stack_assign_copy_str_to_record(ptr_record* left_record, stack_item* rvalue);
+int vm_stack_assign_temp_rexp_to_record(ptr_record* left_record, stack_item* rvalue);
+int vm_stack_assign_copy_rexp_to_record(ptr_record* left_record, stack_item* rvalue);
 
 // Needed?
 int vm_stack_convert_str_item_into_void(ptr_record* left_record, stack_item* rvalue);
@@ -29,8 +31,8 @@ vm_stack_store_val(vm_stack* vmstack)
 	// lvalue should point to heap memory to store objects or values, b/c they should be returned to library user.
 	// If they are not stored on heap, there are possibilities that they are automatically destroyed.
 	ptr_record* left_record = NULL;
-	if( (lvalue->type != NULL_ITEM) && (lvalue->type != PP_IVAL ) && (lvalue->type != PP_DVAL ) && (lvalue->type != PP_STR )){
-		printf("ERROR: lvalue should be pointer to pointer, such as PP_IVAL, PP_DVAL or PP_STR, or NULL_ITEM.\n");
+	if( (lvalue->type != NULL_ITEM) && (lvalue->type != PP_IVAL ) && (lvalue->type != PP_DVAL ) && (lvalue->type != PP_STR ) && (lvalue->type != PP_REXP )){
+		printf("ERROR: lvalue should be pointer to pointer, such as PP_IVAL, PP_DVAL, PP_STR or PP_REXP, or NULL_ITEM.\n");
 		vm_error_raise(vmstack);
 		return 0;
 	} else {
@@ -141,6 +143,23 @@ vm_stack_store_val(vm_stack* vmstack)
 				printf("ERROR: Object other than PP_STR is trying to be assigned to PTR_STR.\n");
 				vm_error_raise(vmstack);
 			}
+		// Unknown but defined variable as PTR_REXP
+		}else if(left_record->type == PTR_REXP){
+			if(rvalue->type == PP_REXP){
+				ptr_record_free_gc_required_memory( left_record );
+				if( vm_stack_item_is_temp(rvalue) ){ // If rvalue is temporary, use the object.
+					if( vm_stack_assign_temp_rexp_to_record(left_record, rvalue) != 1){
+						vm_error_raise(vmstack);
+					}
+				}else{  // If rvalue is not tempoary, create a new regular expression and manage it
+					if( vm_stack_assign_copy_rexp_to_record(left_record, rvalue) != 1 ){
+						vm_error_raise(vmstack);
+					} 
+				}
+			}else {
+				printf("ERROR: Object other than PP_REXP is trying to be assigned to PTR_REXP.\n");
+				vm_error_raise(vmstack);
+			}
 		}
 
 	// ------------------------------
@@ -188,6 +207,29 @@ vm_stack_store_val(vm_stack* vmstack)
 				}
 			}else {
 				printf("ERROR: Object other than PP_STR is trying to be assigned to PTR_STR.\n");
+				vm_error_raise(vmstack);
+			}
+		}
+
+	// as PP_REXP
+	}else if(lvalue->type == PP_REXP){
+		if(left_record->type != PTR_REXP){
+			printf("ERROR: ptr record should be PTR_REXP. This branch should never be executed. \n");
+			vm_error_raise(vmstack);
+		}else{
+			if(rvalue->type == PP_REXP){
+				ptr_record_free_gc_required_memory( left_record );
+				if( vm_stack_item_is_temp(rvalue) ){ // If rvalue is temporary, use the object.
+					if( vm_stack_assign_temp_rexp_to_record(left_record, rvalue) != 1){
+						vm_error_raise(vmstack);
+					}
+				}else{  // If rvalue is not tempoary, create a new regular expression and manage it
+					if( vm_stack_assign_copy_rexp_to_record(left_record, rvalue) != 1){
+						vm_error_raise(vmstack);
+					}
+				}
+			}else {
+				printf("ERROR: Object other than PP_REXP is trying to be assigned to PTR_REXP.\n");
 				vm_error_raise(vmstack);
 			}
 		}
@@ -253,6 +295,25 @@ int
 vm_stack_assign_copy_str_to_record(ptr_record* left_record, stack_item* rvalue)
 {
 	left_record->address = (void*) string_new(string_read((string_object*) *(rvalue->pp_str)));
+	left_record->gc = GC_YES;
+	return 1;
+}
+
+int
+vm_stack_assign_temp_rexp_to_record(ptr_record* left_record, stack_item* rvalue)
+{
+	left_record->address = (void*) *(rvalue->pp_rexp);
+	left_record->gc = GC_YES;
+	free(rvalue->pp_rexp);
+	rvalue->pp_rexp = NULL;
+	rvalue->type = VOID_ITEM;
+	return 1;
+}
+
+int
+vm_stack_assign_copy_rexp_to_record(ptr_record* left_record, stack_item* rvalue)
+{
+	left_record->address = (simple_re*) simple_re_compile( (*(rvalue->pp_rexp))->pattern , (*(rvalue->pp_rexp))->encoding );
 	left_record->gc = GC_YES;
 	return 1;
 }

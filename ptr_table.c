@@ -510,9 +510,15 @@ ptr_record_show(ptr_record* pr)
 				pr->key, pr->address, pr->type, pr->gc, pr->ex_addr, pr->anonym );
 			}
 		}else if(pr->type == PTR_REXP){
-        	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%s\t (EXTR_ADR:%p) [Anonym:%d]\n", 
-			pr->key, pr->address, pr->type, pr->gc, simple_re_read_pattern((simple_re*)(pr->address)),
-			pr->ex_addr, pr->anonym );
+			if( pr->address != NULL ){
+        		printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:%s\t (EXTR_ADR:%p) [Anonym:%d]\n", 
+				pr->key, pr->address, pr->type, pr->gc, simple_re_read_pattern((simple_re*)(pr->address)),
+				pr->ex_addr, pr->anonym );
+			}else{
+        		printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t VAL:(NULL)\t (EXTR_ADR:%p) [Anonym:%d]\n", 
+				pr->key, pr->address, pr->type, pr->gc, 
+				pr->ex_addr, pr->anonym );
+			}
 		}else if(pr->type == PTR_NULL){
         	printf("KEY:%s\t ADR:%p\t TYPE:%d\t GC:%d\t (EXTR_ADR:%p) [Anonym:%d]\n", 
 			pr->key, pr->address, pr->type, pr->gc, pr->ex_addr, pr->anonym);

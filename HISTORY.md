@@ -460,6 +460,17 @@ age2 = age
         + TreeNode's loc field is set during node construction in parse.y. 
         + vm_inst's loc field is set during converting node tree to vm instructions in gen_code.c
     + When runtime error is deteted in vm_exec_code in vm.c, the location is reported.
+* anonym field is added to ptr_record (=ptr_table).
+    + When anonym is set 1, the record is generated as an anonymous object (e.g. strings or regular expressions generated from literals).
+    + This enables library users to choose ptr_record's that are not assigned to varialbes (anonymous objects are not assigned to variables).
+* gc field (and ex_gc field) on ptr_record (=ptr_table) is effectively used.
+    + gc (and ex_gc field) field tells whether the object managed by the ptr_record needs to be freed (destroyed) or not when it is detached from the ptr_record.
+        + Objects are usually detached when new object is assigned or each execution finishes. At this time, based on gc field, they are freed.
+            + For this purpose, ptr_record_free_gc_required_memory() is used.
+            + ptr_record_free_gc_required_memory() becomes available also for library users via sailr_ptr_record_free_objects().
+        + Objects that come from outside of library usually need not be freed, so their gc fields are set GC_NO.
+* Variable with PTR_REXP type is now allowed to be on left hand side of assignment. This allows assigning regular expression object to variable more than once.
+    + Currently, assignment of regular expression creates new regualr expression objects. Therefore, note that this may affect performance.
 
 
 ## Plan 
@@ -471,13 +482,6 @@ age2 = age
         + Missing value should be added as nan in double.
 * Refactoring2
     + Functions in ptr_table.c. Pointer to pointer may be used wrongly; possibility for some local pointers are destroyed unintentionally.
-
-
-
-## Under consideration
-
-* The notion of lifetime attribute is to be added to ptr_table.
-* This works with GCReq attribute.
 
 
 ## Abandoned Ideas

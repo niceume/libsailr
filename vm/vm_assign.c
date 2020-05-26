@@ -137,7 +137,6 @@ vm_stack_store_val(vm_stack* vmstack)
 						vm_error_raise(vmstack);
 					} 
 				}
-				left_record->gc = left_record->gc; // No change.
 			}else {
 				printf("ERROR: Object other than PP_STR is trying to be assigned to PTR_STR.\n");
 				vm_error_raise(vmstack);
@@ -187,7 +186,6 @@ vm_stack_store_val(vm_stack* vmstack)
 						vm_error_raise(vmstack);
 					}				
 				}
-				left_record->gc = left_record->gc; // No change.
 			}else {
 				printf("ERROR: Object other than PP_STR is trying to be assigned to PTR_STR.\n");
 				vm_error_raise(vmstack);
@@ -244,6 +242,7 @@ int
 vm_stack_assign_temp_str_to_record(ptr_record* left_record, stack_item* rvalue)
 {
 	left_record->address = (void*) *(rvalue->pp_str);
+	left_record->gc = GC_YES;
 	free(rvalue->pp_str);
 	rvalue->pp_str = NULL;
 	rvalue->type = VOID_ITEM;
@@ -254,6 +253,7 @@ int
 vm_stack_assign_copy_str_to_record(ptr_record* left_record, stack_item* rvalue)
 {
 	left_record->address = (void*) string_new(string_read((string_object*) *(rvalue->pp_str)));
+	left_record->gc = GC_YES;
 	return 1;
 }
 

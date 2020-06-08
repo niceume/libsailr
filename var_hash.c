@@ -2,6 +2,9 @@
 #include <string.h>
 #include <stdio.h>
 
+// For ptrdiff_t related definitions
+#include <stdint.h>
+
 #include "var_hash.h"
 
 var_hash*

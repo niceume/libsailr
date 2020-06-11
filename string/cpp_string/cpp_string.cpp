@@ -9,6 +9,22 @@
 #include "cpp_string_utf8.hpp"
 #include "cpp_string_latin1.hpp"
 
+#ifdef __GNUG__
+  #ifndef __clang__
+    #if __GNUC__ < 4 || ( __GNUC__ == 4 && ( __GNUC_MINOR__ < 5 ))
+      #define NO_LAMBDA
+    #endif
+  #endif
+#endif
+
+#ifdef __GNUG__
+  #ifndef __clang__
+    #if __GNUC__ < 4 || ( __GNUC__ == 4 && ( __GNUC_MINOR__ < 5 ))
+      #define NOT_ENOUGH_TO_STRING_SUPPORT
+    #endif
+  #endif
+#endif
+
 cpp_object*
 cpp_string_new (const char* str)
 {
@@ -55,7 +71,13 @@ cpp_string_new_int2str(int num)
 //	ss.clear();
 //	ss << num ;
 //	p_str = new std::string(ss.str());
-	p_str = new std::string( std::to_string(num));
+
+#ifdef NOT_ENOUGH_TO_STRING_SUPPORT
+	p_str = new std::string( std::to_string( (long long int) num));
+#else
+	p_str = new std::string( std::to_string( num ));
+#endif
+
 	return (cpp_object*) p_str;
 }
 
@@ -67,7 +89,12 @@ cpp_string_new_double2str(double num)
 //	ss.clear();
 //	ss << num ;
 //	p_str = new std::string(ss.str());
-	p_str = new std::string( std::to_string(num));
+
+#ifdef NOT_ENOUGH_TO_STRING_SUPPORT
+	p_str = new std::string( std::to_string( (long double) num));
+#else
+	p_str = new std::string( std::to_string( num ));
+#endif
 	return (cpp_object*) p_str;
 }
 
@@ -81,7 +108,13 @@ cpp_string_lstrip(cpp_object* obj)
 {
 	std::string* str = static_cast<std::string*>(obj);
 	std::string* new_str = new std::string(*str);
+
+#ifdef NO_LAMBDA
+    new_str->erase(new_str->begin(), std::find_if(new_str->begin(), new_str->end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
+#else
 	new_str->erase(new_str->begin(), std::find_if_not(new_str->begin(), new_str->end(), [](int c){return std::isspace(c);}));
+#endif
+
     return (cpp_object*) new_str;
 }
 
@@ -90,7 +123,13 @@ cpp_string_rstrip(cpp_object* obj)
 {
 	std::string* str = static_cast<std::string*>(obj);
 	std::string* new_str = new std::string(*str);
+
+#ifdef NO_LAMBDA
+    new_str->erase(std::find_if(new_str->rbegin(), new_str->rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), new_str->end());
+#else
 	new_str->erase(std::find_if_not(new_str->rbegin(), new_str->rend(), [](int c){return std::isspace(c);}).base(), new_str->end());
+#endif
+
     return (cpp_object*) new_str;
 }
 

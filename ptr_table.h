@@ -9,6 +9,7 @@
 #include <stdbool.h>
 
 #define MAX_KEY_LEN 511
+#define ANONYM_KEY_WIDTH 16
 
 enum _PtrType{
 	PTR_INT = 0,

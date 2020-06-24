@@ -39,8 +39,12 @@ ptr_table_add (ptr_table** table, const char* key, void** address, PtrType type,
         // Create new key/value.
         ptr_record* new_ptr_record;
         new_ptr_record = (ptr_record *)malloc(sizeof(ptr_record));
-        strncpy( new_ptr_record->key , key, MAX_KEY_LEN ) ;
-        new_ptr_record->key[ MAX_KEY_LEN - 1] = '\0';
+        if( (strlen(key) + 1 ) <= MAX_KEY_LEN ){
+            strcpy( new_ptr_record->key , key);
+        }else{
+            memcpy( new_ptr_record->key , key, MAX_KEY_LEN );
+            new_ptr_record->key[ MAX_KEY_LEN - 1] = '\0';
+        }
         if(type != PTR_NULL){
             new_ptr_record->address = *address;
         }else{
@@ -170,21 +174,21 @@ ptr_record_swap_addresses(ptr_record* pr)
 
 char*
 create_new_str_key(ptr_table** table){
-	char* new_str = (char *)malloc(sizeof(char)*16);
+	char* new_str = (char *)malloc(sizeof(char)* ANONYM_KEY_WIDTH );
 	ptr_table_info* info = (ptr_table_info*) ((*table)->address) ;
 	info->str_counter = (info->str_counter) + 1;
-    const char* prefix = "STR%012d";
-	sprintf(new_str, prefix , info->str_counter);
+    const char* prefix = "STR%0*d";
+	sprintf(new_str, prefix , ANONYM_KEY_WIDTH -3 -1 ,info->str_counter);
 	return new_str ; 
 }
 
 char*
 create_new_rexp_key(ptr_table** table){
-	char* new_str = (char *)malloc(sizeof(char)*16);
+	char* new_str = (char *)malloc(sizeof(char)* ANONYM_KEY_WIDTH );
 	ptr_table_info* info = (ptr_table_info*) ((*table)->address) ;
 	info->rexp_counter = (info->rexp_counter) + 1;
-    const char* prefix = "REXP%011d";
-	sprintf(new_str, prefix , info->rexp_counter);
+    const char* prefix = "REXP%0*d";
+	sprintf(new_str, prefix , ANONYM_KEY_WIDTH -4 -1 , info->rexp_counter);
 	return new_str ; 
 }
 

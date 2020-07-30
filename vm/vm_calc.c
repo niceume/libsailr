@@ -5,7 +5,7 @@
 #include <limits.h>
 
 #include "vm_calc.h"
-#include "common_string.h"
+#include "string/common_string.h"
 #include "vm_item_pp2val.h"
 #include "ptr_table.h"
 #include "helper.h"

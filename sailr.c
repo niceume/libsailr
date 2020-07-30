@@ -23,15 +23,16 @@
 #include "ptr_table.h"
 #include "var_hash.h"
 #include "parser_state.h"
-#include "common_string.h"
+#include "string/common_string.h"
 #include "node.h"
 #include "tree_dump.h"
 #include "tree_free.h"
 #include "gen_code.h"
 #include "gen_code_util.h"
-#include "vm_code.h"
-#include "vm_stack.h"
-#include "vm.h"
+#include "vm/vm_code.h"
+#include "vm/vm_stack.h"
+#include "vm/vm.h"
+#include "vm/func/ext_func/ext_func_hash.h"
 #include "y.tab.h"
 
 // To prevent implicit declaration warnings
@@ -163,10 +164,17 @@ sailr_vm_inst_code_free( vm_inst_object* vmcode )
   free( (vm_inst*) vmcode );
 }
 
+// Set NULL for ext_func_hash_object* extfunc_hash argument, when no external functions are added. 
 int
-sailr_vm_exec_code( vm_inst_object* code , int num_insts , ptr_table_object* table , vm_stack_object* vmstack)
+sailr_vm_exec_code( vm_inst_object* code , int num_insts , ptr_table_object* table , vm_stack_object* vmstack, ext_func_hash_object* extfunc_hash )
 {
-	return vm_exec_code((vm_inst*)code, num_insts, (ptr_table*)table, (vm_stack*)vmstack);
+	return vm_exec_code((vm_inst*)code, num_insts, 0, (ptr_table*)table, (vm_stack*)vmstack, (ext_func_hash*) extfunc_hash );
+}
+
+int
+sailr_vm_resume_code( vm_inst_object* code , int num_insts , int start_inst_idx, ptr_table_object* table , vm_stack_object* vmstack, ext_func_hash_object* extfunc_hash)
+{
+	return vm_exec_code((vm_inst*)code, num_insts, start_inst_idx , (ptr_table*)table, (vm_stack*)vmstack, (ext_func_hash*) extfunc_hash );
 }
 
 ptr_record_object*

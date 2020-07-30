@@ -19,7 +19,7 @@
 #include <ctype.h>
 
 #include "parser_state.h"
-#include "common_string.h"
+#include "string/common_string.h"
 #include "node.h"
 
 

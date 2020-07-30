@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "node.h"
-#include "vm_cmd.h"
+#include "vm/vm_cmd.h"
 #include "vm_label.h"
 #include "gen_code_util.h"
 

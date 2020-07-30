@@ -1,7 +1,7 @@
 #include "vm_stack.h"
 #include "ptr_table.h"
-#include "common_string.h"
-#include "simple_re.h"
+#include "string/common_string.h"
+#include "simple_re/simple_re.h"
 #include "vm_call_func.h"
 #include <stdio.h>
 #include "helper.h"

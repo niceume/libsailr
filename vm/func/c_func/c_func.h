@@ -1,7 +1,7 @@
 #ifndef C_FUNCS_H
 #define C_FUNCS_H
 
-#include "vm_stack.h"
+#include "vm/vm_stack.h"
 
 int sailr_func_print(vm_stack* vmstack, int num_args);
 int sailr_func_num_to_str(vm_stack* vmstack, int num_args, ptr_table** table );

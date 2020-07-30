@@ -7,6 +7,7 @@ typedef void parser_state_object;
 typedef void vm_inst_object;
 typedef void vm_stack_object;
 typedef void string_type_object;
+typedef void ext_func_hash_object;
 
 ptr_table_object*     sailr_ptr_table_init();
 parser_state_object*  sailr_new_parser_state(const char* , ptr_table_object* );
@@ -25,7 +26,8 @@ void                  sailr_vm_inst_code_free( vm_inst_object* vmcode );
 vm_stack_object*      sailr_vm_stack_init();
 int                   sailr_vm_stack_set_encoding(vm_stack_object* , const char*);
 const char*           sailr_vm_stack_get_encoding(vm_stack_object* );
-int                   sailr_vm_exec_code(vm_inst_object*, int, ptr_table_object*, vm_stack_object*);
+int                   sailr_vm_exec_code( vm_inst_object* code , int num_insts , ptr_table_object* table , vm_stack_object* vmstack , ext_func_hash_object* extfunc_hash);
+int                   sailr_vm_resume_code( vm_inst_object* code , int num_insts , int start_inst_idx, ptr_table_object* table , vm_stack_object* vmstack, ext_func_hash_object* extfunc_hash);
 
 // Create
 ptr_record_object* sailr_ptr_table_create_int_from_ptr(ptr_table_object** table, const char* key, int** i_pp, double** d_pp);

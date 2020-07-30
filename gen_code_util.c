@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "gen_code_util.h"
-#include "vm_code.h"
+#include "vm/vm_code.h"
 #include "helper.h"
 
 vm_inst*

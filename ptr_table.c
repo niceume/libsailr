@@ -1,8 +1,8 @@
 #include "ptr_table.h"
 #include <stdio.h>
 #include <string.h>
-#include "common_string.h"
-#include "simple_re.h"
+#include "string/common_string.h"
+#include "simple_re/simple_re.h"
 #include "helper.h"
 
 

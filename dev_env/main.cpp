@@ -1,5 +1,6 @@
 extern "C" {
 	#include "sailr.h"
+	#include "sailr_ext.h"
 }
 
 #include <fstream>
@@ -11,8 +12,46 @@ extern "C" {
 #include "stdio.h"
 #include "getopt.h"
 
+
+
 int verboseflag = 0; /* 0: minimal output, 1: verbose output */
 #define VERBOSE( X ) do{ if(verboseflag != 0){ X } } while(0);
+
+
+int sailr_external_println( arg_list* arglist , unsigned int num_args, vm_stack* vmstack)
+{
+	arg_item* arg = arglist;
+	if(arg_item_confirm_string(arg)){
+		string_object* obj = arg_item_string_obj( arg );
+		printf("%s\n", string_read(obj));
+	}
+	arg_list_finalize( vmstack, num_args , arglist);
+	return 1;
+}
+
+int sailr_external_add2( arg_list* arglist , unsigned int num_args, vm_stack* vmstack)
+{
+	arg_item* arg = arglist;
+
+	double x1, x2, total ;
+	if(arg_item_confirm_int(arg)){
+		x1 = (double) arg_item_int_value( arg );
+	}else if(arg_item_confirm_double(arg)){
+		x1 = arg_item_double_value( arg );
+	}
+
+	arg_item_next(&arg);
+	if(arg_item_confirm_int(arg)){
+		x2 = (double) arg_item_int_value( arg );
+	}else if(arg_item_confirm_double(arg)){
+		x2 = arg_item_double_value( arg );
+	}
+
+	total = x1 + x2;
+	arg_list_finalize( vmstack, num_args , arglist);
+	vm_stack_push_dval( vmstack , total );
+	return 1;
+}
 
 int
 main(int argc, char** argv)
@@ -259,12 +298,18 @@ main(int argc, char** argv)
 	VERBOSE( std::cout << "Converting VM instruction list(linked list format) into VM instruction code (array format)" << std::endl; )
 	vm_inst_object* vmcode = sailr_vm_inst_list_to_code(inst_list);
 	int vmcode_size = sailr_vm_inst_list_size( inst_list);
-	
+
+	/* External Function */
+	ext_func_hash_object* ext_func_hash;
+	ext_func_hash = sailr_ext_func_hash_init();
+	sailr_ext_func_hash_add( &ext_func_hash, "PRINTLN", 1, &sailr_external_println);
+	sailr_ext_func_hash_add( &ext_func_hash, "ADD2", 2, &sailr_external_add2);
+
 	/* Construct and run virtual machine */
 	VERBOSE(std::cout << "----- Constructing VM stack ------" << std::endl; )
 	vm_stack_object* vmstack = sailr_vm_stack_init();
 	VERBOSE(std::cout << "----- Running VM code on VM stack ------" << std::endl; )
-	sailr_vm_exec_code(vmcode, vmcode_size , table , vmstack);
+	sailr_vm_exec_code(vmcode, vmcode_size , table , vmstack, ext_func_hash );
 
 	/* Pointer Table AFTER CALCULATION */
 	VERBOSE( std::cout << "----- Showing pointer table AFTER CALCULATION -----" << std::endl; )
@@ -280,6 +325,9 @@ main(int argc, char** argv)
 	sailr_vm_inst_list_free( inst_list );
 	sailr_vm_inst_code_free( vmcode );
 
+	/* Free memory for external funcion hash */
+	sailr_ext_func_hash_free( &ext_func_hash );
+
     /* Free memory */
 	VERBOSE( std::cout << "----- Memory areas are going to be freed -----" << std::endl; )
 	VERBOSE( std::cout << "Going to free parser tree \n" << std::endl; )
@@ -288,6 +336,38 @@ main(int argc, char** argv)
 	sailr_ptr_table_del_all(&table);
 	VERBOSE( std::cout << "Going to free parser state object" << std::endl; )
 	sailr_parser_state_free(ps);
+
+	/* Free memory used for this main program */
+	free(address_for_x);
+	free(address_for_d_x);
+	free(address_for_y);
+	free(address_for_d_y);
+	free(address_for_z);
+	free(address_for_d_z);
+	free(address_for_z2);
+	free(address_for_d_z2);
+	free(address_for_bmi);
+	free(address_for_i_bmi);
+	free(address_for_height);
+	free(address_for_i_height);
+	free(address_for_bodyweight);
+	free(address_for_i_bw);
+	free(address_for_ow);
+	free(address_for_d_ow);
+	free(address_for_oa);
+	free(address_for_d_oa);
+	free(address_for_race_id);
+	free(address_for_d_race_id);
+	free(address_for_age);
+	free(address_for_d_age);
+	free(address_for_cre);
+	free(address_for_i_cre);
+	free(address_for_sex);
+	free(address_for_d_sex);
+	free(address_for_egfr);
+	free(address_for_i_egfr);
+	free(address_for_hrsweek);
+	free(address_for_d_hrsweek);
 
 	return 1;
 }

@@ -39,7 +39,7 @@ LIGHT_BLUE='\033[1;34m'
 
 echo -e "${Green}For debug purpose, pass -DDEBUG to 'make build' and run the executable with -v option.${NO_COLOR}"
 
-g++ -std=c++11 -Wall -o myparsercpp main.cpp -I../ -I../string -I../simple_re -Ionigmo_build/include -Igetopt_port/ -lm -L../ -lsailr -Lonigmo_build/lib -lonigmo
+g++ -std=c++11 -Wall -o myparsercpp main.cpp -I../ -Ionigmo_build/include -Igetopt_port/ -lm -L../ -lsailr -Lonigmo_build/lib -lonigmo
 
 
 

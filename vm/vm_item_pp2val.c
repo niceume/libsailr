@@ -1,5 +1,5 @@
-#include "simple_re.h"
-#include "common_string.h"
+#include "simple_re/simple_re.h"
+#include "string/common_string.h"
 #include "vm_item_pp2val.h"
 #include <stdio.h>
 

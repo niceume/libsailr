@@ -473,6 +473,17 @@ age2 = age
     + Currently, assignment of regular expression creates new regualr expression objects. Therefore, note that this may affect performance.
 
 
+## Ver 0.8.5
+
+* No chnage. Only version number is updated.
+
+
+## Ver 0.8.6
+
+* Mechanism to allow externally defined functions is introduced. 
+    + Currently, function pointers with the type of int (*func)( arg_list* , unsigned int, vm_stack* ) can be registered using sailr_ext_func_hash_add() function, which stores pairs of Sailr function name, number of expected arguments and corresponding C function pointer. The C function needs to manipulate items on VM stack, so more header files (such as sailr_ext.h) need to be included by library user.
+
+
 ## Plan 
 
 * Avoid directly manipulate ptr_table's properties. Provide functions and use them.

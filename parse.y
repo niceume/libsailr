@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "node.h"
 #include "parser_state.h"
-#include "common_string.h"
+#include "string/common_string.h"
 
 int yydebug = 0; /* 0 : no debug, 1: debug */
 

@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "ptr_table.h"
-#include "common_string.h"
+#include "string/common_string.h"
 #include "script_loc.h"
 
 extern int node_cnt;

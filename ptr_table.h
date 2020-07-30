@@ -5,7 +5,7 @@
 #define PTR_TABLE_H
 
 #include "uthash.h"
-#include "common_string.h"
+#include "string/common_string.h"
 #include <stdbool.h>
 
 #define MAX_KEY_LEN 511

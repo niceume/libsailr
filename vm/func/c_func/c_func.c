@@ -1,9 +1,9 @@
 
 #include "c_func.h"
 #include "c_func_helper.h"
-#include "vm_stack.h"
+#include "vm/vm_stack.h"
 #include "ptr_table.h"
-#include "vm_error.h"
+#include "vm/vm_error.h"
 
 #include <stdio.h>
 #include <limits.h>

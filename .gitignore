@@ -22,8 +22,8 @@ core
 
 # Ignore onigmo files
 
-/dev_env/onigmo_src/*
-/dev_env/onigmo_build/*
+/dev_env/onigmo_src/
+/dev_env/onigmo_build/
 
 # Ignore executable
 

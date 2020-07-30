@@ -39,7 +39,9 @@ OBJS_RE:= simple_re/simple_re.o
 OBJS_DATE:= simple_date/simple_date.o simple_date/cpp_date.o
 SRCS_CFUNC:= $(wildcard vm/func/c_func/*.c)
 OBJS_CFUNC:=$(SRCS_CFUNC:.c=.o)
-DEPS:=$(OBJS:.o=.d) $(OBJS_STR:.o=.d) $(OBJS_RE:.o=.d) $(OBJS_DATE:.o=.d) $(OBJS_CFUNC:.o=.d) $(OBJS_CXX_STR:.o=.d)
+SRCS_EXTFUNC:= $(wildcard vm/func/ext_func/*.c)
+OBJS_EXTFUNC:=$(SRCS_EXTFUNC:.c=.o)
+DEPS:=$(OBJS:.o=.d) $(OBJS_STR:.o=.d) $(OBJS_RE:.o=.d) $(OBJS_DATE:.o=.d) $(OBJS_CFUNC:.o=.d) $(OBJS_EXTFUNC:.o=.d) $(OBJS_CXX_STR:.o=.d)
 
 # List "objfile depends on source and header"
 -include $(DEPS)
@@ -48,8 +50,8 @@ DEPS:=$(OBJS:.o=.d) $(OBJS_STR:.o=.d) $(OBJS_RE:.o=.d) $(OBJS_DATE:.o=.d) $(OBJS
 
 build : parse.o lex.o  $(TARGET) 
 
-$(TARGET) : $(OBJS) $(OBJS_CXX_STR) $(OBJS_STR)  $(OBJS_RE) $(OBJS_DATE) $(OBJS_CFUNC)
-	$(AR) $(TARGET) $(OBJS) $(OBJS_CXX_STR) $(OBJS_STR) $(OBJS_RE) $(OBJS_DATE) $(OBJS_CFUNC)
+$(TARGET) : $(OBJS) $(OBJS_CXX_STR) $(OBJS_STR)  $(OBJS_RE) $(OBJS_DATE) $(OBJS_CFUNC) $(OBJS_EXTFUNC)
+	$(AR) $(TARGET) $(OBJS) $(OBJS_CXX_STR) $(OBJS_STR) $(OBJS_RE) $(OBJS_DATE) $(OBJS_CFUNC) $(OBJS_EXTFUNC)
 
 parse.o : y.tab.c
 	$(CC) -o parse.o -c y.tab.c $(CFLAGS) -MMD -MP 
@@ -99,6 +101,7 @@ distclean :
 	$(RM) simple_re/*.o
 	$(RM) simple_date/*.o
 	$(RM) vm/func/c_func/*.o
+	$(RM) vm/func/ext_func/*.o
 	$(RM) test/*.o
 	$(RM) *.d
 	$(RM) vm/*.d
@@ -107,6 +110,7 @@ distclean :
 	$(RM) simple_re/*.d
 	$(RM) simple_date/*.d
 	$(RM) vm/func/c_func/*.d
+	$(RM) vm/func/ext_func/*.d
 	$(RM) test/*.d
 	$(RM) *.dll
 	$(RM) *.so
@@ -116,6 +120,7 @@ distclean :
 	$(RM) simple_re/*.so
 	$(RM) simple_date/*.so
 	$(RM) vm/func/c_func/*.so
+	$(RM) vm/func/ext_func/*.so
 	$(RM) test/*.so
 	$(RM) *.a
 	$(RM) vm/*.a
@@ -124,6 +129,7 @@ distclean :
 	$(RM) simple_re/*.a
 	$(RM) simple_date/*.a
 	$(RM) vm/func/c_func/*.a
+	$(RM) vm/func/ext_func/*.a
 	$(RM) test/*.a
 	$(RM) a.out
 	$(RM) vm/a.out
@@ -132,6 +138,7 @@ distclean :
 	$(RM) simple_re/a.out
 	$(RM) simple_date/a.out
 	$(RM) vm/func/c_func/a.out
+	$(RM) vm/func/ext_func/a.out
 	$(RM) test/a.out
 	$(RM) core
 	$(RM) vm/core
@@ -140,6 +147,7 @@ distclean :
 	$(RM) simple_re/core
 	$(RM) simple_date/core
 	$(RM) vm/func/c_func/core
+	$(RM) vm/func/ext_func/core
 	$(RM) test/core
 	$(RM) test/*.xml
 	$(RM) $(TARGET)

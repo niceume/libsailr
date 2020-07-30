@@ -1,9 +1,9 @@
 #ifndef GEN_CODE_H
 #define GEN_CODE_H
 
-#include "common_string.h"
+#include "string/common_string.h"
 #include "ptr_table.h"
-#include "vm_code.h"
+#include "vm/vm_code.h"
 
 vm_inst* gen_code(TreeNode*, ptr_table*);
 

@@ -1,7 +1,7 @@
 #ifndef GEN_CODE_UTIL_H
 #define GEN_CODE_UTIL_H
 
-#include "vm_code.h"
+#include "vm/vm_code.h"
 
 typedef vm_inst vm_inst_list;
 

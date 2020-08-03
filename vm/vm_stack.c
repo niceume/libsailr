@@ -33,6 +33,7 @@ vm_stack_init()
 	item->p_vm_stack_info->characterEncoding = DEFAULT_VM_CHARACTER_ENCODING;
 	item->p_vm_stack_info->max_size = MAXSTACKSIZE;
 	item->p_vm_stack_info->last_rexp = NULL;
+	item->p_vm_stack_info->vm_code_pos = 0;
 
 	memcpy( &(stack->stack[stack->sp]), item, sizeof(stack_item));
 	free(item);
@@ -76,6 +77,18 @@ void
 vm_stack_clear_last_rexp_hisotry(vm_stack* vmstack)
 {
     vmstack->stack[0].p_vm_stack_info->last_rexp = NULL;
+}
+
+void
+vm_stack_set_code_position(vm_stack* vmstack, int pos)
+{
+    vmstack->stack[0].p_vm_stack_info->vm_code_pos = pos;
+}
+
+int
+vm_stack_get_code_position(vm_stack* vmstack)
+{
+    return vmstack->stack[0].p_vm_stack_info->vm_code_pos;
 }
 
 int

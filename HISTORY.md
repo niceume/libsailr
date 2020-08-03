@@ -482,6 +482,9 @@ age2 = age
 
 * Mechanism to allow externally defined functions is introduced. 
     + Currently, function pointers with the type of int (*func)( arg_list* , unsigned int, vm_stack* ) can be registered using sailr_ext_func_hash_add() function, which stores pairs of Sailr function name, number of expected arguments and corresponding C function pointer. The C function needs to manipulate items on VM stack, so more header files (such as sailr_ext.h) need to be included by library user.
+* vm_exec_code() returns a new status code, 2, which means suspend. 0:fail, 1:success, 2:suspend.
+* vm stack (vm_stack) now holds information about the next instruction code position when suspended, which is used when vm resumes.
+* ext_func_hash holds the last executed function name, which is useful when vm suspends and you need to know which function has caused that suspension.
 
 
 ## Plan 

@@ -49,6 +49,7 @@ struct _vm_stack_info{
   const char* characterEncoding;
   int max_size;
   simple_re* last_rexp; // Pointer to hold the last executed regular expression.
+  int vm_code_pos;
 };
 typedef struct _vm_stack_info vm_stack_info;
 
@@ -94,6 +95,10 @@ int vm_stack_set_encoding(vm_stack* , const char*);
 const char* vm_stack_get_encoding(vm_stack* );
 simple_re** vm_stack_get_ptr_last_rexp_field(vm_stack* vmstack);
 void vm_stack_clear_last_rexp_hisotry(vm_stack* vmstack);
+
+// public
+void vm_stack_set_code_position(vm_stack* vmstack, int pos);
+int vm_stack_get_code_position(vm_stack* vmstack);;
 
 // private: manipulate stack
 int vm_stack_push_item( vm_stack* , stack_item* );

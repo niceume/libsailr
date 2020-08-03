@@ -24,7 +24,7 @@ int vm_run_inst (vm_inst* , ptr_table* , vm_stack* , ext_func_hash* );
 int
 vm_exec_code( vm_inst* code , int num_insts , int start_inst_idx, ptr_table* table , vm_stack* vmstack, ext_func_hash* extfunc_hash )
 {
-	int exec_result = 1; // success 1, fail 0
+	int exec_result = 1; // 0:fail, 1:success, 2:suspend
 	int inst_idx = start_inst_idx;
 	int move_forward = 0;	
 	stack_item* top_item;
@@ -66,6 +66,9 @@ vm_exec_code( vm_inst* code , int num_insts , int start_inst_idx, ptr_table* tab
 			exec_result = vm_run_inst(inst, table , vmstack, extfunc_hash);
 			if(exec_result == 0){ // fail
 				printf("ERROR: current vm instruction causing some problem.\n");
+				break;
+			}else if(exec_result == 2){ // suspend
+				vm_stack_set_code_position(vmstack, inst_idx + 1 ); // Set next code postion, which is important to resume
 				break;
 			}
 		}
@@ -143,8 +146,11 @@ vm_run_inst (vm_inst* inst, ptr_table* table, vm_stack* vmstack , ext_func_hash*
 		break;
 	case VM_FCALL:
 		if( (extfunc_hash != NULL) && (ext_func = ext_func_hash_find(&extfunc_hash, inst->fname))){
-			result = ext_func_elem_apply(ext_func, vmstack);
+			DEBUG_PRINT("External function is to be executed. \n");
+			DEBUG_PRINT("External function pointer: %p \n", ext_func);
+			result = ext_func_elem_apply(&extfunc_hash, ext_func, vmstack);
 		}else{
+			DEBUG_PRINT("Internal function is to be executed.");
 			result = vm_stack_fcall(vmstack, inst->fname, inst->num_arg, &table );
 		}
 		break;

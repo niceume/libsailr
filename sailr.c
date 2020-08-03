@@ -177,6 +177,12 @@ sailr_vm_resume_code( vm_inst_object* code , int num_insts , int start_inst_idx,
 	return vm_exec_code((vm_inst*)code, num_insts, start_inst_idx , (ptr_table*)table, (vm_stack*)vmstack, (ext_func_hash*) extfunc_hash );
 }
 
+int
+sailr_vm_stack_get_code_position( vm_stack_object* vmstack)
+{
+	return vm_stack_get_code_position((vm_stack*) vmstack); 
+}
+
 ptr_record_object*
 sailr_ptr_table_create_int_from_ptr(ptr_table_object** table, const char* key, int** i_pp, double** d_pp)
 {

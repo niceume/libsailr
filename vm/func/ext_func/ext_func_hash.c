@@ -7,8 +7,9 @@ ext_func_hash_init()
 	ext_func_hash* hash = NULL;
 	ext_func_elem* new_elem ;
 	new_elem = (ext_func_elem*) malloc(sizeof(ext_func_elem));
-	strncpy( new_elem->fname , "_HEAD_OF_UTHASH_", MAX_FUNC_NAME_LEN - 1); 
+	strncpy( new_elem->fname , "_HEAD_OF_EXT_FUNC_UTHASH_", MAX_FUNC_NAME_LEN - 1); 
 	new_elem->num_args = 0;
+	new_elem->last_executed = NULL;
 	new_elem->func = NULL;
 
 	ext_func_hash_insert(&hash, new_elem);
@@ -38,12 +39,27 @@ ext_func_hash_add (ext_func_hash** hash, const char* fname, unsigned int num_arg
 		strncpy( new_elem->fname, fname, MAX_FUNC_NAME_LEN - 1) ;
 		new_elem->num_args = num_args;
 		new_elem->func = func;
+		new_elem->last_executed = NULL; // Not used. Only used by the first elemnt.
 		ext_func_hash_insert(hash, new_elem);
 //		printf("%s added", new_elem->fname);
 		return new_elem;
 	}else{
 		return result;
 	}
+}
+
+const char*
+ext_func_hash_get_last_executed(ext_func_hash** hash)
+{
+  ext_func_elem* first_elem = (ext_func_elem*)(*hash);
+  return (first_elem->last_executed);
+}
+
+void
+ext_func_hash_reset_last_executed(ext_func_hash** hash)
+{
+  ext_func_elem* first_elem = (ext_func_elem*)(*hash);
+  first_elem->last_executed = NULL;
 }
 
 void
@@ -62,13 +78,19 @@ ext_func_hash_free( ext_func_hash** hash )
 }
 
 int
-ext_func_elem_apply(ext_func_elem* elem, vm_stack* vmstack)
+ext_func_elem_apply(ext_func_hash** hash, ext_func_elem* elem, vm_stack* vmstack)
 {
-	arg_list* arglis = arg_list_initialize( vmstack , elem->num_args );
+	arg_list* arglis;
+	if(elem->num_args > 0){
+		arglis = arg_list_initialize( vmstack , elem->num_args );
+	}else{
+		arglis = NULL;
+	}
 	int result = (*(elem->func))( arglis , elem->num_args, vmstack);
+
+	ext_func_hash_set_last_executed(hash, elem->fname);
 	return result;
 }
-
 
 /* PRIVATE */
 
@@ -79,5 +101,10 @@ ext_func_hash_insert (ext_func_hash** hash, ext_func_elem* new_elem )
 	return new_elem ;
 }
 
-
+void
+ext_func_hash_set_last_executed(ext_func_hash** hash, const char* fname)
+{
+  ext_func_elem* first_elem = (ext_func_elem*)(*hash);
+  first_elem->last_executed = fname;
+}
 

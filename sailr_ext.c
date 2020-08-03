@@ -21,3 +21,14 @@ sailr_ext_func_hash_free(ext_func_hash_object** hash)
   ext_func_hash_free((ext_func_hash**)hash);
 }
 
+const char*
+sailr_ext_func_hash_get_last_executed(ext_func_hash_object** hash)
+{
+  return ext_func_hash_get_last_executed((ext_func_hash**) hash);
+}
+
+void
+sailr_ext_func_hash_reset_last_executed(ext_func_hash_object** hash)
+{
+  return ext_func_hash_reset_last_executed((ext_func_hash**) hash);
+}

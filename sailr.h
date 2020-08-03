@@ -28,6 +28,7 @@ int                   sailr_vm_stack_set_encoding(vm_stack_object* , const char*
 const char*           sailr_vm_stack_get_encoding(vm_stack_object* );
 int                   sailr_vm_exec_code( vm_inst_object* code , int num_insts , ptr_table_object* table , vm_stack_object* vmstack , ext_func_hash_object* extfunc_hash);
 int                   sailr_vm_resume_code( vm_inst_object* code , int num_insts , int start_inst_idx, ptr_table_object* table , vm_stack_object* vmstack, ext_func_hash_object* extfunc_hash);
+int                   sailr_vm_stack_get_code_position( vm_stack_object*);
 
 // Create
 ptr_record_object* sailr_ptr_table_create_int_from_ptr(ptr_table_object** table, const char* key, int** i_pp, double** d_pp);

@@ -85,8 +85,8 @@ int fileno(FILE *stream);
 
 CHAR   [a-zA-Z_]|[\302-\337][\200-\277]|[\340-\357][\200-\277][\200-\277]|[\360-\367][\200-\277][\200-\277]|[\370-\373][\200-\277][\200-\277][\200-\277][\200-\277]|[\374-\375][\200-\277][\200-\277][\200-\277][\200-\277][\200-\277]
 CHNUM  ({CHAR}|[0-9])
-CHNUMP ({CHAR}|[0-9.])
-WORD {CHAR}{CHNUMP}*
+CHNUMPE ({CHAR}|[0-9.!])
+WORD {CHAR}{CHNUMPE}*
 
 /* 3. (Start) states that can become active when BEGIN <state> is called in actions, but I use yy_push_state(int) and yy_pop_state(). BEGIN does not seem to work with state stack. */
 

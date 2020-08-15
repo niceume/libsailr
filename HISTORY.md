@@ -485,6 +485,7 @@ age2 = age
 * vm_exec_code() returns a new status code, 2, which means suspend. 0:fail, 1:success, 2:suspend.
 * vm stack (vm_stack) now holds information about the next instruction code position when suspended, which is used when vm resumes.
 * ext_func_hash holds the last executed function name, which is useful when vm suspends and you need to know which function has caused that suspension.
+* Bug fix: when a variable with string type is assigned to a variable with the same name (i.e. itself), the string object was garbage collected. Now it's fixed, and garbage collection does not happen. (Nothing needs to happen in this case.)
 
 
 ## Plan 

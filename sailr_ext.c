@@ -1,5 +1,6 @@
 #include "sailr_ext.h"
 #include "vm/func/c_func/c_func_helper.h"
+#include "vm/vm_stack.h"
 
 // External Functions
 
@@ -31,4 +32,10 @@ void
 sailr_ext_func_hash_reset_last_executed(ext_func_hash_object** hash)
 {
   return ext_func_hash_reset_last_executed((ext_func_hash**) hash);
+}
+
+void
+sailr_ext_vm_stack_end(vm_stack_object* vmstack)
+{
+  vm_stack_end((vm_stack*) vmstack);
 }

@@ -33,7 +33,7 @@ extern "C" {
 	int cpp_string_move_ptr ( cpp_object** , cpp_object** );
 	int cpp_string_free ( cpp_object* );
 #ifdef __cplusplus
-};
+}
 #endif
 
 

@@ -31,7 +31,7 @@ sailr_ext_func_hash_get_last_executed(ext_func_hash_object** hash)
 void
 sailr_ext_func_hash_reset_last_executed(ext_func_hash_object** hash)
 {
-  return ext_func_hash_reset_last_executed((ext_func_hash**) hash);
+  ext_func_hash_reset_last_executed((ext_func_hash**) hash);
 }
 
 void

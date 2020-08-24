@@ -98,7 +98,7 @@ void vm_stack_clear_last_rexp_hisotry(vm_stack* vmstack);
 
 // public
 void vm_stack_set_code_position(vm_stack* vmstack, int pos);
-int vm_stack_get_code_position(vm_stack* vmstack);;
+int vm_stack_get_code_position(vm_stack* vmstack);
 
 // private: manipulate stack
 int vm_stack_push_item( vm_stack* , stack_item* );

@@ -13,7 +13,7 @@ int cpp_date_add_n_days( int unix_date , int days );
 char* cpp_date_new_cstr_format( int unix_date, const char* fmt  );
 
 #ifdef __cplusplus
-};
+}
 #endif
 
 #endif // DATE_HPP

@@ -8,6 +8,11 @@
 void
 tree_free( TreeNode* nd, int level)
 {
+  if(nd == NULL){
+    DEBUG_PRINT( "Pointer to TreeNode is NULL (nothing to free)\n" );
+    return;
+  }
+
   switch(nd->type){
   case NODE_PRGM:
     tree_free(nd->e1.nd, level + 1);

@@ -490,6 +490,12 @@ age2 = age
     + ptr_table_update_int() and ptr_table_update_double() now update values, not pointers.
 
 
+## Ver 0.8.7
+
+* Bug fix
+    + tree_free() tried to free tree nodes, even when parser_state's tree points to NULL. It does not do anything and just return in such a case.
+
+
 ## Plan 
 
 * Avoid directly manipulate ptr_table's properties. Provide functions and use them.

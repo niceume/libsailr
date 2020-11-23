@@ -145,12 +145,18 @@ vm_run_inst (vm_inst* inst, ptr_table* table, vm_stack* vmstack , ext_func_hash*
 		result = vm_stack_store_val(vmstack);
 		break;
 	case VM_FCALL:
-		if( (extfunc_hash != NULL) && (ext_func = ext_func_hash_find(&extfunc_hash, inst->fname))){
-			DEBUG_PRINT("External function is to be executed. \n");
-			DEBUG_PRINT("External function pointer: %p \n", ext_func);
-			result = ext_func_elem_apply(&extfunc_hash, ext_func, vmstack);
+		if( extfunc_hash != NULL ){
+			if((ext_func = ext_func_hash_find(&extfunc_hash, inst->fname))){
+				DEBUG_PRINT("External function is to be executed: %s\n", inst->fname);
+				DEBUG_PRINT("External function pointer: %p \n", ext_func);
+				result = ext_func_elem_apply(&extfunc_hash, ext_func, vmstack);
+			}else{
+				DEBUG_PRINT("Function is not found in external function list: %s\n", inst->fname);
+				DEBUG_PRINT("Function is to be executed as an internal function \n");
+				result = vm_stack_fcall(vmstack, inst->fname, inst->num_arg, &table );
+			}
 		}else{
-			DEBUG_PRINT("Internal function is to be executed.");
+			DEBUG_PRINT("Function is to be executed as an internal function: %s \n", inst->fname);
 			result = vm_stack_fcall(vmstack, inst->fname, inst->num_arg, &table );
 		}
 		break;

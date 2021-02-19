@@ -50,7 +50,11 @@ lex_return(YYLTYPE* loc, char* txt, parser_state *p, yyscan_t scanner, int c)
 
 /* Prevent implicit declaration of fileno() warning*/
 // (ref) https://stackoverflow.com/questions/46213840/get-rid-of-warning-implicit-declaration-of-function-fileno-in-flex
-int fileno(FILE *stream);
+#ifdef __FreeBSD__
+#else
+int fileno(FILE *);
+#endif
+
 %}
 
 /* IF YOU CANNOT LINKs FUNCTIONS WHEN CREATING REENTRANT PARSER, MAKE SURE CORRESPONDING OPTIONS ARE ENEABLED. */

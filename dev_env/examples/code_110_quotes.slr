@@ -1,0 +1,8 @@
+firstname = 'tab\t'
+lastname = 'newline\n'
+fullname = 'carriage return\r'
+
+print( firstname )
+print( lastname )
+print( fullname )
+

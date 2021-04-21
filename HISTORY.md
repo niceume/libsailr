@@ -496,6 +496,13 @@ age2 = age
     + tree_free() tried to free tree nodes, even when parser_state's tree points to NULL. It does not do anything and just return in such a case.
 
 
+## Ver 0.8.8
+
+* Bug Fix
+    + Fix build error on FreeBSD.
+        + fileno implementation is macro function on FreeBSD.
+
+
 ## Plan 
 
 * Avoid directly manipulate ptr_table's properties. Provide functions and use them.

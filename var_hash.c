@@ -56,17 +56,17 @@ var_hash_find (var_hash** hash, char* name)
 	return temp;
 }
 
-int
+unsigned int
 var_hash_size (var_hash** hash)
 {
-	int size = HASH_COUNT( *hash );
+	unsigned int size = HASH_COUNT( *hash );
 	return ( size - 1 );  // -1 because there's one dummy element.
 }
 
 char**
 var_hash_names(var_hash** hash)
 {
-	int hash_size = var_hash_size(hash);
+	unsigned int hash_size = var_hash_size(hash);
 //	printf("hash size: %d\n", hash_size);
 	if(hash_size == 0){
 //		printf("No variables.\n");
@@ -74,14 +74,14 @@ var_hash_names(var_hash** hash)
 	}
 
 	char** hash_names;
-	if( hash_size < PTRDIFF_MAX / sizeof(char*)){
+	if( hash_size < (unsigned int) (PTRDIFF_MAX / (int) sizeof(char*))){
 		hash_names = (char**) malloc( hash_size * sizeof(char*));
 	}else {
 		printf("ERROR: hash size is too large");
 		return NULL;
 	}
 
-	int idx = 0; 
+	unsigned int idx = 0; 
 	var_elem* elem;
 	for( elem = *hash ; elem != NULL; elem = elem->hh.next) {
 		if( (elem->dummy) != 1 ){
@@ -115,8 +115,8 @@ var_hash_print_names(var_hash** hash)
 {
 	printf("printing names in hash....\n");
 	char** names = var_hash_names(hash);
-	int size = var_hash_size(hash);
-	int idx;
+	unsigned int size = var_hash_size(hash);
+	unsigned int idx;
 	for(idx = 0; idx < size; ++idx){
 		printf("%s \n", names[idx]);
 	}

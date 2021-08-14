@@ -508,6 +508,9 @@ age2 = age
 * Fix
     + Fix for unused function and unneeded function warnings.
         + yyunput(), input() and yy_top_state() functions are not used, and options are added to lex.l
+    + var_hash_size() is updated to return unsigned int.
+
+
 
 ## Plan 
 

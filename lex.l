@@ -79,6 +79,10 @@ int fileno(FILE *);
 /* Usually you do not need yywarp() function. */
 %option noyywrap
 
+/* yyunput(), input() and yy_top_state() functions are not used. */
+%option nounput
+%option noinput
+%option noyy_top_state
 
 /* Enable (start) state stack. */
 /* Functions that become available: yy_push_state(int) , yy_pop_state(). I don't know the reason, but yy_top_state() caused segmentation error,  but YY_START works. */

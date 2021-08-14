@@ -492,7 +492,7 @@ age2 = age
 
 ## Ver 0.8.7
 
-* Bug fix
+* Warnings are resolved
     + tree_free() tried to free tree nodes, even when parser_state's tree points to NULL. It does not do anything and just return in such a case.
 
 
@@ -502,6 +502,12 @@ age2 = age
     + Fix build error on FreeBSD.
         + fileno implementation is macro function on FreeBSD.
 
+
+## Ver. 0.8.9
+
+* Fix
+    + Fix for unused function and unneeded function warnings.
+        + yyunput(), input() and yy_top_state() functions are not used, and options are added to lex.l
 
 ## Plan 
 

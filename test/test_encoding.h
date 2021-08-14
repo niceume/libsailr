@@ -45,7 +45,7 @@ test_encoding_test1( void )
 	sailr_vm_stack_set_encoding(vmstack, "UTF8");
 
 	// Run
-	sailr_vm_exec_code(vmcode, vmcode_size , table , vmstack);
+	sailr_vm_exec_code(vmcode, vmcode_size , table , vmstack, NULL);
 
 	// Assert
 	// sailr_ptr_table_show_all(&table);

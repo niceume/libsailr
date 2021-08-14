@@ -52,7 +52,7 @@ test_arithmetic_test1( void )
 	vm_stack_object* vmstack = sailr_vm_stack_init();
 
 	// Run
-	sailr_vm_exec_code(vmcode, vmcode_size , table , vmstack);
+	sailr_vm_exec_code(vmcode, vmcode_size , table , vmstack, NULL);
 
 	// Assert
 	// sailr_ptr_table_show_all(&table);

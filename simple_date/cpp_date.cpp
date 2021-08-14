@@ -108,7 +108,8 @@ cpp_date_new_cstr_format ( int unix_date, const char* fmt  )
   date::sys_days new_day = base_day + date::days{unix_date};
   std::stringstream ss;
   ss << date::format( fmt, new_day ) ;
-  const char* const_str = ss.str().c_str();
+  std::string str = ss.str();
+  const char* const_str = str.c_str();
   char* new_str = (char*) malloc( (strlen(const_str) + 1) * sizeof(char) );
   strcpy(new_str, const_str);
   return new_str;

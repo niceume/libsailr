@@ -13,7 +13,7 @@ typedef struct _var_hash var_hash ;
 
 typedef var_hash var_elem;
 
-var_hash* var_hash_init();
+var_hash* var_hash_init(void);
 var_elem* var_hash_add_name ( var_hash**, char* );
 var_elem* var_hash_insert (var_hash** , var_elem* );
 var_elem* var_hash_find (var_hash** , char* );

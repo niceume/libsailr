@@ -50,7 +50,7 @@ struct _ptr_table_info {
 };
 typedef struct _ptr_table_info ptr_table_info ;
 
-ptr_table*  ptr_table_init();
+ptr_table*  ptr_table_init(void);
 ptr_record* ptr_table_add(ptr_table** table, const char* key, void** address, PtrType type, GCReq gc);
 
 ptr_record* ptr_table_create_int(ptr_table** table, const char* key, int ival);

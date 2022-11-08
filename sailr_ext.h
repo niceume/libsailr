@@ -11,7 +11,7 @@
 
 // External Functions
 
-ext_func_hash_object* sailr_ext_func_hash_init();
+ext_func_hash_object* sailr_ext_func_hash_init(void);
 void sailr_ext_func_hash_add(ext_func_hash_object** hash, const char* fname, unsigned int num_args, int (* func)(arg_list*, unsigned int, vm_stack*));
 void sailr_ext_func_hash_free(ext_func_hash_object** hash);
 

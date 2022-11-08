@@ -9,7 +9,7 @@ typedef void vm_stack_object;
 typedef void string_type_object;
 typedef void ext_func_hash_object;
 
-ptr_table_object*     sailr_ptr_table_init();
+ptr_table_object*     sailr_ptr_table_init(void);
 parser_state_object*  sailr_new_parser_state(const char* , ptr_table_object* );
 int                   sailr_parser_state_set_source_encoding(parser_state_object* ps , const char* source_encoding);
 const char*           sailr_parser_state_get_source_encoding(parser_state_object* ps );
@@ -23,7 +23,7 @@ int                   sailr_vm_inst_list_size( vm_inst_object* );
 void                  sailr_vm_inst_list_show_all( vm_inst_object* );
 void                  sailr_vm_inst_list_free( vm_inst_object* inst_list );
 void                  sailr_vm_inst_code_free( vm_inst_object* vmcode );
-vm_stack_object*      sailr_vm_stack_init();
+vm_stack_object*      sailr_vm_stack_init(void);
 int                   sailr_vm_stack_set_encoding(vm_stack_object* , const char*);
 const char*           sailr_vm_stack_get_encoding(vm_stack_object* );
 int                   sailr_vm_exec_code( vm_inst_object* code , int num_insts , ptr_table_object* table , vm_stack_object* vmstack , ext_func_hash_object* extfunc_hash);

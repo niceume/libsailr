@@ -4,6 +4,7 @@
 #include <string.h>
 #include "helper.h"
 
+simple_re* simple_re_new(void);
 
 simple_re*
 simple_re_new()

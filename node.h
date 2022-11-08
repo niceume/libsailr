@@ -59,7 +59,7 @@ typedef struct TreeNode_ {
 /* function prototypes for each NodeType        */
 /* ********************************************* */
 
-TreeNode* new_tree();
+TreeNode* new_tree(void);
 void init_tree(TreeNode*);
 
 /* Create each type of node */
@@ -69,7 +69,7 @@ extern TreeNode* new_node_stmt( TreeNode* );
 extern TreeNode* pushback_node_stmt( TreeNode*, TreeNode* );
 extern TreeNode* new_node_int(char*);
 extern TreeNode* new_node_double(char*);
-extern TreeNode* new_node_nan_double();
+extern TreeNode* new_node_nan_double( void );
 extern TreeNode* new_node_str( string_object*, ptr_table* );
 extern TreeNode* new_node_rexp( string_object*, ptr_table* , const char* rexp_encoding);
 extern TreeNode* new_node_ident( char* );
@@ -80,7 +80,7 @@ extern TreeNode* new_node_op( char* , TreeNode* , TreeNode* );
 extern TreeNode* new_node_uniop( char* , TreeNode*);
 extern TreeNode* new_node_let(TreeNode*, TreeNode*);
 extern TreeNode* new_node_if(TreeNode* , TreeNode* , TreeNode* );
-extern TreeNode* new_node_null();
+extern TreeNode* new_node_null(void);
 
 extern int count_num_farg(TreeNode* fcall_node);
 

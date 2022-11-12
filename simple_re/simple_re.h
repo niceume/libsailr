@@ -16,7 +16,7 @@ typedef struct simple_re_ {
 	OnigRegion* matched;
 } simple_re ;
 
-// Function Prototypes
+// Function Prototypessimple_re*
 simple_re* simple_re_compile( const char* pattern, const char* enc );
 int simple_re_match ( simple_re* re, const char* str, simple_re** ptr_for_last_rexp);
 int simple_re_reset( simple_re* re);

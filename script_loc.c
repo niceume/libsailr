@@ -4,7 +4,7 @@
 
 // Init loc variable
 struct script_loc
-loc_init()
+loc_init( void )
 {
 	struct script_loc loc;
 	loc.first_line = 0;

@@ -7,7 +7,7 @@
 
 
 ptr_table*
-ptr_table_init (){
+ptr_table_init ( void ){
 	ptr_table *table = NULL;
 	ptr_record* new_ptr_record;
 	ptr_table_info* new_ptr_table_info;

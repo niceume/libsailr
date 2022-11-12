@@ -18,7 +18,7 @@ typedef struct _ext_func_hash ext_func_elem;
 typedef ext_func_elem ext_func_hash;
 
 
-ext_func_hash* ext_func_hash_init();
+ext_func_hash* ext_func_hash_init(void);
 ext_func_elem* ext_func_hash_find (ext_func_hash** hash, const char* fname);
 ext_func_elem* ext_func_hash_add( ext_func_hash** hash, const char* fname, unsigned int num_args, int (* func)(arg_list*, unsigned int, vm_stack*) );
 const char* ext_func_hash_get_last_executed( ext_func_hash** hash);

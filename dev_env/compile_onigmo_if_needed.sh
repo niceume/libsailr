@@ -10,7 +10,7 @@ if [ ! -f "${DEV_ONIGMO_INSTALL}/lib/libonigmo.a" ];then
   echo -e "${Green} start onigmo build and install ${NO_COLOR} \n"
 
   cd onigmo_src/; 
-  ./autogen.sh; ./configure --prefix=${DEV_ONIGMO_INSTALL}; make; make install;
+  ./autogen.sh; ./configure --prefix=${DEV_ONIGMO_INSTALL}; make CFLAGS="-Wstrict-prototypes"; make install;
   cd ..; 
 
   rm -f ${DEV_ONIGMO_INSTALL}/lib/onigmo.dll

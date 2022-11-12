@@ -5,7 +5,7 @@
 // External Functions
 
 ext_func_hash_object*
-sailr_ext_func_hash_init()
+sailr_ext_func_hash_init( void )
 {
   return (ext_func_hash_object*) ext_func_hash_init();
 }

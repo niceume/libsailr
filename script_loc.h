@@ -10,7 +10,7 @@ struct script_loc {
 };
 
 // Init loc variable
-struct script_loc loc_init();
+struct script_loc loc_init(void);
 
 // Show location
 void loc_show( struct script_loc );

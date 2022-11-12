@@ -90,7 +90,7 @@ typedef struct _vm_stack vm_stack;
 // int run_vm ( vm_stack* , vm_code* , ptr_table* ); Deprecated
 
 // private: manipulate stack information
-vm_stack* vm_stack_init();
+vm_stack* vm_stack_init(void);
 int vm_stack_set_encoding(vm_stack* , const char*);
 const char* vm_stack_get_encoding(vm_stack* );
 simple_re** vm_stack_get_ptr_last_rexp_field(vm_stack* vmstack);

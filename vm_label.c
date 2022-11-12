@@ -15,7 +15,7 @@
 
 static unsigned int vm_label_counter = 0;
 
-char* new_vm_label(){
+char* new_vm_label( void ){
 	char* new_label = (char *)malloc((MAX_LABEL_DIGITS + 2) * sizeof(char)); 
 
 	vm_label_counter = vm_label_counter + 1 ; // increment label counter.

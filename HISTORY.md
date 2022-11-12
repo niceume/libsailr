@@ -511,6 +511,16 @@ age2 = age
     + var_hash_size() is updated to return unsigned int.
 
 
+## Ver. 0.8.10
+
+* No change
+
+
+## Ver. 0.8.11 (Nov. 12th, 2022)
+
+* Fix
+    + Fix warnings from -Wstrict-prototypes.
+
 
 ## Plan 
 

@@ -8,7 +8,7 @@
 #include "var_hash.h"
 
 var_hash*
-var_hash_init ()
+var_hash_init ( void )
 {
 	var_hash* hash = NULL;
 	var_elem* new_elem ;

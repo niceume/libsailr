@@ -4,9 +4,8 @@
 #include <string.h>
 #include "helper.h"
 
-
 simple_re*
-simple_re_new()
+simple_re_new( void )
 {
 	simple_re* new_re = (simple_re *) malloc( 1 * sizeof(simple_re));
 	return new_re;

@@ -2,7 +2,7 @@
 #include "ext_func_hash.h"
 
 ext_func_hash*
-ext_func_hash_init()
+ext_func_hash_init( void )
 {
 	ext_func_hash* hash = NULL;
 	ext_func_elem* new_elem ;

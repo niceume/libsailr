@@ -5,7 +5,7 @@ CXX = g++
 AR = ar rvs
 RM = rm -f
 
-CFLAGS := $(CFLAGS) -std=c11 -g -O3 -I. -Ivm -Istring -Isimple_re -Isimple_date -I$(ONIG_INCLUDE_DIR) $(CC_USER_DEFINES)
+CFLAGS := $(CFLAGS) -std=c11 -Wall -Wextra -g -O3 -I. -Ivm -Istring -Isimple_re -Isimple_date -I$(ONIG_INCLUDE_DIR) $(CC_USER_DEFINES)
 CXXFLAGS := $(CXXFLAGS) -std=c++11 -g -O3 -Ivm -Istring $(CXX_USER_DEFINES) 
 
 ARCH_TRIPLE := $(subst -, ,$(shell $(CC) -dumpmachine))

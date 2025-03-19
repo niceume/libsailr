@@ -180,7 +180,7 @@ create_new_str_key(ptr_table** table){
 	ptr_table_info* info = (ptr_table_info*) ((*table)->address) ;
 	info->str_counter = (info->str_counter) + 1;
     const char* prefix = "STR%0*d";
-	sprintf(new_str, prefix , ANONYM_KEY_WIDTH -3 -1 ,info->str_counter);
+	snprintf(new_str, ANONYM_KEY_WIDTH, prefix, ANONYM_KEY_WIDTH -3 -1 ,info->str_counter);
 	return new_str ; 
 }
 
@@ -190,7 +190,7 @@ create_new_rexp_key(ptr_table** table){
 	ptr_table_info* info = (ptr_table_info*) ((*table)->address) ;
 	info->rexp_counter = (info->rexp_counter) + 1;
     const char* prefix = "REXP%0*d";
-	sprintf(new_str, prefix , ANONYM_KEY_WIDTH -4 -1 , info->rexp_counter);
+	snprintf(new_str, ANONYM_KEY_WIDTH, prefix, ANONYM_KEY_WIDTH -4 -1 , info->rexp_counter);
 	return new_str ; 
 }
 
